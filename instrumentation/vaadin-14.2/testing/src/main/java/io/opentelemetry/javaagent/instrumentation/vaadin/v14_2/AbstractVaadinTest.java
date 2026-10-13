@@ -158,7 +158,7 @@ public abstract class AbstractVaadinTest
             () -> {
               List<List<SpanData>> traces = testing.waitForTraces(1);
               List<SpanData> spans = traces.get(0);
-              assertThat(spans).anySatisfy(span -> span.hasKind(SpanKind.SERVER));
+              assertThat(spans).anySatisfy(span -> assertThat(span).hasKind(SpanKind.SERVER));
               if (CONTROLLER_TELEMETRY_ENABLED) {
                 assertThat(spans)
                     .satisfies(
@@ -196,7 +196,7 @@ public abstract class AbstractVaadinTest
     return CONTROLLER_TELEMETRY_ENABLED;
   }
 
-  protected static void assertNoControllerSpans(List<SpanData> spans) {
+  protected static void assertNoControllerSpans(List<? extends SpanData> spans) {
     assertThat(spans)
         .noneMatch(
             span -> INSTRUMENTATION_SCOPE.equals(span.getInstrumentationScopeInfo().getName()));
