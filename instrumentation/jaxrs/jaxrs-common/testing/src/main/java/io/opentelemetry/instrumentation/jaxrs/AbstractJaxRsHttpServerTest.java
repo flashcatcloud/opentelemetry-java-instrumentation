@@ -60,6 +60,8 @@ public abstract class AbstractJaxRsHttpServerTest<SERVER> extends AbstractHttpSe
     super.configure(options);
 
     options.setHasHandlerSpan(endpoint -> CONTROLLER_TELEMETRY_ENABLED);
+    // JAX-RS handles resource exceptions before they reach the underlying HTTP server.
+    options.setHasExceptionOnServerSpan(endpoint -> false);
     options.setTestNotFound(false);
     options.setHasResponseCustomizer(endpoint -> true);
   }

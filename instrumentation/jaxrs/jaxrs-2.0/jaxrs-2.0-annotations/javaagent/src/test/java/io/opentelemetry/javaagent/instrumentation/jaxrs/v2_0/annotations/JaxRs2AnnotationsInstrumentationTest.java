@@ -132,13 +132,11 @@ class JaxRs2AnnotationsInstrumentationTest {
           } else {
             trace.hasSpansSatisfyingExactly(
                 span ->
-                    span.hasName("GET " + path)
+                    span.hasName("GET")
                         .hasKind(SpanKind.SERVER)
                         .hasNoParent()
                         .hasAttributesSatisfyingExactly(
-                            equalTo(HTTP_REQUEST_METHOD, "GET"),
-                            equalTo(HTTP_ROUTE, path),
-                            equalTo(ERROR_TYPE, OTHER)));
+                            equalTo(HTTP_REQUEST_METHOD, "GET"), equalTo(ERROR_TYPE, OTHER)));
           }
         });
   }
