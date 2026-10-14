@@ -3,9 +3,12 @@
 set -eu
 root=$(CDPATH= cd -- "$(dirname "$0")/.." && pwd)
 sdk=${1:?Usage: build-official-candidate.sh /absolute/sdk-fork}
+: "${JAVA6_HOME:?Set JAVA6_HOME to the Oracle JDK 6u45 directory}"
 cd "$root"
 python3 java6-agent/prepare-component-deps.py
 python3 java6-agent/prepare-grpc-transport.py
+python3 java6-agent/prepare-http-transport.py --sdk "$sdk"
+docker run --rm --platform linux/amd64 -v "$root:/repo" -v "$sdk:/sdk" -v "$JAVA6_HOME:/jdk:ro" -e JAVA6_HOME=/jdk -w /repo eclipse-temurin:8-jdk@sha256:3a280002b0d1212a62e9f5095c10b07ef3b62c1b13916fe093438e7e9af44b8b sh java6-agent/build-http-transport.sh
 python3 java6-agent/prepare.py
 python3 java6-agent/prepare-dependency-overlays.py
 python3 java6-agent/prepare-exporter.py --sdk "$sdk"

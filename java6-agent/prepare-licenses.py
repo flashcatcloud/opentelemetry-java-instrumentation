@@ -42,6 +42,19 @@ for source in archives:
                                  entry=name))
             count += 1
     assert count, 'Missing license: ' + str(source)
+# Source-built HTTP dependencies retain the upstream copyright/license header.
+for entry in json.loads((root / 'http-compat/sources.json').read_text()):
+    if 'url' not in entry: continue
+    source = root / 'build/http-source-deps' / entry['file']
+    assert hashlib.sha256(source.read_bytes()).hexdigest() == entry['sha256']
+    name = 'okhttp3/OkHttpClient.java' if entry['name'] == 'okhttp' else 'okio/Okio.java'
+    with zipfile.ZipFile(source) as archive:
+        text = archive.read(name).decode()
+    header = text[:text.index('*/') + 2] + '\n'
+    target = entry['name'] + '-source-license.txt'
+    (out / target).write_text(header)
+    manifest.append(dict(file=target, sha256=hashlib.sha256(header.encode()).hexdigest(),
+                         archive=source.name, archive_sha256=entry['sha256'], entry=name))
 (out / 'sources.json').write_text(json.dumps(manifest, indent=2, sort_keys=True) + '\n')
 (out / 'README.txt').write_text('''Third-party license materials for the Java 6 compatibility candidate.
 

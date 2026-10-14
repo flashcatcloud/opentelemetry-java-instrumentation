@@ -1,6 +1,8 @@
 #!/bin/sh
 # Build both compatibility forks without pre-existing generated files or binary caches.
 set -eu
+: "${JAVA6_HOME:?Set JAVA6_HOME to the Oracle JDK 6u45 directory}"
+test -f "$JAVA6_HOME/jre/lib/rt.jar"
 root=$(CDPATH= cd -- "$(dirname "$0")/.." && pwd)
 sdk=$(CDPATH= cd -- "${1:?Usage: build-all.sh /absolute/sdk-fork}" && pwd)
 python3 "$sdk/java6-compat/fetch.py"

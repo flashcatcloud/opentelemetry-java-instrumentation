@@ -1,0 +1,112 @@
+--- a/okio/Buffer.java
++++ b/okio/Buffer.java
+@@ -1679,7 +1679,7 @@
+   /** For testing. This returns the sizes of the segments in this buffer. */
+   List<Integer> segmentSizes() {
+     if (head == null) return Collections.emptyList();
+-    List<Integer> result = new ArrayList<>();
++    List<Integer> result = new ArrayList<Integer>();
+     result.add(head.limit - head.pos);
+     for (Segment s = head.next; s != head; s = s.next) {
+       result.add(s.limit - s.pos);
+--- a/okio/DeflaterSink.java
++++ b/okio/DeflaterSink.java
+@@ -90,7 +90,7 @@
+       // The @hide tag means that this code won't compile against the Android
+       // 2.3 SDK, but it will run fine there.
+       int deflated = syncFlush
+-          ? deflater.deflate(s.data, s.limit, Segment.SIZE - s.limit, Deflater.SYNC_FLUSH)
++          ? syncFlush(s.data, s.limit, Segment.SIZE - s.limit)
+           : deflater.deflate(s.data, s.limit, Segment.SIZE - s.limit);
+ 
+       if (deflated > 0) {
+@@ -107,6 +107,37 @@
+       }
+     }
+   }
++
++  private static final java.lang.reflect.Method SYNC_FLUSH_METHOD = findSyncFlushMethod();
++
++  private static java.lang.reflect.Method findSyncFlushMethod() {
++    try {
++      return Deflater.class.getMethod("deflate", byte[].class, int.class, int.class, int.class);
++    } catch (NoSuchMethodException unavailable) {
++      return null;
++    } catch (SecurityException unavailable) {
++      return null;
++    }
++  }
++
++  private int syncFlush(byte[] output, int offset, int length) throws IOException {
++    if (SYNC_FLUSH_METHOD == null) throw new IOException("Deflater SYNC_FLUSH is unavailable");
++    try {
++      return ((Integer) SYNC_FLUSH_METHOD.invoke(deflater, output, offset, length, 2)).intValue();
++    } catch (java.lang.reflect.InvocationTargetException failed) {
++      Throwable cause = failed.getCause();
++      if (cause instanceof RuntimeException) throw (RuntimeException) cause;
++      if (cause instanceof Error) throw (Error) cause;
++      IOException error = new IOException("Deflater SYNC_FLUSH failed");
++      error.initCause(cause);
++      throw error;
++    } catch (IllegalAccessException unavailable) {
++      IOException error = new IOException("Deflater SYNC_FLUSH is inaccessible");
++      error.initCause(unavailable);
++      throw error;
++    }
++  }
++
+ 
+   @Override public void flush() throws IOException {
+     deflate(true);
+--- a/okio/Okio.java
++++ b/okio/Okio.java
+@@ -25,9 +25,6 @@
+ import java.io.OutputStream;
+ import java.net.Socket;
+ import java.net.SocketTimeoutException;
+-import java.nio.file.Files;
+-import java.nio.file.OpenOption;
+-import java.nio.file.Path;
+ import java.util.logging.Level;
+ import java.util.logging.Logger;
+ import javax.annotation.Nullable;
+@@ -169,11 +166,7 @@
+   }
+ 
+   /** Returns a source that reads from {@code path}. */
+-  @IgnoreJRERequirement // Should only be invoked on Java 7+.
+-  public static Source source(Path path, OpenOption... options) throws IOException {
+-    if (path == null) throw new IllegalArgumentException("path == null");
+-    return source(Files.newInputStream(path, options));
+-  }
++
+ 
+   /** Returns a sink that writes to {@code file}. */
+   public static Sink sink(File file) throws FileNotFoundException {
+@@ -188,11 +181,7 @@
+   }
+ 
+   /** Returns a sink that writes to {@code path}. */
+-  @IgnoreJRERequirement // Should only be invoked on Java 7+.
+-  public static Sink sink(Path path, OpenOption... options) throws IOException {
+-    if (path == null) throw new IllegalArgumentException("path == null");
+-    return sink(Files.newOutputStream(path, options));
+-  }
++
+ 
+   /** Returns a sink that writes nowhere. */
+   public static Sink blackhole() {
+--- a/okio/Options.java
++++ b/okio/Options.java
+@@ -40,9 +40,9 @@
+ 
+     // Sort the byte strings which is required when recursively building the trie. Map the sorted
+     // indexes to the caller's indexes.
+-    List<ByteString> list = new ArrayList<>(Arrays.asList(byteStrings));
++    List<ByteString> list = new ArrayList<ByteString>(Arrays.asList(byteStrings));
+     Collections.sort(list);
+-    List<Integer> indexes = new ArrayList<>();
++    List<Integer> indexes = new ArrayList<Integer>();
+     for (int i = 0; i < list.size(); i++) {
+       indexes.add(-1);
+     }

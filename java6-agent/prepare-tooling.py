@@ -144,26 +144,20 @@ for module in modules:
         if text != original:
             patch.extend(difflib.unified_diff(original.splitlines(True), text.splitlines(True),
                          fromfile=module + '/' + str(relative), tofile='generated/' + str(relative)))
-# Keep the Java 6 transport, but use the official context suppression contract.
-source = root / 'java6-agent/src/tooling/Java6HttpSenderProvider.java'
-original = source.read_text()
-text = original
-# Retain upstream's default exception policy without loading OkHttp on Java 6.
-retry_path = Path('exporters/sender/okhttp/src/main/java/io/opentelemetry/exporter/sender/okhttp/internal/RetryInterceptor.java')
-retry_source = (args.sdk / retry_path).read_text()
-retry_start = retry_source.index('  static boolean isRetryableException(IOException e) {')
-retry_end = retry_source.index('\n\n  // Visible for testing\n  interface Sleeper', retry_start)
-assert retry_source[retry_start:retry_end] in text, 'HTTP default retry policy drifted from the pinned SDK'
-manifest.append({'module': 'sdk:exporters/sender/okhttp', 'path': str(retry_path),
-                 'adapted': True, 'source_sha256': hashlib.sha256(retry_source.encode()).hexdigest(),
-                 'reused_method': 'RetryInterceptor.isRetryableException'})
-assert 'ProtocolTelemetry' not in text
-relative = Path('io/opentelemetry/javaagent/tooling/Java6HttpSenderProvider.java')
-(output / relative).write_text(text)
-manifest.append({'module': 'java6-agent/src/tooling', 'path': source.name,
-                 'adapted': text != original, 'source_sha256': hashlib.sha256(original.encode()).hexdigest()})
-patch.extend(difflib.unified_diff(original.splitlines(True), text.splitlines(True),
-             fromfile=str(source.relative_to(root)), tofile='generated/' + str(relative)))
+# Reuse the official SDK HTTP sender with the reviewed compatibility overlay.
+http_manifest = json.loads((root / 'java6-agent/http-compat/sources.json').read_text())[-1]
+for relative_name, expected in http_manifest['prepared'].items():
+    relative = Path(relative_name)
+    source = build / 'http-transport-src/sender' / relative
+    data = source.read_bytes()
+    assert hashlib.sha256(data).hexdigest() == expected, source
+    target = output / relative
+    target.parent.mkdir(parents=True, exist_ok=True)
+    target.write_bytes(data)
+    manifest.append({'module': 'sdk:exporters/sender/okhttp', 'path': relative_name,
+                     'adapted': expected != http_manifest['sources'][relative_name],
+                     'source_sha256': http_manifest['sources'][relative_name]})
+patch.append((root / 'java6-agent/http-compat/sender.patch').read_text())
 (build / 'tooling-sources.json').write_text(json.dumps(manifest, indent=2) + '\n')
 (build / 'tooling-excluded.json').write_text(json.dumps(excluded, indent=2) + '\n')
 (build / 'tooling-adaptation.patch').write_text(''.join(patch))

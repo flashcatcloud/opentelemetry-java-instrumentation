@@ -21,7 +21,12 @@ for manifest, directory in [
 ]:
     for entry in json.loads(manifest.read_text()):
         inventory[entry['file']] = (entry, directory / entry['file'])
+for entry in json.loads((root / 'http-compat/sources.json').read_text()):
+    if 'url' in entry:
+        inventory[entry['file']] = (entry, root / 'build/http-source-deps' / entry['file'])
 selected = {
+    'okhttp-3.12.13-sources.jar': 'Apache-2.0',
+    'okio-1.17.2-sources.jar': 'Apache-2.0',
     'byte-buddy-dep-1.18.14.jar': 'Apache-2.0',
     'opentelemetry-semconv-1.44.0.jar': 'Apache-2.0',
     'opentelemetry-semconv-incubating-1.44.0-alpha.jar': 'Apache-2.0',

@@ -7,7 +7,7 @@ import org.objectweb.asm.commons.*;
 
 /** Build-only relocation using upstream javaagent-shadowing conventions. */
 public final class RelocateGrpcTransport {
-  private static final String[] ROOTS = {"io/grpc", "io/netty", "com/google/common", "com/google/instrumentation", "io/opencensus"};
+  private static final String[] ROOTS = {"okhttp3", "okio", "io/grpc", "io/netty", "com/google/common", "com/google/instrumentation", "io/opencensus"};
   static String relocate(String name) {
     for (String root : ROOTS) {
       if (name.equals(root) || name.startsWith(root + "/")) return "io/opentelemetry/javaagent/transport/" + name;

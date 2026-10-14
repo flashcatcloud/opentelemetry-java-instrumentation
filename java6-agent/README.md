@@ -2,7 +2,7 @@
 
 This branch adapts upstream instrumentation **v2.32.0** and SDK **v1.66.0** for a single Agent JAR on Oracle JDK 6u45, Java 8 and Java 17. It is a pre-release compatibility build, not a claim that the entire upstream component catalog is supported.
 
-The implementation uses upstream AgentInstaller, InstrumentationModule discovery, Muzzle, helper injection, Instrumenter APIs, SDK autoconfiguration and OTLP protobuf export. All JVMs use this framework. Replaced handwritten HTTP/JDBC/Redis instrumentation and the prototype starter have been removed. Legacy com.alibaba Dubbo 2.5/2.6 retains the necessary extension under the official module lifecycle. Java6HttpSenderProvider supplies HTTP transport beneath the official exporter. OTLP/gRPC reuses the official managed-channel sender with privately relocated Java 6-compatible transport dependencies.
+The implementation uses upstream AgentInstaller, InstrumentationModule discovery, Muzzle, helper injection, Instrumenter APIs, SDK autoconfiguration and OTLP protobuf export. All JVMs use this framework. Replaced handwritten HTTP/JDBC/Redis instrumentation and the prototype starter have been removed. Legacy com.alibaba Dubbo 2.5/2.6 retains the necessary extension under the official module lifecycle. The current candidate reuses the official SDK OkHttp sender beneath the HTTP exporter, with source-pinned Java 6 dependency backports and bounded admission/cancellation overlays; see `http-compat/README.md`. The previous handwritten HTTP sender has been removed. OTLP/gRPC reuses the official managed-channel sender with privately relocated Java 6-compatible transport dependencies.
 
 ## Build and verify
 
@@ -11,7 +11,8 @@ From this instrumentation fork, build both matching flashcatcloud forks. The SDK
 Build:
 
 ```sh
-sh java6-agent/build-all.sh /absolute/path/to/opentelemetry-java
+JAVA6_HOME=/absolute/path/to/jdk1.6.0_45 \
+  sh java6-agent/build-all.sh /absolute/path/to/opentelemetry-java
 python3 java6-agent/verify-official-loader.py \
   --sdk /absolute/path/to/opentelemetry-java \
   --jdk6 /absolute/path/to/jdk1.6.0_45
