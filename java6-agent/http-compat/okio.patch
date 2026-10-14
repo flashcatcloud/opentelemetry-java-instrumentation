@@ -110,3 +110,14 @@
      for (int i = 0; i < list.size(); i++) {
        indexes.add(-1);
      }
+--- a/okio/GzipSource.java
++++ b/okio/GzipSource.java
+@@ -127,7 +127,7 @@
+     if (((flags >> FEXTRA) & 1) == 1) {
+       source.require(2);
+       if (fhcrc) updateCrc(source.buffer(), 0, 2);
+-      int xlen = source.buffer().readShortLe();
++      int xlen = source.buffer().readShortLe() & 0xffff;
+       source.require(xlen);
+       if (fhcrc) updateCrc(source.buffer(), 0, xlen);
+       source.skip(xlen);

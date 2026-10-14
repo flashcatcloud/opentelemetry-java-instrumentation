@@ -21,7 +21,7 @@ p.add_argument('--native-java', type=Path)
 p.add_argument('--export-timeout-ms', type=int, default=10000)
 p.add_argument('--tls-debug', action='store_true')
 p.add_argument('--platform', default='linux/amd64')
-p.add_argument('--mode', choices=['auth-gzip', 'tls', 'untrusted-tls', 'timeout'], required=True)
+p.add_argument('--mode', choices=['auth-gzip', 'gzip-response', 'tls', 'untrusted-tls', 'timeout'], required=True)
 a = p.parse_args()
 root = Path(__file__).resolve().parents[1]
 artifact = root / 'build/official-loader-candidate.jar'
@@ -72,7 +72,15 @@ class Collector(http.server.BaseHTTPRequestHandler):
             captured.append(MessageToDict(message))
         try:
             self.send_response(200)
+            response = b''
+            if a.mode == 'gzip-response':
+                compressed = gzip.compress(b'')  # Empty protobuf ExportTraceServiceResponse.
+                response = compressed[:3] + bytes([compressed[3] | 4]) + compressed[4:10] + b'\xff\xff' + bytes(65535) + compressed[10:]
+                self.send_header('Content-Encoding', 'gzip')
+                self.send_header('Content-Type', 'application/x-protobuf')
+                self.send_header('Content-Length', str(len(response)))
             self.end_headers()
+            if response: self.wfile.write(response)
         except (BrokenPipeError, ConnectionResetError): pass
 servers = [http.server.ThreadingHTTPServer(('127.0.0.1', 0), handler) for handler in (Business, Collector)]
 if 'tls' in a.mode:
@@ -117,10 +125,12 @@ try:
     stdout, stderr = process.stdout, process.stderr
     assert process.returncode == 0 and 'HTTP_PROBE_OK' in stdout, (stdout, stderr)
     assert sorted(business) == ['/failure', '/missing', '/ok'], business
-    if a.mode in ('auth-gzip', 'tls'):
+    if a.mode in ('auth-gzip', 'gzip-response', 'tls'):
         spans = [s for d in captured for rs in d['resourceSpans'] for ss in rs['scopeSpans'] for s in ss['spans']]
         assert len(spans) == 4, (captured, stderr)  # also excludes exporter self-tracing
         assert requests and all(r['authorization'] == 'Bearer test-only' and r['path'] == '/v1/traces' for r in requests), requests
+        if a.mode == 'gzip-response':
+            assert not any(value in (stdout + stderr) for value in ('Failed to export', 'byteCount < 0', 'Exception in thread')), (stdout, stderr)
         if a.mode == 'auth-gzip': assert all(r['encoding'] == 'gzip' for r in requests), requests
     elif a.mode == 'untrusted-tls':
         assert not captured and not requests, requests

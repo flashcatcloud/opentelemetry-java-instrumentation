@@ -267,7 +267,7 @@
       "okio/ForwardingSource.java": "8fcf28914cf61c0b9a5137c01f4204ced71850baf21f55e5aba9e1e79dce6473",
       "okio/ForwardingTimeout.java": "0e1a7e5ba257ec6bb7563ac89744ae56d30e98e5638e59fbf9b0bf96181241b2",
       "okio/GzipSink.java": "40412a9227e34f72ec70fab68a51c5c8b441ba4af3d8f6795f9aff6d5cfd3136",
-      "okio/GzipSource.java": "1a2f9ec29807785284fd3330780a904d5f7ffa9a54d6c4f3b01e006325e5526f",
+      "okio/GzipSource.java": "3dcb37af46af92bc34971afd4ff034e2b3dd4198370b05f6cb8ee79504f2aa4f",
       "okio/HashingSink.java": "1a42a6b8d1bb129b4a3e7570de8b200211df2aba3af1eb43b520e37f9adb84f5",
       "okio/HashingSource.java": "4fa60728a46de56534ac36f74b67181434ad55b7770905cf7f3fd732ef79f55e",
       "okio/InflaterSource.java": "1700baeda7ba1250214aafc4113b51d8c72747eda016ab1ac7623880cb39f23b",
