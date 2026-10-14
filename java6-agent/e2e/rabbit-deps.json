@@ -1,0 +1,27 @@
+[
+  {
+    "file": "commons-cli-1.1.jar",
+    "url": "https://repo.maven.apache.org/maven2/commons-cli/commons-cli/1.1/commons-cli-1.1.jar",
+    "sha256": "7c0c4dc03175c3a64c5b112592b70302d88be9738888b8c04029ab29ea3a3641"
+  },
+  {
+    "file": "commons-io-1.2.jar",
+    "url": "https://repo.maven.apache.org/maven2/commons-io/commons-io/1.2/commons-io-1.2.jar",
+    "sha256": "8d952b8badef1f92d0c401d58ea459bb0632d59ac02c19c1b48a552dfab9159d"
+  },
+  {
+    "file": "amqp-client-2.7.0.jar",
+    "url": "https://repo.maven.apache.org/maven2/com/rabbitmq/amqp-client/2.7.0/amqp-client-2.7.0.jar",
+    "sha256": "e6507c35791abecaf055959b4ba6b4ecb3b2fc1eae1cc66bc5404526ee77e8d8"
+  },
+  {
+    "file": "amqp-client-3.6.6.jar",
+    "url": "https://repo.maven.apache.org/maven2/com/rabbitmq/amqp-client/3.6.6/amqp-client-3.6.6.jar",
+    "sha256": "0245da16db41f51a684ce3b261073aea1c9dec95b1cfaf6b2b7417764a61e70f"
+  },
+  {
+    "file": "amqp-client-5.20.0.jar",
+    "url": "https://repo.maven.apache.org/maven2/com/rabbitmq/amqp-client/5.20.0/amqp-client-5.20.0.jar",
+    "sha256": "420e085cad65b0b4889def4a5704ae7dfe467b1bedb9fee709b17c154207843b"
+  }
+]

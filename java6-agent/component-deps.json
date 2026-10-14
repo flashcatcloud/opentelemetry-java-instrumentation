@@ -1,0 +1,177 @@
+[
+  {
+    "file": "tomcat-embed-core.jar",
+    "url": "https://repo.maven.apache.org/maven2/org/apache/tomcat/embed/tomcat-embed-core/7.0.109/tomcat-embed-core-7.0.109.jar",
+    "sha256": "7acb01e27a60f0da7e45f6f74d7c0ade4773cfeb8fadb2398cc64a87c1927094"
+  },
+  {
+    "file": "jedis.jar",
+    "url": "https://repo.maven.apache.org/maven2/redis/clients/jedis/2.9.0/jedis-2.9.0.jar",
+    "sha256": "1eaa96cb8e5055e4d517467f0f3b2b3cbbc62a7d9d1e8b6a23c617ec60d386fa"
+  },
+  {
+    "file": "pool.jar",
+    "url": "https://repo.maven.apache.org/maven2/org/apache/commons/commons-pool2/2.4.2/commons-pool2-2.4.2.jar",
+    "sha256": "21112aa673733dfcd045354ddf75b31e1d464b99c8e515974349b2532254cc53"
+  },
+  {
+    "file": "dubbo-2.7.0.jar",
+    "url": "https://repo.maven.apache.org/maven2/org/apache/dubbo/dubbo/2.7.0/dubbo-2.7.0.jar",
+    "sha256": "14f37e804a8e25d8d59ccb2319e9e79efe9990bc5e97e245cae48e75eb2b0ed9"
+  },
+  {
+    "file": "spring-core-4.3.16.RELEASE.jar",
+    "url": "https://repo.maven.apache.org/maven2/org/springframework/spring-core/4.3.16.RELEASE/spring-core-4.3.16.RELEASE.jar",
+    "sha256": "596ffc927a800df82c5b3d93292e2fe81596e5cadb4c68d15bad85c8294bc062"
+  },
+  {
+    "file": "spring-context-4.3.16.RELEASE.jar",
+    "url": "https://repo.maven.apache.org/maven2/org/springframework/spring-context/4.3.16.RELEASE/spring-context-4.3.16.RELEASE.jar",
+    "sha256": "5ed77a80764d983ec77b72af6e86025e7f76790e5cbc4c0fce8275a0329282f1"
+  },
+  {
+    "file": "spring-beans-4.3.16.RELEASE.jar",
+    "url": "https://repo.maven.apache.org/maven2/org/springframework/spring-beans/4.3.16.RELEASE/spring-beans-4.3.16.RELEASE.jar",
+    "sha256": "8dc528e4e9998f626a6072a087d8d155a3c833515790dff01785b7efe86d7f5a"
+  },
+  {
+    "file": "spring-expression-4.3.16.RELEASE.jar",
+    "url": "https://repo.maven.apache.org/maven2/org/springframework/spring-expression/4.3.16.RELEASE/spring-expression-4.3.16.RELEASE.jar",
+    "sha256": "db24c4800a524c920c6deae76ef2a84b4250b2cd467ae08e7fa3a258f595d3ca"
+  },
+  {
+    "file": "spring-aop-4.3.16.RELEASE.jar",
+    "url": "https://repo.maven.apache.org/maven2/org/springframework/spring-aop/4.3.16.RELEASE/spring-aop-4.3.16.RELEASE.jar",
+    "sha256": "2b4796cbbb292b0c79cd69712e0bcab54741650a0a816271d4fc31d54a8cf40a"
+  },
+  {
+    "file": "spring-web-4.3.16.RELEASE.jar",
+    "url": "https://repo.maven.apache.org/maven2/org/springframework/spring-web/4.3.16.RELEASE/spring-web-4.3.16.RELEASE.jar",
+    "sha256": "9bbd5a7a0b1fc4ad1f7a08a005b6990a4d892d94c616ddc66296cb600684d305"
+  },
+  {
+    "file": "spring-webmvc-4.3.16.RELEASE.jar",
+    "url": "https://repo.maven.apache.org/maven2/org/springframework/spring-webmvc/4.3.16.RELEASE/spring-webmvc-4.3.16.RELEASE.jar",
+    "sha256": "fa820188ab35b6cbb9c4bc220c0e6336ad05e9a27f54791c642334533b2155fe"
+  },
+  {
+    "file": "commons-logging-1.2.jar",
+    "url": "https://repo.maven.apache.org/maven2/commons-logging/commons-logging/1.2/commons-logging-1.2.jar",
+    "sha256": "daddea1ea0be0f56978ab3006b8ac92834afeefbd9b7e4e6316fca57df0fa636"
+  },
+  {
+    "file": "httpclient-4.5.14.jar",
+    "url": "https://repo.maven.apache.org/maven2/org/apache/httpcomponents/httpclient/4.5.14/httpclient-4.5.14.jar",
+    "sha256": "c8bc7e1c51a6d4ce72f40d2ebbabf1c4b68bfe76e732104b04381b493478e9d6"
+  },
+  {
+    "file": "httpcore-4.4.16.jar",
+    "url": "https://repo.maven.apache.org/maven2/org/apache/httpcomponents/httpcore/4.4.16/httpcore-4.4.16.jar",
+    "sha256": "6c9b3dd142a09dc468e23ad39aad6f75a0f2b85125104469f026e52a474e464f"
+  },
+  {
+    "file": "commons-codec-1.11.jar",
+    "url": "https://repo.maven.apache.org/maven2/commons-codec/commons-codec/1.11/commons-codec-1.11.jar",
+    "sha256": "e599d5318e97aa48f42136a2927e6dfa4e8881dff0e6c8e3109ddbbff51d7b7d"
+  },
+  {
+    "file": "lettuce-core-5.1.0.RELEASE.jar",
+    "url": "https://repo.maven.apache.org/maven2/io/lettuce/lettuce-core/5.1.0.RELEASE/lettuce-core-5.1.0.RELEASE.jar",
+    "sha256": "973628f9a27b3b03a1f2705f8494d14dd8fe3caaffeb543038c9cc3e2bad3aef"
+  },
+  {
+    "file": "netty-buffer-4.1.29.Final.jar",
+    "url": "https://repo.maven.apache.org/maven2/io/netty/netty-buffer/4.1.29.Final/netty-buffer-4.1.29.Final.jar",
+    "sha256": "684763a4d56adb42c5b08f0dcb4783b32238520768684524d1285d88111b23a9"
+  },
+  {
+    "file": "netty-codec-4.1.29.Final.jar",
+    "url": "https://repo.maven.apache.org/maven2/io/netty/netty-codec/4.1.29.Final/netty-codec-4.1.29.Final.jar",
+    "sha256": "9750d29f49c0b325c7fd6e6c942516f49f3c5bbbf196c79b666bcbe29e180bbc"
+  },
+  {
+    "file": "netty-common-4.1.29.Final.jar",
+    "url": "https://repo.maven.apache.org/maven2/io/netty/netty-common/4.1.29.Final/netty-common-4.1.29.Final.jar",
+    "sha256": "dca8a638969f48107a8c3f6c12236814140a0c461e8dda11774ae8edf17b20b8"
+  },
+  {
+    "file": "netty-handler-4.1.29.Final.jar",
+    "url": "https://repo.maven.apache.org/maven2/io/netty/netty-handler/4.1.29.Final/netty-handler-4.1.29.Final.jar",
+    "sha256": "6bb62f3ba593c3e5fc4a679d2b59a3913a22e31bff10f85dd9578659799e024f"
+  },
+  {
+    "file": "netty-resolver-4.1.29.Final.jar",
+    "url": "https://repo.maven.apache.org/maven2/io/netty/netty-resolver/4.1.29.Final/netty-resolver-4.1.29.Final.jar",
+    "sha256": "21b283ac9245a7c472b29875a3b065fe73ab6db0d1b5ab43d5c4092a06cd7df8"
+  },
+  {
+    "file": "netty-transport-4.1.29.Final.jar",
+    "url": "https://repo.maven.apache.org/maven2/io/netty/netty-transport/4.1.29.Final/netty-transport-4.1.29.Final.jar",
+    "sha256": "a80748e745a60d8e00222cc8895eb61e4ce92c5d6b30cdb17193d345813f5896"
+  },
+  {
+    "file": "reactive-streams-1.0.2.jar",
+    "url": "https://repo.maven.apache.org/maven2/org/reactivestreams/reactive-streams/1.0.2/reactive-streams-1.0.2.jar",
+    "sha256": "cc09ab0b140e0d0496c2165d4b32ce24f4d6446c0a26c5dc77b06bdf99ee8fae"
+  },
+  {
+    "file": "reactor-core-3.2.0.RELEASE.jar",
+    "url": "https://repo.maven.apache.org/maven2/io/projectreactor/reactor-core/3.2.0.RELEASE/reactor-core-3.2.0.RELEASE.jar",
+    "sha256": "1ea6b4e2ada3e16d54d2753a26206585972df95c173efe831853a63479312e2b"
+  },
+  {
+    "file": "amqp-client-2.7.0.jar",
+    "url": "https://repo.maven.apache.org/maven2/com/rabbitmq/amqp-client/2.7.0/amqp-client-2.7.0.jar",
+    "sha256": "e6507c35791abecaf055959b4ba6b4ecb3b2fc1eae1cc66bc5404526ee77e8d8"
+  },
+  {
+    "file": "mongo-java-driver-3.7.0.jar",
+    "url": "https://repo.maven.apache.org/maven2/org/mongodb/mongo-java-driver/3.7.0/mongo-java-driver-3.7.0.jar",
+    "sha256": "95711e5a8e19355574a51e26158464466cb10e1931cc42f399ccb46aa5cec6dc"
+  },
+  {
+    "file": "kafka-clients-0.11.0.0.jar",
+    "url": "https://repo.maven.apache.org/maven2/org/apache/kafka/kafka-clients/0.11.0.0/kafka-clients-0.11.0.0.jar",
+    "sha256": "55a697b24f5cdfea35aab3a59ce54bae766dbf79c5c4f4870cbd4a19aaab2c02"
+  },
+  {
+    "file": "grpc-core-1.6.0.jar",
+    "url": "https://repo.maven.apache.org/maven2/io/grpc/grpc-core/1.6.0/grpc-core-1.6.0.jar",
+    "sha256": "8571e0ed0c8c4e32c070b18b42fc366bf3037305a636af3883625a22f0937137"
+  },
+  {
+    "file": "grpc-context-1.6.0.jar",
+    "url": "https://repo.maven.apache.org/maven2/io/grpc/grpc-context/1.6.0/grpc-context-1.6.0.jar",
+    "sha256": "d18d1fc8c9bc685bc908d23fc0b7f0705b6ae6b186e54f16765f25cfe9561b05"
+  },
+  {
+    "file": "guava-19.0.jar",
+    "url": "https://repo.maven.apache.org/maven2/com/google/guava/guava/19.0/guava-19.0.jar",
+    "sha256": "58d4cc2e05ebb012bbac568b032f75623be1cb6fb096f3c60c72a86f7f057de4"
+  },
+  {
+    "file": "elasticsearch-rest-client-7.17.28.jar",
+    "url": "https://repo.maven.apache.org/maven2/org/elasticsearch/client/elasticsearch-rest-client/7.17.28/elasticsearch-rest-client-7.17.28.jar",
+    "sha256": "ea9f2090f6c054a7e865a71c693b0b9fd8ff9f232713d155d747e54146efa93c"
+  },
+  {
+    "file": "httpasyncclient-4.1.5.jar",
+    "url": "https://repo.maven.apache.org/maven2/org/apache/httpcomponents/httpasyncclient/4.1.5/httpasyncclient-4.1.5.jar",
+    "sha256": "0c1877489a9d1ba4fa50f6cfcab11d1123618858cb31d56afaab5afdd5064d99"
+  },
+  {
+    "file": "httpcore-nio-4.4.16.jar",
+    "url": "https://repo.maven.apache.org/maven2/org/apache/httpcomponents/httpcore-nio/4.4.16/httpcore-nio-4.4.16.jar",
+    "sha256": "4018736ede2d321034e8517ea90baefb31831a8608afccc446d8a699fb1d00d4"
+  },
+  {
+    "file": "jackson-core-2.22.3.jar",
+    "url": "https://repo.maven.apache.org/maven2/com/fasterxml/jackson/core/jackson-core/2.22.3/jackson-core-2.22.3.jar",
+    "sha256": "8a501126a385b25841915d839508f8a66e2a0dbc8a6709d055ef3b3e852b094c"
+  },
+  {
+    "file": "dubbo-2.5.3.jar",
+    "url": "https://repo.maven.apache.org/maven2/com/alibaba/dubbo/2.5.3/dubbo-2.5.3.jar",
+    "sha256": "b469f8512199222c7b3a02e23928546393b5c8119ed9a7af065d5acd0099837a"
+  }
+]

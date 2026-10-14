@@ -1,0 +1,42 @@
+[
+  {
+    "path": "com/alibaba/dubbo/2.5.3/dubbo-2.5.3.jar",
+    "sha256": "b469f8512199222c7b3a02e23928546393b5c8119ed9a7af065d5acd0099837a"
+  },
+  {
+    "path": "com/alibaba/dubbo/2.5.10/dubbo-2.5.10.jar",
+    "sha256": "330c3b0b9037cd24f476defb13affcf5cc945c0cfe1c297ea9aaef71c9e904a5"
+  },
+  {
+    "path": "com/alibaba/dubbo/2.6.12/dubbo-2.6.12.jar",
+    "sha256": "6dcccd1cb2ef82242faece063551b58756fa224ed3339552fe5809805ed9a5fc"
+  },
+  {
+    "path": "org/javassist/javassist/3.20.0-GA/javassist-3.20.0-GA.jar",
+    "sha256": "d7691062fb779c2381640c8f72acba2c23873b01c243866d41c15dc4c8848ea2"
+  },
+  {
+    "path": "org/jboss/netty/netty/3.2.5.Final/netty-3.2.5.Final.jar",
+    "sha256": "39c561be2ba171f3618aabd110fe6047043e6425eac586901dcb9df8751d3674"
+  },
+  {
+    "path": "org/slf4j/slf4j-api/1.7.25/slf4j-api-1.7.25.jar",
+    "sha256": "18c4a0095d5c1da6b817592e767bb23d29dd2f560ad74df75ff3961dbde25b79"
+  },
+  {
+    "path": "org/slf4j/slf4j-simple/1.7.25/slf4j-simple-1.7.25.jar",
+    "sha256": "0966e86fffa5be52d3d9e7b89dd674d98a03eed0a454fbaf7c1bd9493bd9d874"
+  },
+  {
+    "path": "com/alibaba/dubbo/2.6.0/dubbo-2.6.0.jar",
+    "sha256": "64423dcab7197d38289caa0f94937c56605c508f2f88ece9404d41d1a421cf9e"
+  },
+  {
+    "path": "com/alibaba/dubbo/2.6.2/dubbo-2.6.2.jar",
+    "sha256": "efa28d57958d52ae49f08ddfee4a42ebee540660fe45a529baa505018db4d58f"
+  },
+  {
+    "path": "io/netty/netty-all/4.1.25.Final/netty-all-4.1.25.Final.jar",
+    "sha256": "972642d0037706485747d34ce50fd67a15f0ed3d8a781882d683824c9977bc86"
+  }
+]

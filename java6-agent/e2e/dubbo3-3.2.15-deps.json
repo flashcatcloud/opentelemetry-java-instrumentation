@@ -1,0 +1,298 @@
+[
+  {
+    "file": "HdrHistogram-2.2.2.jar",
+    "sha256": "22d1d4316c4ec13a68b559e98c8256d69071593731da96136640f864fa14fad8"
+  },
+  {
+    "file": "LatencyUtils-2.0.3.jar",
+    "sha256": "a32a9ffa06b2f4e01c5360f8f9df7bc5d9454a5d373cd8f361347fa5a57165ec"
+  },
+  {
+    "file": "byte-buddy-1.14.18.jar",
+    "sha256": "52117af1696a53aa77c131353074ada25ccbdf2df511f2af33fad6704fa95104"
+  },
+  {
+    "file": "commons-io-2.16.1.jar",
+    "sha256": "f41f7baacd716896447ace9758621f62c1c6b0a91d89acee488da26fc477c84f"
+  },
+  {
+    "file": "dubbo-3.2.15.jar",
+    "sha256": "811e8126b82d3f7bf9d511339d186d314d7e06d52fdedfe8f2aa3e9ab590884f"
+  },
+  {
+    "file": "dubbo-cluster-3.2.15.jar",
+    "sha256": "08844c61db70362e04952e8d0f07f4fd4421f27801702a77cd0d2994ed269c5d"
+  },
+  {
+    "file": "dubbo-common-3.2.15.jar",
+    "sha256": "03a649793f20bc041753ce1db6a966ab80cda76932f19fc02132c3706afe8367"
+  },
+  {
+    "file": "dubbo-config-api-3.2.15.jar",
+    "sha256": "dfa01d89c145f40902d33685916939b3bdba93d4e5eb61e36e517e981b04836a"
+  },
+  {
+    "file": "dubbo-container-api-3.2.15.jar",
+    "sha256": "fae26acd84785d208be9b0bfc33960870fe09b8510b935689f12dfb8df1e2f5f"
+  },
+  {
+    "file": "dubbo-metadata-api-3.2.15.jar",
+    "sha256": "27a7a0c32a02d3be9525780fbe0fe587f3817eff56c2743e3ddb09300483f68a"
+  },
+  {
+    "file": "dubbo-metrics-api-3.2.15.jar",
+    "sha256": "8e35752e140d0c01dc13b7096fed50686b42fa54c12c6f9ae765ba1fcf850665"
+  },
+  {
+    "file": "dubbo-metrics-config-center-3.2.15.jar",
+    "sha256": "72ec1b291a184f1157b7801844390d58486d6272cb00e390a23ed40524d10f0a"
+  },
+  {
+    "file": "dubbo-metrics-default-3.2.15.jar",
+    "sha256": "180a6d14bc95db7a15f4adadeae915f5d4bd8a60ad1f0c97eff0077b4f20a521"
+  },
+  {
+    "file": "dubbo-metrics-metadata-3.2.15.jar",
+    "sha256": "2bdf1cf5c7b2d1a75000b6108928030ea2bc0c3ca5d6893fb356b36384775fdf"
+  },
+  {
+    "file": "dubbo-metrics-registry-3.2.15.jar",
+    "sha256": "74a606546d01fe502ed8ef77bf8dc229c94c039cc929ebab1669cff47b1e67f8"
+  },
+  {
+    "file": "dubbo-monitor-api-3.2.15.jar",
+    "sha256": "8b513b44930c0121bb8fa798745f1e0c5b1b4fe4c056d8dab6a59bce8a59ed9b"
+  },
+  {
+    "file": "dubbo-registry-api-3.2.15.jar",
+    "sha256": "73330e29fd1995e0c640f428e2b53c35d37d846a225a927995c452ce56a1f77f"
+  },
+  {
+    "file": "dubbo-remoting-api-3.2.15.jar",
+    "sha256": "7f8297103f1ed9ca6e7eccfcf192c3d49567139020437e5dcafccbcbfbe9730c"
+  },
+  {
+    "file": "dubbo-rpc-api-3.2.15.jar",
+    "sha256": "24cd4633a0c7ba054f8d990fb38d40444421beea11fbf8e14df27e8ff047ecf4"
+  },
+  {
+    "file": "dubbo-rpc-injvm-3.2.15.jar",
+    "sha256": "f2966e08675f74e3e31c41199b8bd2b913f597af2a024fcca5c61e819d1777bd"
+  },
+  {
+    "file": "dubbo-serialization-api-3.2.15.jar",
+    "sha256": "33ccbc8f2f86553a060cb71a951261a0eccec34f31c1540c52beb4705c629503"
+  },
+  {
+    "file": "fastjson2-2.0.52.jar",
+    "sha256": "61f35d82a6a948821cc4e5a25ccad36ec5895667363719556f2fd4940e2f22a4"
+  },
+  {
+    "file": "hessian-lite-3.2.13.jar",
+    "sha256": "691967b560a6bd0e4719cfbe24a47febb0a3d18ef8779f7b4f8b72537080befd"
+  },
+  {
+    "file": "javassist-3.30.2-GA.jar",
+    "sha256": "eba37290994b5e4868f3af98ff113f6244a6b099385d9ad46881307d3cb01aaf"
+  },
+  {
+    "file": "javax.annotation-api-1.3.2.jar",
+    "sha256": "e04ba5195bcd555dc95650f7cc614d151e4bcd52d29a10b8aa2197f3ab89ab9b"
+  },
+  {
+    "file": "micrometer-commons-1.13.2.jar",
+    "sha256": "68776cc09a4bdd80abcfe65e0a2caee5c9a88580df1f7c615bfd13e4baa60f7b"
+  },
+  {
+    "file": "micrometer-core-1.13.2.jar",
+    "sha256": "70d73b46bb5412431f6d589f4ffcd8fa31c122b763eb0dc1b3dcc9c86b28df56"
+  },
+  {
+    "file": "micrometer-observation-1.13.2.jar",
+    "sha256": "445b615d7b0a2b0917b044bea496c2ec84c57cb3402a47eabc9e23a72a1d6f68"
+  },
+  {
+    "file": "netty-all-4.1.112.Final.jar",
+    "sha256": "311799e633f490de01d5720a20c0d6f326c012538db9f504687a3f2c7b3582ea"
+  },
+  {
+    "file": "netty-buffer-4.1.112.Final.jar",
+    "sha256": "bc182c48f5369d48cd8370d2ab0c5b8d99dd8ffa4a0f8ac701652d57bd380eff"
+  },
+  {
+    "file": "netty-codec-4.1.112.Final.jar",
+    "sha256": "72db4f93629f7ea520d2998c08e2b1d69f9c6a4792b53da5e9a001d24c78b151"
+  },
+  {
+    "file": "netty-codec-dns-4.1.112.Final.jar",
+    "sha256": "8939e59890dba2b72f720811c15034178449f2ce0ff3daf7942f0fb488d7ee6b"
+  },
+  {
+    "file": "netty-codec-haproxy-4.1.112.Final.jar",
+    "sha256": "fc9e2335d28b1824389b8cbe36a64d1839c743dd3ffded0c053bc36b7b3e5f4c"
+  },
+  {
+    "file": "netty-codec-http-4.1.112.Final.jar",
+    "sha256": "21b502d1374d6992728d004e0c1c95544d46d971f55ea78dcb854ce1ac0c83bc"
+  },
+  {
+    "file": "netty-codec-http2-4.1.112.Final.jar",
+    "sha256": "7f73efc845e8818d71da23b21dc65d69132dd0e12ed0e80cc937bd79ab7d5749"
+  },
+  {
+    "file": "netty-codec-memcache-4.1.112.Final.jar",
+    "sha256": "fa7c14def7031add8fa4c5aed93748126290f426c8d133a692b1311c31b056a8"
+  },
+  {
+    "file": "netty-codec-mqtt-4.1.112.Final.jar",
+    "sha256": "870db37d9d32ce7f78180f3649e40f94e3b60902e98a5136ff9c3c8b24f71a0d"
+  },
+  {
+    "file": "netty-codec-redis-4.1.112.Final.jar",
+    "sha256": "62cb4114ddbd3baa5b7760b6cc4dcf3655b1569b1f27cf564d5b7c1f67947a87"
+  },
+  {
+    "file": "netty-codec-smtp-4.1.112.Final.jar",
+    "sha256": "40b1bfb093af2658e5bbe77f71c138bb67ab7b56203d3934b27f31975b70f21c"
+  },
+  {
+    "file": "netty-codec-socks-4.1.112.Final.jar",
+    "sha256": "069f14507676282a8c4b871b27332aa4491c16339ec0e86f4d86d45a953b51f5"
+  },
+  {
+    "file": "netty-codec-stomp-4.1.112.Final.jar",
+    "sha256": "b72bdd3887a3547ac3a9c47e26077f11c1c5a810e767fdcde5acde1e8326c8f8"
+  },
+  {
+    "file": "netty-codec-xml-4.1.112.Final.jar",
+    "sha256": "edc728dc87e6e9670b3a7d86fc2a63f4dd462c692311946966b0da12de14905e"
+  },
+  {
+    "file": "netty-common-4.1.112.Final.jar",
+    "sha256": "b03967f32c65de5ed339b97729170e0289b22ffa5729e7f45f68bf6b431fb567"
+  },
+  {
+    "file": "netty-handler-4.1.112.Final.jar",
+    "sha256": "ea4d6062a5fb10a6e2364d8bbdebc1cfa814f1fc9f910ef57e5caf02fb15c588"
+  },
+  {
+    "file": "netty-handler-proxy-4.1.112.Final.jar",
+    "sha256": "91f7c93dfe4b7a13198d40af39edac0adb0c33f08d9759242997b89176130c8c"
+  },
+  {
+    "file": "netty-handler-ssl-ocsp-4.1.112.Final.jar",
+    "sha256": "46d938ee1d963d8c1d1aa59156f532d6fa2a9ed9d251607cac1d16c7a3e42cf8"
+  },
+  {
+    "file": "netty-resolver-4.1.112.Final.jar",
+    "sha256": "6b4ac9f3b67f562f0770d57c389279ff9c708eb401e1a3635f52297f0f897edc"
+  },
+  {
+    "file": "netty-resolver-dns-4.1.112.Final.jar",
+    "sha256": "ad918df020ba6e10aeecc0b47133754d0c2616aa44d414bcb876d61bd704e56d"
+  },
+  {
+    "file": "netty-resolver-dns-classes-macos-4.1.112.Final.jar",
+    "sha256": "12d431286ab142e5bb395f1559cb45f703d65ef8d7ce1d95fd401ef7b9d54605"
+  },
+  {
+    "file": "netty-resolver-dns-native-macos-4.1.112.Final-osx-aarch_64.jar",
+    "sha256": "352596492d07f46e7b56d23cc5a4b0a773ea09b65b4a901cfc4594ea9b90ba6d"
+  },
+  {
+    "file": "netty-resolver-dns-native-macos-4.1.112.Final-osx-x86_64.jar",
+    "sha256": "f800ddd2ed121b61010a2b2c7f3fc697ee0207a9ac5f1f719a78012c4b7449a6"
+  },
+  {
+    "file": "netty-transport-4.1.112.Final.jar",
+    "sha256": "d38e31624d25ca790ee413d529c152170217ebedbcdcf61164fa6291f3a56c92"
+  },
+  {
+    "file": "netty-transport-classes-epoll-4.1.112.Final.jar",
+    "sha256": "96cf2e6622ea70e2bc67aed373607df32863f863d0d7b8c9c94d468efd1d0638"
+  },
+  {
+    "file": "netty-transport-classes-kqueue-4.1.112.Final.jar",
+    "sha256": "06d3e957325938855b319ef327d4c4eef777522c2cb9b6049e249ced45339624"
+  },
+  {
+    "file": "netty-transport-native-epoll-4.1.112.Final-linux-aarch_64.jar",
+    "sha256": "8814a47f6f3fb11100528a7db126bba033a1bc49b288bd6a35138ebe3393517b"
+  },
+  {
+    "file": "netty-transport-native-epoll-4.1.112.Final-linux-riscv64.jar",
+    "sha256": "9fd6db997086468e4075efd9924ea7873b4079367a70ffdb72ec0de9ca08e452"
+  },
+  {
+    "file": "netty-transport-native-epoll-4.1.112.Final-linux-x86_64.jar",
+    "sha256": "4e6bc9fec706aa98acd6965e7707e385c7acfdf5236f9561c0551f21d1a40f8b"
+  },
+  {
+    "file": "netty-transport-native-kqueue-4.1.112.Final-osx-aarch_64.jar",
+    "sha256": "571664e9502966caaa2620e6c058a76464c685a5936ef4b166f3ebd2d5d691a6"
+  },
+  {
+    "file": "netty-transport-native-kqueue-4.1.112.Final-osx-x86_64.jar",
+    "sha256": "a65668ab59e91084f3ceb3a91344ba25a90df36eef5c6106070aa92649b668a8"
+  },
+  {
+    "file": "netty-transport-native-unix-common-4.1.112.Final.jar",
+    "sha256": "e79ccea1b87a6348d4ebd3dfb37a2cccd9b7cb65c3375f6ccdac086c7b5ce487"
+  },
+  {
+    "file": "netty-transport-rxtx-4.1.112.Final.jar",
+    "sha256": "0f9e3dfc7b81361ebc18b3f51e3e4c35c041a3fa666e04f846556b72b950f43c"
+  },
+  {
+    "file": "netty-transport-sctp-4.1.112.Final.jar",
+    "sha256": "a1b8f663be0c8433f4df0b216c52e85548e77b6975e65fda813f032a58a5e4ac"
+  },
+  {
+    "file": "netty-transport-udt-4.1.112.Final.jar",
+    "sha256": "11257d208dd14328d0acb22e5d5b4fbb8fef4e3585c2682e7e749306a2b3f8c8"
+  },
+  {
+    "file": "slf4j-api-1.7.25.jar",
+    "sha256": "18c4a0095d5c1da6b817592e767bb23d29dd2f560ad74df75ff3961dbde25b79"
+  },
+  {
+    "file": "slf4j-simple-1.7.25.jar",
+    "sha256": "0966e86fffa5be52d3d9e7b89dd674d98a03eed0a454fbaf7c1bd9493bd9d874"
+  },
+  {
+    "file": "snakeyaml-2.2.jar",
+    "sha256": "1467931448a0817696ae2805b7b8b20bfb082652bf9c4efaed528930dc49389b"
+  },
+  {
+    "file": "spring-aop-5.3.37.jar",
+    "sha256": "48049480b96435a409e7bceda9b650ecbe58093a7d8e9cbcfe7f5b877a522c68"
+  },
+  {
+    "file": "spring-beans-5.3.37.jar",
+    "sha256": "96df4350a77692095490b8eeb2e8d5df4c121d38e6a68f9e75e2aeefc9bf4b60"
+  },
+  {
+    "file": "spring-context-5.3.37.jar",
+    "sha256": "cb804389aac212f898f349dc066b5cdc35fd2fa27bc5278fa4e98debd9d97d94"
+  },
+  {
+    "file": "spring-context-support-1.0.11.jar",
+    "sha256": "227719b2063c0b93064ec34358d4a4e3b59d63c619ba9eb679095d287133ea92"
+  },
+  {
+    "file": "spring-core-5.3.37.jar",
+    "sha256": "fa368ec048ab821774c5259498462a53eb7c860c3ce876e427e1b18999efb4b8"
+  },
+  {
+    "file": "spring-expression-5.3.37.jar",
+    "sha256": "1b8bc056a122b49a6d80c3c024395bebdfada8353eae31b052da98963dabc00d"
+  },
+  {
+    "file": "spring-jcl-5.3.37.jar",
+    "sha256": "32e6f7d7e810e2582b39427f30f5b221954c8c37ddc25cd5e8497e544f9da918"
+  },
+  {
+    "file": "t-digest-3.3.jar",
+    "sha256": "dc8be5228e0733e12fbe35eeffb6f720dff576bb2eb5dee69c1c211adcd7aeb9"
+  }
+]

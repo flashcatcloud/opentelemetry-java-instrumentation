@@ -1,0 +1,78 @@
+[
+  {
+    "file": "error_prone_annotations-2.0.19.jar",
+    "sha256": "cde78ace21e46398299d0d9c6be9f47b7f971c7f045d40c78f95be9a638cbf7e"
+  },
+  {
+    "file": "grpc-context-1.6.0.jar",
+    "sha256": "d18d1fc8c9bc685bc908d23fc0b7f0705b6ae6b186e54f16765f25cfe9561b05"
+  },
+  {
+    "file": "grpc-core-1.6.0.jar",
+    "sha256": "8571e0ed0c8c4e32c070b18b42fc366bf3037305a636af3883625a22f0937137"
+  },
+  {
+    "file": "grpc-netty-1.6.0.jar",
+    "sha256": "1ae2fcadbb52d2e836b5295a692d4181a52996b8b1d6c5b6abc15d77b8024e38"
+  },
+  {
+    "file": "grpc-stub-1.6.0.jar",
+    "sha256": "7e6ae86195fb8c604f0bff9ccf8ff9ea568acf549bc2b0d54d5f867405b4635d"
+  },
+  {
+    "file": "guava-19.0.jar",
+    "sha256": "58d4cc2e05ebb012bbac568b032f75623be1cb6fb096f3c60c72a86f7f057de4"
+  },
+  {
+    "file": "instrumentation-api-0.4.3.jar",
+    "sha256": "9502d5622fea56e5b3fbe4a5263ad3bfd93487869813304c36831e1cb1d88bd5"
+  },
+  {
+    "file": "jsr305-3.0.0.jar",
+    "sha256": "bec0b24dcb23f9670172724826584802b80ae6cbdaba03bdebdef9327b962f6a"
+  },
+  {
+    "file": "netty-buffer-4.1.14.Final.jar",
+    "sha256": "abbd8044655f63517c96dbcbd5b9b38dfaa60ae03f815b47f4a33c225426ed28"
+  },
+  {
+    "file": "netty-codec-4.1.14.Final.jar",
+    "sha256": "96b1716254f2b7ccedd33cec18ebdbe4c2f4f72ad8f9678913a846742f2dfeda"
+  },
+  {
+    "file": "netty-codec-http-4.1.14.Final.jar",
+    "sha256": "7b5fb69a53df6c2bc71e01dc9cb743d33fba6e38851533bf8c29faf5693065e2"
+  },
+  {
+    "file": "netty-codec-http2-4.1.14.Final.jar",
+    "sha256": "10c66c05d8c1af1b583133dfc34f00eb475374f7365eab0cfc1d02c1cc620171"
+  },
+  {
+    "file": "netty-codec-socks-4.1.14.Final.jar",
+    "sha256": "5adba9a07ea62e6d854ed21e66c099a41ec1230344a64534d69a0d1d814c188a"
+  },
+  {
+    "file": "netty-common-4.1.14.Final.jar",
+    "sha256": "35f9153eae9c1dd33a2e9984bc8f84019f50d18831da569cad98032486753ccd"
+  },
+  {
+    "file": "netty-handler-4.1.14.Final.jar",
+    "sha256": "70f2d91054ba7817d37bba282070c066d2c7a9bc4b0c4ce2725b5e5c44d40675"
+  },
+  {
+    "file": "netty-handler-proxy-4.1.14.Final.jar",
+    "sha256": "0e501410e7ea3226d02097f5f06bc603af78ca54fcb2ff641bd9b82f0de663c7"
+  },
+  {
+    "file": "netty-resolver-4.1.14.Final.jar",
+    "sha256": "810d6d699c6bab04fd1d75914eb1878a7d39ab0b756ab9d7f4a386d22a54db04"
+  },
+  {
+    "file": "netty-transport-4.1.14.Final.jar",
+    "sha256": "9f3ab8fe25d01e78c0eae27c2bb1126a525f951a7b35bf7ee718627ac1ed1620"
+  },
+  {
+    "file": "opencensus-api-0.5.1.jar",
+    "sha256": "19c51d2fb50e1b8135630fc68ea57828a1acb36c60fc5c9cd441940d67631079"
+  }
+]

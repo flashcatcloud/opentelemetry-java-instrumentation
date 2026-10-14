@@ -1,0 +1,12 @@
+[
+  {
+    "file": "gson-2.8.9.jar",
+    "url": "https://repo.maven.apache.org/maven2/com/google/code/gson/gson/2.8.9/gson-2.8.9.jar",
+    "sha256": "d3999291855de495c94c743761b8ab5176cfeabe281a5ab0d8e8d45326fd703e"
+  },
+  {
+    "file": "threetenbp-1.6.8-sources.jar",
+    "url": "https://repo.maven.apache.org/maven2/org/threeten/threetenbp/1.6.8/threetenbp-1.6.8-sources.jar",
+    "sha256": "6b68e90399fd0d97ee7abbe3918c87a236d52a3fb3c434359a11942f9a1abc59"
+  }
+]

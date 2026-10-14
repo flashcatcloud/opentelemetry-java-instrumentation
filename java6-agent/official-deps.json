@@ -1,0 +1,82 @@
+[
+  {
+    "file": "opentelemetry-semconv-1.44.0.jar",
+    "url": "https://repo.maven.apache.org/maven2/io/opentelemetry/semconv/opentelemetry-semconv/1.44.0/opentelemetry-semconv-1.44.0.jar",
+    "sha256": "2421833680c5a4aa618745854a0654abd9ff4a333dab43290aa8d55ce659c9e7"
+  },
+  {
+    "file": "opentelemetry-semconv-incubating-1.44.0-alpha.jar",
+    "url": "https://repo.maven.apache.org/maven2/io/opentelemetry/semconv/opentelemetry-semconv-incubating/1.44.0-alpha/opentelemetry-semconv-incubating-1.44.0-alpha.jar",
+    "sha256": "fefd94784dcbd3151223031c9c505f5e03760ca1c7a2cee4a8e69b411bbcfc83"
+  },
+  {
+    "file": "byte-buddy-dep-1.18.14.jar",
+    "url": "https://repo.maven.apache.org/maven2/net/bytebuddy/byte-buddy-dep/1.18.14/byte-buddy-dep-1.18.14.jar",
+    "sha256": "f06059c47001683dc0b83fd734ad9ecddd1869eecafbf6f1efd13a96441f1a6a"
+  },
+  {
+    "file": "asm-9.10.1.jar",
+    "url": "https://repo.maven.apache.org/maven2/org/ow2/asm/asm/9.10.1/asm-9.10.1.jar",
+    "sha256": "ed825d10ab1399c8c0cb669e688cf0c8c82629b4c8399b58352b68e92ca10fcb"
+  },
+  {
+    "file": "asm-tree-9.10.1.jar",
+    "url": "https://repo.maven.apache.org/maven2/org/ow2/asm/asm-tree/9.10.1/asm-tree-9.10.1.jar",
+    "sha256": "3dfb0d5b6a106cd40b5b250e39935fbf2f927f4477546a5369a3ac609cf0506b"
+  },
+  {
+    "file": "asm-commons-9.10.1.jar",
+    "url": "https://repo.maven.apache.org/maven2/org/ow2/asm/asm-commons/9.10.1/asm-commons-9.10.1.jar",
+    "sha256": "6d0abefb7cbf972ea16edb37ec14835372505063a45f976ab7ea889ed9497895"
+  },
+  {
+    "file": "asm-util-9.10.1.jar",
+    "url": "https://repo.maven.apache.org/maven2/org/ow2/asm/asm-util/9.10.1/asm-util-9.10.1.jar",
+    "sha256": "1bb99d091fba2597dc6d51193e9bbcf0d8447e7ed96bd8f0198b18152f09655c"
+  },
+  {
+    "file": "asm-analysis-9.10.1.jar",
+    "url": "https://repo.maven.apache.org/maven2/org/ow2/asm/asm-analysis/9.10.1/asm-analysis-9.10.1.jar",
+    "sha256": "dede75a21306b65974ecd8f87114ff6970f09fb794157a4ca09ab25c888c2bfc"
+  },
+  {
+    "file": "auto-service-annotations-1.1.1.jar",
+    "url": "https://repo.maven.apache.org/maven2/com/google/auto/service/auto-service-annotations/1.1.1/auto-service-annotations-1.1.1.jar",
+    "sha256": "16a76dd00a2650568447f5d6e3a9e2c809d9a42367d56b45215cfb89731f4d24"
+  },
+  {
+    "file": "jflex-1.9.1.jar",
+    "url": "https://repo.maven.apache.org/maven2/de/jflex/jflex/1.9.1/jflex-1.9.1.jar",
+    "sha256": "2888d90d6a5ee37166a5e339b1616ad3a2604e6cce246e61deaf115487b18350"
+  },
+  {
+    "file": "java-cup-runtime-11b-20160615-1.jar",
+    "url": "https://repo.maven.apache.org/maven2/com/github/vbmacher/java-cup-runtime/11b-20160615-1/java-cup-runtime-11b-20160615-1.jar",
+    "sha256": "7efa10d1a1d8a77f855be46e14f1011ff716e2a000a34335b57e44eeed68e03b"
+  },
+  {
+    "file": "guava-33.7.1-jre.jar",
+    "url": "https://repo.maven.apache.org/maven2/com/google/guava/guava/33.7.1-jre/guava-33.7.1-jre.jar",
+    "sha256": "796d8e28ac64e83a47c4c5935a8fecc4682650a04bbdead738ef0f5a3a0e6c46"
+  },
+  {
+    "file": "jackson-annotations-2.15.4.jar",
+    "url": "https://repo.maven.apache.org/maven2/com/fasterxml/jackson/core/jackson-annotations/2.15.4/jackson-annotations-2.15.4.jar",
+    "sha256": "f204ebbd552614a22b8531ffe350d47f8fd42c45bb60517c07974dc27a5a1dd3"
+  },
+  {
+    "file": "auto-service-1.1.1.jar",
+    "url": "https://repo.maven.apache.org/maven2/com/google/auto/service/auto-service/1.1.1/auto-service-1.1.1.jar",
+    "sha256": "1f48f451503e623daba7d9ed368cca0f81e1e3815653a4560113e12c0129ebd5"
+  },
+  {
+    "file": "auto-common-1.2.1.jar",
+    "url": "https://repo.maven.apache.org/maven2/com/google/auto/auto-common/1.2.1/auto-common-1.2.1.jar",
+    "sha256": "f43f29fe2a6ebaf04b2598cdeec32a4e346d49a9404e990f5fc19c19f3a28d0e"
+  },
+  {
+    "file": "opentelemetry-semconv-1.44.0-sources.jar",
+    "url": "https://repo.maven.apache.org/maven2/io/opentelemetry/semconv/opentelemetry-semconv/1.44.0/opentelemetry-semconv-1.44.0-sources.jar",
+    "sha256": "12e30a7ffb46f89673aea7627d3287290f8387c439d668a7f9f1695833cfb5d4"
+  }
+]
