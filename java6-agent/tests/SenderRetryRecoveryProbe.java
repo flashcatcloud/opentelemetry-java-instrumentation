@@ -58,7 +58,9 @@ public class SenderRetryRecoveryProbe {
    Field pendingField=sender.getClass().getDeclaredField("pending");pendingField.setAccessible(true);pending=(Set<?>)pendingField.get(sender);
   }
   try {
-   for(int round=0;round<20;round++) {
+   int rounds=Integer.getInteger("probe.rounds",20).intValue();
+   if(rounds<1 || rounds>10000)throw new IllegalArgumentException("probe.rounds outside 1..10000");
+   for(int round=0;round<rounds;round++) {
     healthy.set(round%2==1);int before=attempts.get();
     final java.util.concurrent.atomic.AtomicInteger successes=new java.util.concurrent.atomic.AtomicInteger();
     final CountDownLatch callbacks=new CountDownLatch(8);
@@ -82,6 +84,11 @@ public class SenderRetryRecoveryProbe {
     if(healthy.get() && successes.get()!=8-rejected.get())throw new AssertionError("recovery failed: "+successes.get());
     if(!healthy.get() && successes.get()!=0)throw new AssertionError("false success");
     System.out.println("RETRY_RECOVERY_ROUND_OK "+round+" callbacks=8 rejected="+rejected.get()+" active=0 queued=0");
+    if(round%20==19 || round==rounds-1) {
+     String[] descriptors=new File("/proc/self/fd").list();
+     Runtime runtime=Runtime.getRuntime();
+     System.out.println("RESOURCE_SAMPLE round="+round+" threads="+java.lang.management.ManagementFactory.getThreadMXBean().getThreadCount()+" heap="+(runtime.totalMemory()-runtime.freeMemory())+" fds="+(descriptors==null?-1:descriptors.length)+" pool="+worker.getPoolSize());
+    }
    }
    api.getMethod("shutdown").invoke(sender);Thread.sleep(500);
    if(!worker.isTerminated() || (timer!=null && !timer.isTerminated()))throw new AssertionError("shutdown leaked threads");

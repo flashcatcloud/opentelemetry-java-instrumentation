@@ -20,6 +20,9 @@ Android and Conscrypt artifacts are compile-only and must not be packaged.
 - Okio's two Java 7 `Path` overloads are excluded; no exporter call uses them.
   `Deflater.SYNC_FLUSH` is unavailable on Java 6 and fails explicitly if invoked.
   The SDK compressor and Okio response decompressor do not require this operation.
+- The upstream Okio [b4fa875](https://github.com/square/okio/commit/b4fa875)
+  gzip XLEN unsigned-length fix (CVE-2023-3635)
+  is retained as an explicit patch; lengths 32768..65535 must not become negative.
 - Android 10 platform detection is excluded from this server-JVM distribution.
 - The upstream hostname ASCII guard from commit
   `f574ea2f5259d9040f264ddeb582fb1ce563f10c` is ported to Java source.
