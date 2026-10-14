@@ -1,0 +1,30 @@
+[
+  {
+    "file": "commons-codec-1.15.jar",
+    "sha256": "b3e9f6d63a790109bf0d056611fbed1cf69055826defeb9894a71369d246ed63"
+  },
+  {
+    "file": "commons-logging-1.2.jar",
+    "sha256": "daddea1ea0be0f56978ab3006b8ac92834afeefbd9b7e4e6316fca57df0fa636"
+  },
+  {
+    "file": "elasticsearch-rest-client-8.17.3.jar",
+    "sha256": "5640ad7f720bf90f5f8f5451686d76024933d74cd93371fbd81abafe19ecde07"
+  },
+  {
+    "file": "httpasyncclient-4.1.5.jar",
+    "sha256": "0c1877489a9d1ba4fa50f6cfcab11d1123618858cb31d56afaab5afdd5064d99"
+  },
+  {
+    "file": "httpclient-4.5.14.jar",
+    "sha256": "c8bc7e1c51a6d4ce72f40d2ebbabf1c4b68bfe76e732104b04381b493478e9d6"
+  },
+  {
+    "file": "httpcore-4.4.13.jar",
+    "sha256": "e06e89d40943245fcfa39ec537cdbfce3762aecde8f9c597780d2b00c2b43424"
+  },
+  {
+    "file": "httpcore-nio-4.4.13.jar",
+    "sha256": "71fcfbe869002c48563cc5979fc734571c8d0d167ccce42970c932f337981f19"
+  }
+]

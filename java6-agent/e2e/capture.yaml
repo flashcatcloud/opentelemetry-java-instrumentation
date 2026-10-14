@@ -1,0 +1,18 @@
+receivers:
+  otlp:
+    protocols:
+      http:
+        endpoint: 0.0.0.0:4318
+exporters:
+  file:
+    path: /evidence/traces.jsonl
+    rotation:
+      max_megabytes: 10
+      max_backups: 2
+  otlphttp:
+    endpoint: http://10.98.1.111:4418
+service:
+  pipelines:
+    traces:
+      receivers: [otlp]
+      exporters: [file, otlphttp]

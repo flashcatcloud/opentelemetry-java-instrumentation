@@ -1,0 +1,114 @@
+[
+  {
+    "file": "animal-sniffer-annotations-1.24.jar",
+    "sha256": "c720e6e5bcbe6b2f48ded75a47bccdb763eede79d14330102e0d352e3d89ed92"
+  },
+  {
+    "file": "annotations-4.1.1.4.jar",
+    "sha256": "ba734e1e84c09d615af6a09d33034b4f0442f8772dec120efb376d86a565ae15"
+  },
+  {
+    "file": "checker-qual-3.42.0.jar",
+    "sha256": "ccaedd33af0b7894d9f2f3b644f4d19e43928e32902e61ac4d10777830f5aac7"
+  },
+  {
+    "file": "error_prone_annotations-2.28.0.jar",
+    "sha256": "f3fc8a3a0a4020706a373b00e7f57c2512dd26d1f83d28c7d38768f8682b231e"
+  },
+  {
+    "file": "failureaccess-1.0.2.jar",
+    "sha256": "8a8f81cf9b359e3f6dfa691a1e776985c061ef2f223c9b2c80753e1b458e8064"
+  },
+  {
+    "file": "grpc-api-1.68.1.jar",
+    "sha256": "d88d815e07fe58a7572dda5d2823485b61706564f289a1e74281705d50ac2d5b"
+  },
+  {
+    "file": "grpc-context-1.68.1.jar",
+    "sha256": "1df4f0310a7e7836bc2948afa95105f5ee27b5d468488aded74e7ff620359076"
+  },
+  {
+    "file": "grpc-core-1.68.1.jar",
+    "sha256": "e1eddfe433aa850783cb6af9ad6da1ad3dfe2fb9b4c385b9a98d7a596e4d382a"
+  },
+  {
+    "file": "grpc-netty-1.68.1.jar",
+    "sha256": "1bf33f36496c4fffa7b83cab9215ab2967f00e483270d87f1c17b23e5722a13f"
+  },
+  {
+    "file": "grpc-stub-1.68.1.jar",
+    "sha256": "3d0260ba925cdeb63930b672daac815245f1c76d67ec111dd82e4dac6c9abd47"
+  },
+  {
+    "file": "grpc-util-1.68.1.jar",
+    "sha256": "d489e40de9209981272fb9e7b0f61a5f0e5c1ce230195a5f23fb1078cd1baade"
+  },
+  {
+    "file": "gson-2.11.0.jar",
+    "sha256": "57928d6e5a6edeb2abd3770a8f95ba44dce45f3b23b7a9dc2b309c581552a78b"
+  },
+  {
+    "file": "guava-33.2.1-android.jar",
+    "sha256": "6b55fbe6ffee621454c03df7bea720d189789e136391a524e29506ff40654180"
+  },
+  {
+    "file": "j2objc-annotations-3.0.0.jar",
+    "sha256": "88241573467ddca44ffd4d74aa04c2bbfd11bf7c17e0c342c94c9de7a70a7c64"
+  },
+  {
+    "file": "jsr305-3.0.2.jar",
+    "sha256": "766ad2a0783f2687962c8ad74ceecc38a28b9f72a2d085ee438b7813e928d0c7"
+  },
+  {
+    "file": "listenablefuture-9999.0-empty-to-avoid-conflict-with-guava.jar",
+    "sha256": "b372a037d4230aa57fbeffdef30fd6123f9c0c2db85d0aced00c91b974f33f99"
+  },
+  {
+    "file": "netty-buffer-4.1.110.Final.jar",
+    "sha256": "46d74e79125aacc055c31f18152fdc5d4a569aa8d60091203d0baa833973ac3c"
+  },
+  {
+    "file": "netty-codec-4.1.110.Final.jar",
+    "sha256": "9eccce9a8d827bb8ce84f9c3183fec58bd1c96a51010cf711297746034af3701"
+  },
+  {
+    "file": "netty-codec-http-4.1.110.Final.jar",
+    "sha256": "dc0d6af5054630a70ff0ef354f20aa7a6e46738c9fc5636ed3d4fe77e38bd48d"
+  },
+  {
+    "file": "netty-codec-http2-4.1.110.Final.jar",
+    "sha256": "b546c75445a487bb7bcd5a94779caecce33582cf7be31b8b39fc0e65b1ee26fc"
+  },
+  {
+    "file": "netty-codec-socks-4.1.110.Final.jar",
+    "sha256": "976052a3c9bb280bc6d99f3a29e6404677cf958c3de05b205093d38c006b880c"
+  },
+  {
+    "file": "netty-common-4.1.110.Final.jar",
+    "sha256": "9851ec66548b9e0d41164ce98943cdd4bbe305f68ddbd24eae52e4501a0d7b1a"
+  },
+  {
+    "file": "netty-handler-4.1.110.Final.jar",
+    "sha256": "d5a08d7de364912e4285968de4d4cce3f01da4bb048d5c6937e5f2af1f8e148a"
+  },
+  {
+    "file": "netty-handler-proxy-4.1.110.Final.jar",
+    "sha256": "ad54ab4fe9c47ef3e723d71251126db53e8db543871adb9eafc94446539eff52"
+  },
+  {
+    "file": "netty-resolver-4.1.110.Final.jar",
+    "sha256": "a2e9b4ae7caa92fc5bd747e11d1dec20d81b18fc00959554302244ac5c56ce70"
+  },
+  {
+    "file": "netty-transport-4.1.110.Final.jar",
+    "sha256": "a42dd68390ca14b4ff2d40628a096c76485b4adb7c19602d5289321a0669e704"
+  },
+  {
+    "file": "netty-transport-native-unix-common-4.1.110.Final.jar",
+    "sha256": "51717bb7471141950390c6713a449fdb1054d07e60737ee7dda7083796cdee48"
+  },
+  {
+    "file": "perfmark-api-0.27.0.jar",
+    "sha256": "c7b478503ec524e55df19b424d46d27c8a68aeb801664fadd4f069b71f52d0f6"
+  }
+]

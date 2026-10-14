@@ -1,0 +1,67 @@
+[
+  {
+    "file": "dubbo-2.7.0.jar",
+    "url": "https://repo.maven.apache.org/maven2/org/apache/dubbo/dubbo/2.7.0/dubbo-2.7.0.jar",
+    "sha256": "14f37e804a8e25d8d59ccb2319e9e79efe9990bc5e97e245cae48e75eb2b0ed9"
+  },
+  {
+    "file": "hessian-lite-3.2.3.jar",
+    "url": "https://repo.maven.apache.org/maven2/com/alibaba/hessian-lite/3.2.3/hessian-lite-3.2.3.jar",
+    "sha256": "7f454f36a234775722534f104f27031e0df4aa82e5f51c874cc451ecd89d594d"
+  },
+  {
+    "file": "gson-2.8.5.jar",
+    "url": "https://repo.maven.apache.org/maven2/com/google/code/gson/gson/2.8.5/gson-2.8.5.jar",
+    "sha256": "233a0149fc365c9f6edbd683cfe266b19bdc773be98eabdaf6b3c924b48e7d81"
+  },
+  {
+    "file": "spring-context-4.3.16.RELEASE.jar",
+    "url": "https://repo.maven.apache.org/maven2/org/springframework/spring-context/4.3.16.RELEASE/spring-context-4.3.16.RELEASE.jar",
+    "sha256": "5ed77a80764d983ec77b72af6e86025e7f76790e5cbc4c0fce8275a0329282f1"
+  },
+  {
+    "file": "spring-core-4.3.16.RELEASE.jar",
+    "url": "https://repo.maven.apache.org/maven2/org/springframework/spring-core/4.3.16.RELEASE/spring-core-4.3.16.RELEASE.jar",
+    "sha256": "596ffc927a800df82c5b3d93292e2fe81596e5cadb4c68d15bad85c8294bc062"
+  },
+  {
+    "file": "spring-beans-4.3.16.RELEASE.jar",
+    "url": "https://repo.maven.apache.org/maven2/org/springframework/spring-beans/4.3.16.RELEASE/spring-beans-4.3.16.RELEASE.jar",
+    "sha256": "8dc528e4e9998f626a6072a087d8d155a3c833515790dff01785b7efe86d7f5a"
+  },
+  {
+    "file": "spring-expression-4.3.16.RELEASE.jar",
+    "url": "https://repo.maven.apache.org/maven2/org/springframework/spring-expression/4.3.16.RELEASE/spring-expression-4.3.16.RELEASE.jar",
+    "sha256": "db24c4800a524c920c6deae76ef2a84b4250b2cd467ae08e7fa3a258f595d3ca"
+  },
+  {
+    "file": "spring-aop-4.3.16.RELEASE.jar",
+    "url": "https://repo.maven.apache.org/maven2/org/springframework/spring-aop/4.3.16.RELEASE/spring-aop-4.3.16.RELEASE.jar",
+    "sha256": "2b4796cbbb292b0c79cd69712e0bcab54741650a0a816271d4fc31d54a8cf40a"
+  },
+  {
+    "file": "commons-logging-1.2.jar",
+    "url": "https://repo.maven.apache.org/maven2/commons-logging/commons-logging/1.2/commons-logging-1.2.jar",
+    "sha256": "daddea1ea0be0f56978ab3006b8ac92834afeefbd9b7e4e6316fca57df0fa636"
+  },
+  {
+    "file": "javassist-3.20.0-GA.jar",
+    "source": "java6-agent/build/dubbo/deps/javassist-3.20.0-GA.jar",
+    "sha256": "d7691062fb779c2381640c8f72acba2c23873b01c243866d41c15dc4c8848ea2"
+  },
+  {
+    "file": "netty-all-4.1.25.Final.jar",
+    "source": "java6-agent/build/dubbo/deps/netty-all-4.1.25.Final.jar",
+    "sha256": "972642d0037706485747d34ce50fd67a15f0ed3d8a781882d683824c9977bc86"
+  },
+  {
+    "file": "slf4j-api-1.7.25.jar",
+    "source": "java6-agent/build/dubbo/deps/slf4j-api-1.7.25.jar",
+    "sha256": "18c4a0095d5c1da6b817592e767bb23d29dd2f560ad74df75ff3961dbde25b79"
+  },
+  {
+    "file": "slf4j-simple-1.7.25.jar",
+    "source": "java6-agent/build/dubbo/deps/slf4j-simple-1.7.25.jar",
+    "sha256": "0966e86fffa5be52d3d9e7b89dd674d98a03eed0a454fbaf7c1bd9493bd9d874"
+  }
+]

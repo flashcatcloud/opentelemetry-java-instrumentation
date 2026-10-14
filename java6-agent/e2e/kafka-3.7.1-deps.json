@@ -1,0 +1,32 @@
+[
+  {
+    "file": "kafka-clients-3.7.1.jar",
+    "url": "https://repo.maven.apache.org/maven2/org/apache/kafka/kafka-clients/3.7.1/kafka-clients-3.7.1.jar",
+    "sha256": "e128cccb0efcfc52556d8dd73d804e78de7a22543e747880f61e1ba18613ddbb"
+  },
+  {
+    "file": "slf4j-api-1.7.36.jar",
+    "url": "https://repo.maven.apache.org/maven2/org/slf4j/slf4j-api/1.7.36/slf4j-api-1.7.36.jar",
+    "sha256": "d3ef575e3e4979678dc01bf1dcce51021493b4d11fb7f1be8ad982877c16a1c0"
+  },
+  {
+    "file": "slf4j-simple-1.7.36.jar",
+    "url": "https://repo.maven.apache.org/maven2/org/slf4j/slf4j-simple/1.7.36/slf4j-simple-1.7.36.jar",
+    "sha256": "2f39bed943d624dfa8f4102d0571283a10870b6aa36f197a8a506f147010c10f"
+  },
+  {
+    "file": "lz4-java-1.8.0.jar",
+    "url": "https://repo.maven.apache.org/maven2/org/lz4/lz4-java/1.8.0/lz4-java-1.8.0.jar",
+    "sha256": "d74a3334fb35195009b338a951f918203d6bbca3d1d359033dc33edd1cadc9ef"
+  },
+  {
+    "file": "snappy-java-1.1.10.5.jar",
+    "url": "https://repo.maven.apache.org/maven2/org/xerial/snappy/snappy-java/1.1.10.5/snappy-java-1.1.10.5.jar",
+    "sha256": "0f3f1857ed33116583f480b4df5c0218836c47bfbc9c6221c0d73f356decf37b"
+  },
+  {
+    "file": "zstd-jni-1.5.6-3.jar",
+    "url": "https://repo.maven.apache.org/maven2/com/github/luben/zstd-jni/1.5.6-3/zstd-jni-1.5.6-3.jar",
+    "sha256": "f72ede1b39258faf81277dc58de30c71cbae4253732558d2ce10b53d8b5763d5"
+  }
+]

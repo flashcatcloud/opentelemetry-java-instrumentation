@@ -1,0 +1,370 @@
+[
+  {
+    "extraction": "Unique complete license comment blocks from Java sources",
+    "file": "asm-9.10.1-LICENSE.txt",
+    "sha256": "569e4cf5a7dd337d0f1fad43cabba11f0cd0d5f6b034d260c8e295041cc21390",
+    "source": "https://repo.maven.apache.org/maven2/org/ow2/asm/asm/9.10.1/asm-9.10.1-sources.jar",
+    "source_sha256": "cb29bf42b4008972c566944d377192aa1b2d90275b9cfa9a7fa86de669fde11c"
+  },
+  {
+    "extraction": "Unique complete license comment blocks from Java sources",
+    "file": "asm-analysis-9.10.1-LICENSE.txt",
+    "sha256": "34b8dd2e1b4b5f822ba633602676297fa82328d9438ba4d7336ec7393d212e06",
+    "source": "https://repo.maven.apache.org/maven2/org/ow2/asm/asm-analysis/9.10.1/asm-analysis-9.10.1-sources.jar",
+    "source_sha256": "a85db3987f46505bba104ab1d267692aaa1937792007dcdffad34f54c76193ef"
+  },
+  {
+    "extraction": "Unique complete license comment blocks from Java sources",
+    "file": "asm-commons-9.10.1-LICENSE.txt",
+    "sha256": "34b8dd2e1b4b5f822ba633602676297fa82328d9438ba4d7336ec7393d212e06",
+    "source": "https://repo.maven.apache.org/maven2/org/ow2/asm/asm-commons/9.10.1/asm-commons-9.10.1-sources.jar",
+    "source_sha256": "a26e55103e094a0f6df75a7b5e578bd7b4ad73abd2641b0fa2ac97db70641906"
+  },
+  {
+    "extraction": "Unique complete license comment blocks from Java sources",
+    "file": "asm-tree-9.10.1-LICENSE.txt",
+    "sha256": "34b8dd2e1b4b5f822ba633602676297fa82328d9438ba4d7336ec7393d212e06",
+    "source": "https://repo.maven.apache.org/maven2/org/ow2/asm/asm-tree/9.10.1/asm-tree-9.10.1-sources.jar",
+    "source_sha256": "93a9406bb68abff43f491891625e0d3c7edce87b70d2370ec1ea4627c9ead090"
+  },
+  {
+    "extraction": "Unique complete license comment blocks from Java sources",
+    "file": "asm-util-9.10.1-LICENSE.txt",
+    "sha256": "379aaa561ef0ab386e653f2362399b11c8d54a2bad9479781c8c5e1784c6ec49",
+    "source": "https://repo.maven.apache.org/maven2/org/ow2/asm/asm-util/9.10.1/asm-util-9.10.1-sources.jar",
+    "source_sha256": "a7cbc3782c5384837149f84869dcc24625ed9a0bcaec9e929e69c44abf8f7125"
+  },
+  {
+    "extraction": "Unique complete license comment blocks from Java sources",
+    "file": "slf4j-api-1.7.36-LICENSE.txt",
+    "sha256": "615ad1d091a53c601e1dd58ba233842e748c0ff7857f1e855098fb20499128f2",
+    "source": "https://repo.maven.apache.org/maven2/org/slf4j/slf4j-api/1.7.36/slf4j-api-1.7.36-sources.jar",
+    "source_sha256": "15bc04357a3725b7a5153f132db71379f95e83b7b8590a86cc6d4ad77bfc150a"
+  },
+  {
+    "extraction": "Unique complete license comment blocks from Java sources",
+    "file": "slf4j-simple-1.7.36-LICENSE.txt",
+    "sha256": "dab1aead79fbaa822f2b44e1445d586c7741bebe8a83fba47496634f1cf21cf0",
+    "source": "https://repo.maven.apache.org/maven2/org/slf4j/slf4j-simple/1.7.36/slf4j-simple-1.7.36-sources.jar",
+    "source_sha256": "c11b4197b7100eb4c4986c93493d4230f1efccfc53f39fbdbb84573493722379"
+  },
+  {
+    "file": "streamsupport-GPL-Classpath.txt",
+    "sha256": "03a5e2dc00f2c20925d2761638aac486f5976172c001f0c9ca9f30f6022f2d72",
+    "source": "https://raw.githubusercontent.com/stefan-zobel/streamsupport/6332e13a69ad01630b03c487927d5cc65a05c421/GPL_ClasspathException"
+  },
+  {
+    "file": "CC0-1.0.txt",
+    "sha256": "a2010f343487d3f7618affe54f789f5487602331c0a8d03f49e9a7c547cf0499",
+    "source": "https://raw.githubusercontent.com/spdx/license-list-data/v3.26.0/text/CC0-1.0.txt"
+  },
+  {
+    "file": "Apache-2.0.txt",
+    "sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4",
+    "source": "OpenTelemetry Java instrumentation v2.32.0 LICENSE"
+  },
+  {
+    "file": "guava-19.0-COPYING.txt",
+    "sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30",
+    "source": "https://raw.githubusercontent.com/google/guava/v19.0/COPYING"
+  },
+  {
+    "applies_to_archive": "grpc-context-1.6.0.jar",
+    "extraction": "Unique complete leading source copyright/license headers",
+    "file": "grpc-context-1.6.0-LICENSE-HEADERS.txt",
+    "sha256": "2a1b1152d01c0622e14b8f3493e91c3e9e91fafab13073eed027222116e3c4eb",
+    "source": "https://repo.maven.apache.org/maven2/io/grpc/grpc-context/1.6.0/grpc-context-1.6.0-sources.jar",
+    "source_sha256": "8b091d3dfb8a013e906043cc74d753e9fb6084ad3ca4a9d4af6ccd506f992aa7"
+  },
+  {
+    "applies_to_archive": "grpc-core-1.6.0.jar",
+    "extraction": "Unique complete leading source copyright/license headers",
+    "file": "grpc-core-1.6.0-LICENSE-HEADERS.txt",
+    "sha256": "b6fa84f94510e326bb0eef559d8053c9bbdbf3ff438f00ef4267b0076173bff0",
+    "source": "https://repo.maven.apache.org/maven2/io/grpc/grpc-core/1.6.0/grpc-core-1.6.0-sources.jar",
+    "source_sha256": "e69834310f2c7e2d9ee3d47350c884222352f2d312364b15a4237d6bbf522aaf"
+  },
+  {
+    "applies_to_archive": "grpc-netty-1.6.0.jar",
+    "extraction": "Unique complete leading source copyright/license headers",
+    "file": "grpc-netty-1.6.0-LICENSE-HEADERS.txt",
+    "sha256": "b6fa84f94510e326bb0eef559d8053c9bbdbf3ff438f00ef4267b0076173bff0",
+    "source": "https://repo.maven.apache.org/maven2/io/grpc/grpc-netty/1.6.0/grpc-netty-1.6.0-sources.jar",
+    "source_sha256": "73a5bdf34dcd084a06257ed86b42d217a699598f07ac054037fc60041317a83f"
+  },
+  {
+    "applies_to_archive": "grpc-stub-1.6.0.jar",
+    "extraction": "Unique complete leading source copyright/license headers",
+    "file": "grpc-stub-1.6.0-LICENSE-HEADERS.txt",
+    "sha256": "b6fa84f94510e326bb0eef559d8053c9bbdbf3ff438f00ef4267b0076173bff0",
+    "source": "https://repo.maven.apache.org/maven2/io/grpc/grpc-stub/1.6.0/grpc-stub-1.6.0-sources.jar",
+    "source_sha256": "4797ef2f02c08f7eb0a22b150897fea4748494293b2edb20eb7994fb653be828"
+  },
+  {
+    "applies_to_archive": "guava-19.0.jar",
+    "extraction": "Unique complete leading source copyright/license headers",
+    "file": "guava-19.0-LICENSE-HEADERS.txt",
+    "sha256": "300ef71b412a77e72180e3f4f4bd5abd318a8f1f163a366ec73fde476c40bbdc",
+    "source": "https://repo.maven.apache.org/maven2/com/google/guava/guava/19.0/guava-19.0-sources.jar",
+    "source_sha256": "814e1ebf708d38c3b00155fbd484a401a6f771b512862e4bf58863c4f9563c6a"
+  },
+  {
+    "applies_to_archive": "instrumentation-api-0.4.3.jar",
+    "extraction": "Unique complete leading source copyright/license headers",
+    "file": "instrumentation-api-0.4.3-LICENSE-HEADERS.txt",
+    "sha256": "b16625b4950ce7447142aa8dda673e3f5889bac83020d1055e598780ad6f4ee1",
+    "source": "https://repo.maven.apache.org/maven2/com/google/instrumentation/instrumentation-api/0.4.3/instrumentation-api-0.4.3-sources.jar",
+    "source_sha256": "cd5d40834c2f85a4b559f4d14420f84684b9c775b9688bccf951621b4255643d"
+  },
+  {
+    "applies_to_archive": "opencensus-api-0.5.1.jar",
+    "extraction": "Unique complete leading source copyright/license headers",
+    "file": "opencensus-api-0.5.1-LICENSE-HEADERS.txt",
+    "sha256": "b16625b4950ce7447142aa8dda673e3f5889bac83020d1055e598780ad6f4ee1",
+    "source": "https://repo.maven.apache.org/maven2/io/opencensus/opencensus-api/0.5.1/opencensus-api-0.5.1-sources.jar",
+    "source_sha256": "35b5652026fcf5afdffe52170462e79dd8980b5d2f23a9357137d554f6452b1c"
+  },
+  {
+    "applies_to_archive": "netty-buffer-4.1.139.Final.jar",
+    "extraction": "Unique complete leading source copyright/license headers",
+    "file": "netty-buffer-4.1.139.Final-LICENSE-HEADERS.txt",
+    "sha256": "250d760bba1d2a5551d566c10147cf556e33d494e4e55c2ec9a1efa586fd5051",
+    "source": "https://repo.maven.apache.org/maven2/io/netty/netty-buffer/4.1.139.Final/netty-buffer-4.1.139.Final-sources.jar",
+    "source_sha256": "08e8449d46218c5b523465b6fefc5dddf80314e34bf9789ef0da706ba77b816a"
+  },
+  {
+    "applies_to_archive": "netty-codec-4.1.139.Final.jar",
+    "extraction": "Unique complete leading source copyright/license headers",
+    "file": "netty-codec-4.1.139.Final-LICENSE-HEADERS.txt",
+    "sha256": "905e4f5a645de4db0a306b84c85500a83e20a658d13cea21bc23190a2ec555a8",
+    "source": "https://repo.maven.apache.org/maven2/io/netty/netty-codec/4.1.139.Final/netty-codec-4.1.139.Final-sources.jar",
+    "source_sha256": "52d3e6aefa41ab7c24e3c57cb221b4d8e09d6af45e09483502636ae085cad6f6"
+  },
+  {
+    "applies_to_archive": "netty-codec-http-4.1.139.Final.jar",
+    "extraction": "Unique complete leading source copyright/license headers",
+    "file": "netty-codec-http-4.1.139.Final-LICENSE-HEADERS.txt",
+    "sha256": "75d5f43c3677195a0f69aaec1e1293070a8aeff3c67243777820bf2d8cb653e4",
+    "source": "https://repo.maven.apache.org/maven2/io/netty/netty-codec-http/4.1.139.Final/netty-codec-http-4.1.139.Final-sources.jar",
+    "source_sha256": "0f5a831ea08b9ed4b44546c92d0e47aba626ab52948e7d6d5088e961b3216b47"
+  },
+  {
+    "applies_to_archive": "netty-codec-http2-4.1.139.Final.jar",
+    "extraction": "Unique complete leading source copyright/license headers",
+    "file": "netty-codec-http2-4.1.139.Final-LICENSE-HEADERS.txt",
+    "sha256": "051b6a84d9fd37eaa0973bcb3842a90039f6ed9000d8181ef3dbaa286033d188",
+    "source": "https://repo.maven.apache.org/maven2/io/netty/netty-codec-http2/4.1.139.Final/netty-codec-http2-4.1.139.Final-sources.jar",
+    "source_sha256": "a872c2fdffd7c6b40e6db3012cb41a1ea67a4ac45a22b16b557c55c23f245bde"
+  },
+  {
+    "applies_to_archive": "netty-codec-socks-4.1.139.Final.jar",
+    "extraction": "Unique complete leading source copyright/license headers",
+    "file": "netty-codec-socks-4.1.139.Final-LICENSE-HEADERS.txt",
+    "sha256": "c2f6fa857964f500632632626471d5ae080071cf69c3a7e18e8c0153bcd12a24",
+    "source": "https://repo.maven.apache.org/maven2/io/netty/netty-codec-socks/4.1.139.Final/netty-codec-socks-4.1.139.Final-sources.jar",
+    "source_sha256": "3f72ab27d77aea9ef97710dc4c8e4b693c9efa244f527d291857e9b7b4f19fb3"
+  },
+  {
+    "applies_to_archive": "netty-common-4.1.139.Final.jar",
+    "extraction": "Unique complete leading source copyright/license headers",
+    "file": "netty-common-4.1.139.Final-LICENSE-HEADERS.txt",
+    "sha256": "15a4f5aa379ef0c43a9d4b0ca31e72b58cee57c84a24a0daaefd00653ffcf701",
+    "source": "https://repo.maven.apache.org/maven2/io/netty/netty-common/4.1.139.Final/netty-common-4.1.139.Final-sources.jar",
+    "source_sha256": "dec370a8916b3452d8da4e13ce4af93504bf2b4fd706e0b2a18e2b6302f742c7"
+  },
+  {
+    "applies_to_archive": "netty-handler-4.1.139.Final.jar",
+    "extraction": "Unique complete leading source copyright/license headers",
+    "file": "netty-handler-4.1.139.Final-LICENSE-HEADERS.txt",
+    "sha256": "09b6f85eddc2aecc9360433dd1f99082707ab42172dad83f392fae5cd92a0018",
+    "source": "https://repo.maven.apache.org/maven2/io/netty/netty-handler/4.1.139.Final/netty-handler-4.1.139.Final-sources.jar",
+    "source_sha256": "b20b5be210b4e7657ebf79d37123bafa3c5211f4c28549e777f7ad55d667046d"
+  },
+  {
+    "applies_to_archive": "netty-handler-proxy-4.1.139.Final.jar",
+    "extraction": "Unique complete leading source copyright/license headers",
+    "file": "netty-handler-proxy-4.1.139.Final-LICENSE-HEADERS.txt",
+    "sha256": "1b71dfab89f8de9fe602bce1b231c6283ccde5de2198661671f05fa2fafde9b8",
+    "source": "https://repo.maven.apache.org/maven2/io/netty/netty-handler-proxy/4.1.139.Final/netty-handler-proxy-4.1.139.Final-sources.jar",
+    "source_sha256": "b196204a37dd2fc144042f5bd2deab59f01157612ec0a048890623a6e6a1ebaf"
+  },
+  {
+    "applies_to_archive": "netty-resolver-4.1.139.Final.jar",
+    "extraction": "Unique complete leading source copyright/license headers",
+    "file": "netty-resolver-4.1.139.Final-LICENSE-HEADERS.txt",
+    "sha256": "f4d6e5a515b10ec060227afde130ccb2fcd419ca7468c1ae534cd48cfbff0470",
+    "source": "https://repo.maven.apache.org/maven2/io/netty/netty-resolver/4.1.139.Final/netty-resolver-4.1.139.Final-sources.jar",
+    "source_sha256": "5101960dddfd3d5266d3270491cbe134c5c539dddb7469aab2e3b8a65f24a623"
+  },
+  {
+    "applies_to_archive": "netty-transport-4.1.139.Final.jar",
+    "extraction": "Unique complete leading source copyright/license headers",
+    "file": "netty-transport-4.1.139.Final-LICENSE-HEADERS.txt",
+    "sha256": "271bafa1d3406c2322282d5060a4b4d25458c85588a9859d6253c339726d45a4",
+    "source": "https://repo.maven.apache.org/maven2/io/netty/netty-transport/4.1.139.Final/netty-transport-4.1.139.Final-sources.jar",
+    "source_sha256": "c2212c8754a0525f2eaa35c899711d143d165098890fa5c5fdce596c2641eb02"
+  },
+  {
+    "applies_to_archive": "netty-transport-native-unix-common-4.1.139.Final.jar",
+    "extraction": "Unique complete leading source copyright/license headers",
+    "file": "netty-transport-native-unix-common-4.1.139.Final-LICENSE-HEADERS.txt",
+    "sha256": "9e7ba3bae84f0efe81898a679b3f544117d6739740d5493f5e4e9ef2e9850dbf",
+    "source": "https://repo.maven.apache.org/maven2/io/netty/netty-transport-native-unix-common/4.1.139.Final/netty-transport-native-unix-common-4.1.139.Final-sources.jar",
+    "source_sha256": "05fe1d4a6a5c56fdae998b476abe774ae75f12d7c4c5026f4e741a1c09e9d185"
+  },
+  {
+    "file": "netty-4.1.139.Final-NOTICE.txt",
+    "sha256": "64e368e79be71463922ebb102b33088667cf975edeed8df7f68efe9f89835ca1",
+    "source": "https://raw.githubusercontent.com/netty/netty/netty-4.1.139.Final/NOTICE.txt"
+  },
+  {
+    "file": "netty-4.1.139.Final-LICENSE.txt",
+    "sha256": "aac73b3148f6d1d7111dbca32099f68d26c644c6813ae1e4f05f6579aa2663fe",
+    "source": "https://raw.githubusercontent.com/netty/netty/netty-4.1.139.Final/LICENSE.txt"
+  },
+  {
+    "file": "netty-4.1.139.Final-license-LICENSE.aalto-xml.txt",
+    "sha256": "2dca650805d8e96b8fcd3c2ac8bd17a8813fee479caefce929c75528710f35df",
+    "source": "https://raw.githubusercontent.com/netty/netty/netty-4.1.139.Final/license/LICENSE.aalto-xml.txt"
+  },
+  {
+    "file": "netty-4.1.139.Final-license-LICENSE.base64.txt",
+    "sha256": "922754f715103e9366d1099f85bfea7df192d3d457cd7e222786321c9ab01954",
+    "source": "https://raw.githubusercontent.com/netty/netty/netty-4.1.139.Final/license/LICENSE.base64.txt"
+  },
+  {
+    "file": "netty-4.1.139.Final-license-LICENSE.bouncycastle.txt",
+    "sha256": "3ad769df48f54692f561debc1be6134efb95b63b6e5031b8167f821bd82a204f",
+    "source": "https://raw.githubusercontent.com/netty/netty/netty-4.1.139.Final/license/LICENSE.bouncycastle.txt"
+  },
+  {
+    "file": "netty-4.1.139.Final-license-LICENSE.brotli4j.txt",
+    "sha256": "c1b9df1275e769f3dbab000d1e457a2d4b0f28eb5da6c77e48dc37eeba202ed7",
+    "source": "https://raw.githubusercontent.com/netty/netty/netty-4.1.139.Final/license/LICENSE.brotli4j.txt"
+  },
+  {
+    "file": "netty-4.1.139.Final-license-LICENSE.caliper.txt",
+    "sha256": "aac73b3148f6d1d7111dbca32099f68d26c644c6813ae1e4f05f6579aa2663fe",
+    "source": "https://raw.githubusercontent.com/netty/netty/netty-4.1.139.Final/license/LICENSE.caliper.txt"
+  },
+  {
+    "file": "netty-4.1.139.Final-license-LICENSE.commons-lang.txt",
+    "sha256": "3e4af21da9cb8a50d6a8f32225d7630fbf94a263e89945489d4863585f4aca4e",
+    "source": "https://raw.githubusercontent.com/netty/netty/netty-4.1.139.Final/license/LICENSE.commons-lang.txt"
+  },
+  {
+    "file": "netty-4.1.139.Final-license-LICENSE.commons-logging.txt",
+    "sha256": "3e4af21da9cb8a50d6a8f32225d7630fbf94a263e89945489d4863585f4aca4e",
+    "source": "https://raw.githubusercontent.com/netty/netty/netty-4.1.139.Final/license/LICENSE.commons-logging.txt"
+  },
+  {
+    "file": "netty-4.1.139.Final-license-LICENSE.compress-lzf.txt",
+    "sha256": "95eab05f6010cc64dedb668523c01fc9f48665cded448de86404b14a7a557ddd",
+    "source": "https://raw.githubusercontent.com/netty/netty/netty-4.1.139.Final/license/LICENSE.compress-lzf.txt"
+  },
+  {
+    "file": "netty-4.1.139.Final-license-LICENSE.dnsinfo.txt",
+    "sha256": "f0bdf5682bf317b1f85c80ed32cb4c7bf77b5a231dee485aa92d983673b7c58f",
+    "source": "https://raw.githubusercontent.com/netty/netty/netty-4.1.139.Final/license/LICENSE.dnsinfo.txt"
+  },
+  {
+    "file": "netty-4.1.139.Final-license-LICENSE.harmony.txt",
+    "sha256": "3e4af21da9cb8a50d6a8f32225d7630fbf94a263e89945489d4863585f4aca4e",
+    "source": "https://raw.githubusercontent.com/netty/netty/netty-4.1.139.Final/license/LICENSE.harmony.txt"
+  },
+  {
+    "file": "netty-4.1.139.Final-license-LICENSE.hpack.txt",
+    "sha256": "62fb8a3a9621dc2388174caaabe9c2317b694bb9a1d46c98bcf5655b68f51be3",
+    "source": "https://raw.githubusercontent.com/netty/netty/netty-4.1.139.Final/license/LICENSE.hpack.txt"
+  },
+  {
+    "file": "netty-4.1.139.Final-license-LICENSE.hyper-hpack.txt",
+    "sha256": "763a9342a04df62046c9dc748a5287934eb0a5331c6863b3ca0aee20e18cb4ed",
+    "source": "https://raw.githubusercontent.com/netty/netty/netty-4.1.139.Final/license/LICENSE.hyper-hpack.txt"
+  },
+  {
+    "file": "netty-4.1.139.Final-license-LICENSE.jboss-marshalling.txt",
+    "sha256": "ff420781e0005270cd1894a265e526dec4eb332f99df62a481b06672db202290",
+    "source": "https://raw.githubusercontent.com/netty/netty/netty-4.1.139.Final/license/LICENSE.jboss-marshalling.txt"
+  },
+  {
+    "file": "netty-4.1.139.Final-license-LICENSE.jbzip2.txt",
+    "sha256": "77edfb9953d4a58f573c40280f9703df301b1f28e68b556914a561b03559c5e9",
+    "source": "https://raw.githubusercontent.com/netty/netty/netty-4.1.139.Final/license/LICENSE.jbzip2.txt"
+  },
+  {
+    "file": "netty-4.1.139.Final-license-LICENSE.jctools.txt",
+    "sha256": "3e4af21da9cb8a50d6a8f32225d7630fbf94a263e89945489d4863585f4aca4e",
+    "source": "https://raw.githubusercontent.com/netty/netty/netty-4.1.139.Final/license/LICENSE.jctools.txt"
+  },
+  {
+    "file": "netty-4.1.139.Final-license-LICENSE.jfastlz.txt",
+    "sha256": "06c1bf4cd5304c64bb72a6e03b461c389c35af26d623e3add7d828c398482e1d",
+    "source": "https://raw.githubusercontent.com/netty/netty/netty-4.1.139.Final/license/LICENSE.jfastlz.txt"
+  },
+  {
+    "file": "netty-4.1.139.Final-license-LICENSE.jsr166y.txt",
+    "sha256": "17869cb6184447de9663a752a7663c118a9ed0d4ce0a2208986afc75206e1bbb",
+    "source": "https://raw.githubusercontent.com/netty/netty/netty-4.1.139.Final/license/LICENSE.jsr166y.txt"
+  },
+  {
+    "file": "netty-4.1.139.Final-license-LICENSE.jzlib.txt",
+    "sha256": "2ce9cdc96c015e5bb03fb1b565f33ffc7590c35ff2a33abe923e299135c01ce1",
+    "source": "https://raw.githubusercontent.com/netty/netty/netty-4.1.139.Final/license/LICENSE.jzlib.txt"
+  },
+  {
+    "file": "netty-4.1.139.Final-license-LICENSE.libdivsufsort.txt",
+    "sha256": "a801f489b279d91b8afc67d41e3769ec4df476fda218d63f4326c005db881541",
+    "source": "https://raw.githubusercontent.com/netty/netty/netty-4.1.139.Final/license/LICENSE.libdivsufsort.txt"
+  },
+  {
+    "file": "netty-4.1.139.Final-license-LICENSE.log4j.txt",
+    "sha256": "3e4af21da9cb8a50d6a8f32225d7630fbf94a263e89945489d4863585f4aca4e",
+    "source": "https://raw.githubusercontent.com/netty/netty/netty-4.1.139.Final/license/LICENSE.log4j.txt"
+  },
+  {
+    "file": "netty-4.1.139.Final-license-LICENSE.lz4.txt",
+    "sha256": "aac73b3148f6d1d7111dbca32099f68d26c644c6813ae1e4f05f6579aa2663fe",
+    "source": "https://raw.githubusercontent.com/netty/netty/netty-4.1.139.Final/license/LICENSE.lz4.txt"
+  },
+  {
+    "file": "netty-4.1.139.Final-license-LICENSE.lzma-java.txt",
+    "sha256": "aac73b3148f6d1d7111dbca32099f68d26c644c6813ae1e4f05f6579aa2663fe",
+    "source": "https://raw.githubusercontent.com/netty/netty/netty-4.1.139.Final/license/LICENSE.lzma-java.txt"
+  },
+  {
+    "file": "netty-4.1.139.Final-license-LICENSE.mvn-wrapper.txt",
+    "sha256": "aac73b3148f6d1d7111dbca32099f68d26c644c6813ae1e4f05f6579aa2663fe",
+    "source": "https://raw.githubusercontent.com/netty/netty/netty-4.1.139.Final/license/LICENSE.mvn-wrapper.txt"
+  },
+  {
+    "file": "netty-4.1.139.Final-license-LICENSE.nghttp2-hpack.txt",
+    "sha256": "6b94f3abc1aabd0c72a7c7d92a77f79dda7c8a0cb3df839a97890b4116a2de2a",
+    "source": "https://raw.githubusercontent.com/netty/netty/netty-4.1.139.Final/license/LICENSE.nghttp2-hpack.txt"
+  },
+  {
+    "file": "netty-4.1.139.Final-license-LICENSE.protobuf.txt",
+    "sha256": "8fa16eae6ec99dfa982ab552ecbf9e98421bf5062356538cac4cd0c7bacd0093",
+    "source": "https://raw.githubusercontent.com/netty/netty/netty-4.1.139.Final/license/LICENSE.protobuf.txt"
+  },
+  {
+    "file": "netty-4.1.139.Final-license-LICENSE.slf4j.txt",
+    "sha256": "e45deaad2824e38410545e2ed8ced91eccd13bc03b41643a4bd79c96e106e106",
+    "source": "https://raw.githubusercontent.com/netty/netty/netty-4.1.139.Final/license/LICENSE.slf4j.txt"
+  },
+  {
+    "file": "netty-4.1.139.Final-license-LICENSE.snappy.txt",
+    "sha256": "38139f9e51ce002fccec3b6cf2011a24e18e5096b8e6ad715f718828fa0b57d1",
+    "source": "https://raw.githubusercontent.com/netty/netty/netty-4.1.139.Final/license/LICENSE.snappy.txt"
+  },
+  {
+    "file": "netty-4.1.139.Final-license-LICENSE.webbit.txt",
+    "sha256": "9a746c7a218e6ee1ef719a39a0a66454c82ada93c60f06f9f819b505f6401046",
+    "source": "https://raw.githubusercontent.com/netty/netty/netty-4.1.139.Final/license/LICENSE.webbit.txt"
+  },
+  {
+    "file": "netty-4.1.139.Final-license-LICENSE.zstd-jni.txt",
+    "sha256": "101b8b218e3784b326bcbf7fb4a6b0138f63e8df53242d9b10eb80a0056a1133",
+    "source": "https://raw.githubusercontent.com/netty/netty/netty-4.1.139.Final/license/LICENSE.zstd-jni.txt"
+  }
+]

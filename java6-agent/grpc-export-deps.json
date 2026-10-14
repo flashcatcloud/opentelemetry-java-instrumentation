@@ -1,0 +1,92 @@
+[
+  {
+    "file": "grpc-context-1.6.0.jar",
+    "sha256": "d18d1fc8c9bc685bc908d23fc0b7f0705b6ae6b186e54f16765f25cfe9561b05",
+    "url": "https://repo.maven.apache.org/maven2/io/grpc/grpc-context/1.6.0/grpc-context-1.6.0.jar"
+  },
+  {
+    "file": "grpc-core-1.6.0.jar",
+    "sha256": "8571e0ed0c8c4e32c070b18b42fc366bf3037305a636af3883625a22f0937137",
+    "url": "https://repo.maven.apache.org/maven2/io/grpc/grpc-core/1.6.0/grpc-core-1.6.0.jar"
+  },
+  {
+    "file": "grpc-netty-1.6.0.jar",
+    "sha256": "1ae2fcadbb52d2e836b5295a692d4181a52996b8b1d6c5b6abc15d77b8024e38",
+    "url": "https://repo.maven.apache.org/maven2/io/grpc/grpc-netty/1.6.0/grpc-netty-1.6.0.jar"
+  },
+  {
+    "file": "grpc-stub-1.6.0.jar",
+    "sha256": "7e6ae86195fb8c604f0bff9ccf8ff9ea568acf549bc2b0d54d5f867405b4635d",
+    "url": "https://repo.maven.apache.org/maven2/io/grpc/grpc-stub/1.6.0/grpc-stub-1.6.0.jar"
+  },
+  {
+    "file": "guava-19.0.jar",
+    "sha256": "58d4cc2e05ebb012bbac568b032f75623be1cb6fb096f3c60c72a86f7f057de4",
+    "url": "https://repo.maven.apache.org/maven2/com/google/guava/guava/19.0/guava-19.0.jar"
+  },
+  {
+    "file": "instrumentation-api-0.4.3.jar",
+    "sha256": "9502d5622fea56e5b3fbe4a5263ad3bfd93487869813304c36831e1cb1d88bd5",
+    "url": "https://repo.maven.apache.org/maven2/com/google/instrumentation/instrumentation-api/0.4.3/instrumentation-api-0.4.3.jar"
+  },
+  {
+    "file": "opencensus-api-0.5.1.jar",
+    "sha256": "19c51d2fb50e1b8135630fc68ea57828a1acb36c60fc5c9cd441940d67631079",
+    "url": "https://repo.maven.apache.org/maven2/io/opencensus/opencensus-api/0.5.1/opencensus-api-0.5.1.jar"
+  },
+  {
+    "file": "netty-buffer-4.1.139.Final.jar",
+    "url": "https://repo.maven.apache.org/maven2/io/netty/netty-buffer/4.1.139.Final/netty-buffer-4.1.139.Final.jar",
+    "sha256": "48d805b74e56dc5f92b1f288858185abc86db16d293e8da183542df6243427f2"
+  },
+  {
+    "file": "netty-codec-4.1.139.Final.jar",
+    "url": "https://repo.maven.apache.org/maven2/io/netty/netty-codec/4.1.139.Final/netty-codec-4.1.139.Final.jar",
+    "sha256": "ad43f07219dfb757a87b9c2b4765002be478c5401971379954e3d182f285fe6b"
+  },
+  {
+    "file": "netty-codec-http-4.1.139.Final.jar",
+    "url": "https://repo.maven.apache.org/maven2/io/netty/netty-codec-http/4.1.139.Final/netty-codec-http-4.1.139.Final.jar",
+    "sha256": "627cfdac2cd5dbd8a33af85977fb81fa6b46f0c00389ab4c8677a415f0f85480"
+  },
+  {
+    "file": "netty-codec-http2-4.1.139.Final.jar",
+    "url": "https://repo.maven.apache.org/maven2/io/netty/netty-codec-http2/4.1.139.Final/netty-codec-http2-4.1.139.Final.jar",
+    "sha256": "4cb8bc95386112f3a9da935272781d577d9e70ca4c56cf0eef603a45e9526e02"
+  },
+  {
+    "file": "netty-codec-socks-4.1.139.Final.jar",
+    "url": "https://repo.maven.apache.org/maven2/io/netty/netty-codec-socks/4.1.139.Final/netty-codec-socks-4.1.139.Final.jar",
+    "sha256": "94d6800d5f717b40db5d0bf42a77b448d472cd9033735e69e7b18311bd902f23"
+  },
+  {
+    "file": "netty-common-4.1.139.Final.jar",
+    "url": "https://repo.maven.apache.org/maven2/io/netty/netty-common/4.1.139.Final/netty-common-4.1.139.Final.jar",
+    "sha256": "50372d86e27b4b1cf0810d75eb534795966a199049a1e85a0c41bbd2bb97f519"
+  },
+  {
+    "file": "netty-handler-4.1.139.Final.jar",
+    "url": "https://repo.maven.apache.org/maven2/io/netty/netty-handler/4.1.139.Final/netty-handler-4.1.139.Final.jar",
+    "sha256": "ff85f00781b956d618b20f33da076c839a5e43e0084108b07bab0c19737168ec"
+  },
+  {
+    "file": "netty-handler-proxy-4.1.139.Final.jar",
+    "url": "https://repo.maven.apache.org/maven2/io/netty/netty-handler-proxy/4.1.139.Final/netty-handler-proxy-4.1.139.Final.jar",
+    "sha256": "9c92c2407b6fd3c120ab5efb900475a1fe40ce099703d2500c8679d3c75a90cb"
+  },
+  {
+    "file": "netty-resolver-4.1.139.Final.jar",
+    "url": "https://repo.maven.apache.org/maven2/io/netty/netty-resolver/4.1.139.Final/netty-resolver-4.1.139.Final.jar",
+    "sha256": "562a5388c88325b7d6ed05e8168736871ce0e64ab01e0ce52ea7710760b9b457"
+  },
+  {
+    "file": "netty-transport-4.1.139.Final.jar",
+    "url": "https://repo.maven.apache.org/maven2/io/netty/netty-transport/4.1.139.Final/netty-transport-4.1.139.Final.jar",
+    "sha256": "be7bff8b6274e7fae12bbad3c565777539e9b069517e0b3acc06d9ac2cd6ec05"
+  },
+  {
+    "file": "netty-transport-native-unix-common-4.1.139.Final.jar",
+    "url": "https://repo.maven.apache.org/maven2/io/netty/netty-transport-native-unix-common/4.1.139.Final/netty-transport-native-unix-common-4.1.139.Final.jar",
+    "sha256": "8e660ac8a485fc8d8b47d87d04ea33d19902dc6fc5a113e9353b762188b3f333"
+  }
+]

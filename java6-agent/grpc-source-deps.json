@@ -1,0 +1,12 @@
+[
+  {
+    "file": "grpc-netty-1.6.0-sources.jar",
+    "url": "https://repo.maven.apache.org/maven2/io/grpc/grpc-netty/1.6.0/grpc-netty-1.6.0-sources.jar",
+    "sha256": "73a5bdf34dcd084a06257ed86b42d217a699598f07ac054037fc60041317a83f"
+  },
+  {
+    "file": "grpc-netty-1.68.1-sources.jar",
+    "url": "https://repo.maven.apache.org/maven2/io/grpc/grpc-netty/1.68.1/grpc-netty-1.68.1-sources.jar",
+    "sha256": "3f7f26db44527829a988f6563877d8058dcba0078327264522deb9aaae81ba0c"
+  }
+]
