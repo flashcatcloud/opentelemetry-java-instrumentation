@@ -1,0 +1,65 @@
+--- a/okhttp3/OkHttpClient.java
++++ b/okhttp3/OkHttpClient.java
+@@ -20,7 +20,7 @@
+ import java.net.ProxySelector;
+ import java.net.Socket;
+ import java.security.GeneralSecurityException;
+-import java.time.Duration;
++import org.threeten.bp.Duration;
+ import java.util.ArrayList;
+ import java.util.Collections;
+ import java.util.List;
+--- a/okhttp3/internal/platform/Platform.java
++++ b/okhttp3/internal/platform/Platform.java
+@@ -237,7 +237,7 @@
+   }
+ 
+   private static Platform findAndroidPlatform() {
+-    Platform android10 = Android10Platform.buildIfSupported();
++    Platform android10 = null /* JVM-only Agent distribution; Android 10 is not supported */;
+ 
+     if (android10 != null) {
+       return android10;
+--- a/okhttp3/internal/tls/OkHostnameVerifier.java
++++ b/okhttp3/internal/tls/OkHostnameVerifier.java
+@@ -39,11 +39,22 @@
+   private static final int ALT_DNS_NAME = 2;
+   private static final int ALT_IPA_NAME = 7;
+ 
++  // Port of upstream f574ea2 hostname verification guard.
++  private static boolean isAscii(String value) {
++    for (int i = 0; i < value.length(); i++) if (value.charAt(i) > 127) return false;
++    return true;
++  }
++
++  private static String asciiToLowercase(String value) {
++    return isAscii(value) ? value.toLowerCase(Locale.US) : value;
++  }
++
+   private OkHostnameVerifier() {
+   }
+ 
+   @Override
+   public boolean verify(String host, SSLSession session) {
++    if (!isAscii(host)) return false;
+     try {
+       Certificate[] certificates = session.getPeerCertificates();
+       return verify(host, (X509Certificate) certificates[0]);
+@@ -71,7 +82,7 @@
+ 
+   /** Returns true if {@code certificate} matches {@code hostname}. */
+   private boolean verifyHostname(String hostname, X509Certificate certificate) {
+-    hostname = hostname.toLowerCase(Locale.US);
++    hostname = asciiToLowercase(hostname);
+     List<String> altNames = getSubjectAltNames(certificate, ALT_DNS_NAME);
+     for (String altName : altNames) {
+       if (verifyHostname(hostname, altName)) {
+@@ -157,7 +168,7 @@
+     }
+     // hostname and pattern are now absolute domain names.
+ 
+-    pattern = pattern.toLowerCase(Locale.US);
++    pattern = asciiToLowercase(pattern);
+     // hostname and pattern are now in lower case -- domain names are case-insensitive.
+ 
+     if (!pattern.contains("*")) {

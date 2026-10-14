@@ -3,7 +3,7 @@
 import hashlib,json,urllib.request
 from pathlib import Path
 root=Path(__file__).resolve().parent
-for manifest,directory in [('official-deps.json','official-deps'),('base-deps.json','deps'),('component-deps.json','component-deps'),('runtime-deps.json','runtime-deps'),('grpc-export-deps.json','grpc-export-deps'),('grpc-source-deps.json','grpc-source-deps')]:
+for manifest,directory in [('official-deps.json','official-deps'),('base-deps.json','deps'),('component-deps.json','component-deps'),('runtime-deps.json','runtime-deps'),('grpc-export-deps.json','grpc-export-deps'),('grpc-source-deps.json','grpc-source-deps'),('http-compile-deps.json','http-compile-deps')]:
     out=root/'build'/directory;out.mkdir(parents=True,exist_ok=True)
     for item in json.loads((root/manifest).read_text()):
         target=out/item['file']

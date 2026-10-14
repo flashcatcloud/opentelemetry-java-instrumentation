@@ -16,7 +16,7 @@ for archive in build/official-deps/asm-*.jar build/runtime-deps/*.jar; do
   (cd build/tooling-combined && jar -J-XX:TieredStopAtLevel=1 xf "../../$archive")
 done
 rm -rf build/tooling-combined/META-INF
-classpath="build/tooling-combined:build/bootstrap:build/tooling-java9"
+classpath="build/http-dependencies-java6:build/tooling-combined:build/bootstrap:build/tooling-java9"
 for archive in /sdk/java6-compat/build/deps/build/*.jar build/official-deps/*.jar build/component-deps/*.jar build/grpc-export-deps/*.jar; do
   classpath="$classpath:$archive"
 done

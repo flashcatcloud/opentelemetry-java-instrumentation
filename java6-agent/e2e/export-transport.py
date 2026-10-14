@@ -37,7 +37,30 @@ class Business(http.server.BaseHTTPRequestHandler):
 class Collector(http.server.BaseHTTPRequestHandler):
     def log_message(self, *args): pass
     def do_POST(self):
-        payload = self.rfile.read(int(self.headers['Content-Length']))
+        # Official OkHttp streams compressed requests using HTTP chunked transfer encoding.
+        if self.headers.get('Transfer-Encoding', '').lower() == 'chunked':
+            chunks = []
+            total = 0
+            while True:
+                line = self.rfile.readline(8193)
+                if len(line) > 8192 or not line.endswith(b'\r\n'):
+                    raise ValueError('Invalid fixture chunk header')
+                size = int(line.split(b';', 1)[0].strip(), 16)
+                if size == 0:
+                    for _ in range(100):
+                        if self.rfile.readline(8193) == b'\r\n': break
+                    else: raise ValueError('Too many fixture trailers')
+                    break
+                total += size
+                if size < 0 or total > 16 * 1024 * 1024:
+                    raise ValueError('Fixture body too large')
+                chunk = self.rfile.read(size)
+                if len(chunk) != size or self.rfile.read(2) != b'\r\n':
+                    raise ValueError('Incomplete fixture chunk')
+                chunks.append(chunk)
+            payload = b''.join(chunks)
+        else:
+            payload = self.rfile.read(int(self.headers['Content-Length']))
         requests.append(dict(received=time.monotonic(), path=self.path, authorization=self.headers.get('Authorization'),
                              encoding=self.headers.get('Content-Encoding')))
         if a.mode == 'timeout':

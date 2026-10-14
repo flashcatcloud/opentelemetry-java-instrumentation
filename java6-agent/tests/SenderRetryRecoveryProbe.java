@@ -20,7 +20,7 @@ public class SenderRetryRecoveryProbe {
    socket.getOutputStream().write(("HTTP/1.1 "+status+"\r\nContent-Length: 0\r\nConnection: close\r\n\r\n").getBytes("US-ASCII"));
   }catch(IOException cancelled){/* A deadline may close an in-flight request. */}finally{socket.close();}}}catch(IOException end){if(!server.isClosed())throw new RuntimeException(end);}}});accept.setDaemon(true);accept.start();
   final ClassLoader loader=(ClassLoader)Class.forName("io.opentelemetry.javaagent.bootstrap.AgentInitializer").getMethod("getExtensionsClassLoader").invoke(null);
-  final boolean official=Boolean.getBoolean("probe.official");
+  final boolean official=Boolean.parseBoolean(System.getProperty("probe.official", "true"));
   final String sdk="io.opentelemetry.";
   Class<?> cfg=Class.forName(sdk+"sdk.common.export.HttpSenderConfig",true,loader);
   final URI uri=new URI("http://127.0.0.1:"+server.getLocalPort()+"/v1/traces");
@@ -41,12 +41,22 @@ public class SenderRetryRecoveryProbe {
    if(m.getName().equals("getContentLength"))return Integer.valueOf(1024);
    if(m.getName().equals("writeMessage")){((OutputStream)a[0]).write(new byte[1024]);}return null;
   }});
-  Field field=sender.getClass().getDeclaredField("worker");field.setAccessible(true);
-  ThreadPoolExecutor worker=(ThreadPoolExecutor)field.get(sender);
-  Field timerField=sender.getClass().getDeclaredField("timer");timerField.setAccessible(true);
-  ScheduledThreadPoolExecutor timer=(ScheduledThreadPoolExecutor)timerField.get(sender);
-  Field pendingField=sender.getClass().getDeclaredField("pending");pendingField.setAccessible(true);
-  Set<?> pending=(Set<?>)pendingField.get(sender);
+  ThreadPoolExecutor worker;
+  ScheduledThreadPoolExecutor timer=null;
+  Set<?> pending=null;
+  Object dispatcher=null;
+  Semaphore admissions=null;
+  if(official) {
+   Field field=sender.getClass().getDeclaredField("client");field.setAccessible(true);
+   Object client=field.get(sender);dispatcher=client.getClass().getMethod("dispatcher").invoke(client);
+   worker=(ThreadPoolExecutor)dispatcher.getClass().getMethod("executorService").invoke(dispatcher);
+   Field permits=sender.getClass().getDeclaredField("admissions");permits.setAccessible(true);admissions=(Semaphore)permits.get(sender);
+  } else {
+   // Retain the old path only for explicit comparisons against historical RC3 artifacts.
+   Field field=sender.getClass().getDeclaredField("worker");field.setAccessible(true);worker=(ThreadPoolExecutor)field.get(sender);
+   Field timerField=sender.getClass().getDeclaredField("timer");timerField.setAccessible(true);timer=(ScheduledThreadPoolExecutor)timerField.get(sender);
+   Field pendingField=sender.getClass().getDeclaredField("pending");pendingField.setAccessible(true);pending=(Set<?>)pendingField.get(sender);
+  }
   try {
    for(int round=0;round<20;round++) {
     healthy.set(round%2==1);int before=attempts.get();
@@ -58,20 +68,23 @@ public class SenderRetryRecoveryProbe {
      final int index=i;
      Object callback=java.lang.reflect.Proxy.newProxyInstance(loader,new Class[]{params[1]},new InvocationHandler(){public Object invoke(Object p,Method m,Object[] a){if(m.getName().equals("accept")){counts.incrementAndGet(index);if(a[0] instanceof RejectedExecutionException)rejected.incrementAndGet();if(!(a[0] instanceof Throwable)){try{Class<?> response=Class.forName("io.opentelemetry.sdk.common.export.HttpResponse",true,loader);if(((Integer)response.getMethod("getStatusCode").invoke(a[0])).intValue()==200)successes.incrementAndGet();}catch(Exception e){throw new RuntimeException(e);}}callbacks.countDown();}return null;}});
      send.invoke(sender,writer,callback,callback);
-     if(worker.getPoolSize()>2 || worker.getQueue().size()>64)throw new AssertionError("unbounded worker");
+     if(worker.getPoolSize()>(official?Math.max(Runtime.getRuntime().availableProcessors(),5):2) || worker.getQueue().size()>(official?0:64))throw new AssertionError("unbounded worker");
     }
     if(!callbacks.await(12,TimeUnit.SECONDS))throw new AssertionError("missing callbacks");
     Thread.sleep(1000);
     for(int i=0;i<8;i++)if(counts.get(i)!=1)throw new AssertionError("callback count "+counts.get(i));
-    if(worker.getActiveCount()!=0 || worker.getQueue().size()!=0 || pending.size()!=0 || timer.getQueue().size()!=0)throw new AssertionError("retained work active="+worker.getActiveCount()+" queued="+worker.getQueue().size()+" pending="+pending.size()+" timers="+timer.getQueue().size());
+    if(worker.getActiveCount()!=0 || worker.getQueue().size()!=0)throw new AssertionError("retained worker tasks");
+    if(official) {
+     if(admissions.availablePermits()!=5 || ((Integer)dispatcher.getClass().getMethod("queuedCallsCount").invoke(dispatcher)).intValue()!=0 || ((Integer)dispatcher.getClass().getMethod("runningCallsCount").invoke(dispatcher)).intValue()!=0)throw new AssertionError("retained dispatcher calls or admissions");
+    } else if(pending.size()!=0 || timer.getQueue().size()!=0)throw new AssertionError("retained legacy timers");
     int count=attempts.get()-before;
     if(count<1 || count>8*5)throw new AssertionError("retry attempts outside bound: "+count);
-    if(healthy.get() && successes.get()!=8)throw new AssertionError("recovery failed: "+successes.get());
+    if(healthy.get() && successes.get()!=8-rejected.get())throw new AssertionError("recovery failed: "+successes.get());
     if(!healthy.get() && successes.get()!=0)throw new AssertionError("false success");
-    System.out.println("RETRY_RECOVERY_ROUND_OK "+round+" callbacks=8 rejected="+rejected.get()+" active=0 queued=0 pending=0 timers=0");
+    System.out.println("RETRY_RECOVERY_ROUND_OK "+round+" callbacks=8 rejected="+rejected.get()+" active=0 queued=0");
    }
    api.getMethod("shutdown").invoke(sender);Thread.sleep(500);
-   if(!worker.isTerminated() || !timer.isTerminated())throw new AssertionError("shutdown leaked threads");
+   if(!worker.isTerminated() || (timer!=null && !timer.isTerminated()))throw new AssertionError("shutdown leaked threads");
    System.out.println("RETRY_RECOVERY_OK");
   }finally{api.getMethod("shutdown").invoke(sender);server.close();}
  }

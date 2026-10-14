@@ -1,0 +1,176 @@
+--- a/io/opentelemetry/exporter/sender/okhttp/internal/OkHttpHttpSender.java
++++ b/io/opentelemetry/exporter/sender/okhttp/internal/OkHttpHttpSender.java
+@@ -17,16 +17,16 @@
+ import io.opentelemetry.sdk.common.export.RetryPolicy;
+ import java.io.IOException;
+ import java.net.URI;
+-import java.time.Duration;
++import org.threeten.bp.Duration;
+ import java.util.Collections;
+ import java.util.List;
+ import java.util.Map;
+-import java.util.OptionalLong;
++import java8.util.OptionalLong;
+ import java.util.concurrent.ExecutorService;
+ import java.util.concurrent.RejectedExecutionException;
+ import java.util.concurrent.TimeUnit;
+-import java.util.function.Consumer;
+-import java.util.function.Supplier;
++import java8.util.function.Consumer;
++import java8.util.function.Supplier;
+ import java.util.logging.Level;
+ import java.util.logging.Logger;
+ import javax.annotation.Nullable;
+@@ -61,6 +61,9 @@
+ 
+   private static final Logger logger = Logger.getLogger(OkHttpHttpSender.class.getName());
+ 
++  // Bound active and queued requests independently of OkHttp's unbounded ready queue.
++  private final java.util.concurrent.Semaphore admissions = new java.util.concurrent.Semaphore(5);
++  private final java.util.concurrent.atomic.AtomicBoolean closed = new java.util.concurrent.atomic.AtomicBoolean();
+   private final boolean managedExecutor;
+   private final OkHttpClient client;
+   private final HttpUrl url;
+@@ -100,8 +103,8 @@
+     OkHttpClient.Builder builder =
+         new OkHttpClient.Builder()
+             .dispatcher(dispatcher)
+-            .connectTimeout(Duration.ofMillis(connectTimeoutMillis))
+-            .callTimeout(Duration.ofMillis(callTimeoutMillis));
++            .connectTimeout(connectTimeoutMillis, java.util.concurrent.TimeUnit.MILLISECONDS)
++            .callTimeout(callTimeoutMillis, java.util.concurrent.TimeUnit.MILLISECONDS);
+ 
+     if (proxyOptions != null) {
+       builder.proxySelector(proxyOptions.getProxySelector());
+@@ -130,7 +133,7 @@
+       }
+       if (enabledProtocols != null && !enabledProtocols.isEmpty()) {
+         TlsVersion[] versions =
+-            enabledProtocols.stream().map(TlsVersion::forJavaName).toArray(TlsVersion[]::new);
++            java8.util.stream.StreamSupport.stream(enabledProtocols).map(TlsVersion::forJavaName).toArray(TlsVersion[]::new);
+         builder.connectionSpecs(
+             Collections.singletonList(
+                 new ConnectionSpec.Builder(ConnectionSpec.COMPATIBLE_TLS)
+@@ -154,12 +157,38 @@
+   @Override
+   public void send(
+       MessageWriter messageWriter, Consumer<HttpResponse> onResponse, Consumer<Throwable> onError) {
++    if (closed.get() || !admissions.tryAcquire()) {
++      onError.accept(new RejectedExecutionException("HTTP sender is closed or at capacity"));
++      return;
++    }
++    java.util.concurrent.atomic.AtomicBoolean completed = new java.util.concurrent.atomic.AtomicBoolean();
++    Consumer<HttpResponse> responseCallback = response -> {
++      if (completed.compareAndSet(false, true)) {
++        admissions.release();
++        onResponse.accept(response);
++      }
++    };
++    Consumer<Throwable> errorCallback = error -> {
++      if (completed.compareAndSet(false, true)) {
++        admissions.release();
++        onError.accept(error);
++      }
++    };
++    try {
++      sendAccepted(messageWriter, responseCallback, errorCallback);
++    } catch (Throwable error) {
++      errorCallback.accept(error);
++    }
++  }
++
++  private void sendAccepted(
++      MessageWriter messageWriter, Consumer<HttpResponse> onResponse, Consumer<Throwable> onError) {
+     Request.Builder requestBuilder = new Request.Builder().url(url);
+ 
+     Map<String, List<String>> headers = headerSupplier.get();
+     if (headers != null) {
+-      headers.forEach(
+-          (key, values) -> values.forEach(value -> requestBuilder.addHeader(key, value)));
++      io.opentelemetry.java6.FrameworkCollections.forEach(headers, 
++          (key, values) -> java8.lang.Iterables.forEach(values, value -> requestBuilder.addHeader(key, value)));
+     }
+     if (compressor != null) {
+       requestBuilder.addHeader("Content-Encoding", compressor.getEncoding());
+@@ -221,7 +250,8 @@
+           }
+         }
+       } catch (IOException e) {
+-        logger.log(Level.WARNING, "Failed to read response body", e);
++        onError.accept(e);
++        return;
+       }
+ 
+       if (buffer.size() > maxResponseBodySize) {
+@@ -239,6 +269,7 @@
+ 
+   @Override
+   public CompletableResultCode shutdown() {
++    closed.set(true);
+     client.dispatcher().cancelAll();
+     client.connectionPool().evictAll();
+ 
+--- a/io/opentelemetry/exporter/sender/okhttp/internal/RetryInterceptor.java
++++ b/io/opentelemetry/exporter/sender/okhttp/internal/RetryInterceptor.java
+@@ -5,7 +5,7 @@
+ 
+ package io.opentelemetry.exporter.sender.okhttp.internal;
+ 
+-import static java.util.stream.Collectors.joining;
++import static java8.util.stream.Collectors.joining;
+ 
+ import io.opentelemetry.sdk.common.export.RetryPolicy;
+ import java.io.IOException;
+@@ -13,13 +13,13 @@
+ import java.net.SocketException;
+ import java.net.SocketTimeoutException;
+ import java.net.UnknownHostException;
+-import java.util.OptionalLong;
+-import java.util.StringJoiner;
+-import java.util.concurrent.ThreadLocalRandom;
++import java8.util.OptionalLong;
++import java8.util.StringJoiner;
++import java8.util.concurrent.ThreadLocalRandom;
+ import java.util.concurrent.TimeUnit;
+-import java.util.function.Function;
+-import java.util.function.Predicate;
+-import java.util.function.Supplier;
++import java8.util.function.Function;
++import java8.util.function.Predicate;
++import java8.util.function.Supplier;
+ import java.util.logging.Level;
+ import java.util.logging.Logger;
+ import okhttp3.Interceptor;
+@@ -94,7 +94,20 @@
+         nextBackoffNanos = (long) (currentBackoffNanos * retryPolicy.getBackoffMultiplier());
+         retryDelayNanos = OptionalLong.empty();
+         try {
+-          sleeper.sleep(backoffNanos);
++          long remainingBackoffNanos = backoffNanos;
++          while (remainingBackoffNanos > 0) {
++            if (chain.call().isCanceled()) {
++              if (response != null) response.close();
++              throw new java.io.InterruptedIOException("Call cancelled during retry backoff");
++            }
++            long slice = Math.min(remainingBackoffNanos, TimeUnit.MILLISECONDS.toNanos(50));
++            sleeper.sleep(slice);
++            remainingBackoffNanos -= slice;
++          }
++          if (chain.call().isCanceled()) {
++            if (response != null) response.close();
++            throw new java.io.InterruptedIOException("Call cancelled during retry backoff");
++          }
+         } catch (InterruptedException e) {
+           Thread.currentThread().interrupt();
+           break; // Break out and return response or throw
+@@ -157,8 +170,8 @@
+     joiner.add("code=" + response.code());
+     joiner.add(
+         "headers="
+-            + response.headers().toMultimap().entrySet().stream()
+-                .map(entry -> entry.getKey() + "=" + String.join(",", entry.getValue()))
++            + java8.util.stream.StreamSupport.stream(response.headers().toMultimap().entrySet())
++                .map(entry -> entry.getKey() + "=" + io.opentelemetry.java6.InstrumentationStrings.join(",", entry.getValue()))
+                 .collect(joining(",", "[", "]")));
+     return joiner.toString();
+   }

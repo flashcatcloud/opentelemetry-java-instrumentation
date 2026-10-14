@@ -9,7 +9,7 @@ public class SenderBlockedWriteProbe {
   final List<Socket> sockets=Collections.synchronizedList(new ArrayList<Socket>());
   Thread accept=new Thread(new Runnable(){public void run(){try{while(true)sockets.add(server.accept());}catch(IOException end){}}});accept.setDaemon(true);accept.start();
   final ClassLoader loader=(ClassLoader)Class.forName("io.opentelemetry.javaagent.bootstrap.AgentInitializer").getMethod("getExtensionsClassLoader").invoke(null);
-  final boolean official=Boolean.getBoolean("probe.official");
+  final boolean official=Boolean.parseBoolean(System.getProperty("probe.official", "true"));
   final String sdk="io.opentelemetry.";
   Class<?> cfg=Class.forName(sdk+"sdk.common.export.HttpSenderConfig",true,loader);
   final URI uri=new URI("http://127.0.0.1:"+server.getLocalPort()+"/v1/traces");

@@ -9,7 +9,8 @@ for directory in (source,relocated):
     if directory.exists():shutil.rmtree(directory)
 shutil.copytree(b/'tooling-java6',source)
 # Fail on stale prototype classes instead of silently shipping two implementations.
-for prefix in ['io/opentelemetry/javaagent/tooling/ProtocolInstrumentation',
+for prefix in ['io/opentelemetry/javaagent/tooling/Java6HttpSenderProvider',
+               'io/opentelemetry/javaagent/tooling/ProtocolInstrumentation',
                'io/opentelemetry/javaagent/tooling/ProtocolTelemetry',
                'io/opentelemetry/javaagent/tooling/OracleAddress',
                'io/opentelemetry/javaagent/tooling/DubboInstrumentation',
@@ -54,6 +55,17 @@ transport_input=b/'grpc-transport-input';transport_private=b/'grpc-transport-pri
 for directory in (transport_input,transport_private):
     if directory.exists():shutil.rmtree(directory)
 shutil.copytree(source/'io/opentelemetry/exporter',transport_input/'io/opentelemetry/exporter')
+# Relocate HTTP dependencies only alongside exporter code, never application matchers.
+for dependency in sorted((b/'http-dependencies-java6').rglob('*')):
+    if not dependency.is_file():continue
+    name=dependency.relative_to(b/'http-dependencies-java6')
+    data=dependency.read_bytes()
+    if dependency.suffix=='.class' and int.from_bytes(data[6:8],'big')>50:
+        raise RuntimeError('Non-Java6 HTTP dependency: '+str(name))
+    target=transport_input/name
+    if target.exists():raise RuntimeError('Duplicate HTTP dependency: '+str(name))
+    target.parent.mkdir(parents=True,exist_ok=True);target.write_bytes(data)
+
 for transport_entry in json.loads((r/'java6-agent/grpc-export-deps.json').read_text()):
     dependency=b/'grpc-export-deps'/transport_entry['file']
     assert hashlib.sha256(dependency.read_bytes()).hexdigest()==transport_entry['sha256']
