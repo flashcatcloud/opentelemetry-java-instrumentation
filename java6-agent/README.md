@@ -6,7 +6,9 @@ The implementation uses upstream AgentInstaller, InstrumentationModule discovery
 
 ## Build and verify
 
-From this instrumentation fork, build both matching flashcatcloud forks:
+From this instrumentation fork, build both matching flashcatcloud forks. The SDK directory must contain the flashcatcloud `v1.66.0` **branch**, not the identically named upstream tag. SDK PR #1 is merged at `3a96a956aee3b269e85bffbd046a7784ae4bc05a`; pin that commit for this candidate. `build-all.sh` compiles the supplied SDK source directory and packages its output into the Agent; it does not automatically fetch the latest SDK. SDK changes require rebuilding and validating the Agent.
+
+Build:
 
 ```sh
 sh java6-agent/build-all.sh /absolute/path/to/opentelemetry-java
