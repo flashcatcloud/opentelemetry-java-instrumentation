@@ -13,7 +13,7 @@ import tempfile
 
 parser = argparse.ArgumentParser()
 parser.add_argument("n9e_repo", type=Path)
-parser.add_argument("--n9e-ref", default="5022f6c22e2f30b77c51ce9c76770127e7290de4",
+parser.add_argument("--n9e-ref", default="b078fdd6801dd2b6e7c04736e78aed855be3b8e4",
                     help="Committed n9e-plus revision; working-tree files are never used")
 args = parser.parse_args()
 revision = subprocess.check_output(

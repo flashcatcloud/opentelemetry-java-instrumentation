@@ -17,8 +17,8 @@ The endpoint helper appends `/v1/opamp`. Existing `otel.*` export settings stay
 unchanged. The legacy resource key `deployment.environment` also works. Neither
 an environment nor authentication headers are required. Without an endpoint,
 no OpAMP worker starts. All connection options use `otel.javaagent.opamp.*`;
-Elastic-prefixed properties are not read. The wire configuration namespace stays
-`elastic` because that is the existing n9e-plus protocol contract.
+Elastic-prefixed properties are not read. The wire configuration namespace is `otel`, paired with the n9e-plus protocol-key
+update. The `elastic` wire key is not accepted; upgrade both sides together.
 
 The merged n9e-plus probe route requires no Authorization header. Management
 routes continue using existing administrator headers (`X-User-Token`,
@@ -26,15 +26,15 @@ routes continue using existing administrator headers (`X-User-Token`,
 requests remain `POST /api/n9e-plus/opamp/control`, for example:
 
 ```json
-{"scope":"service","selector":"my-service","stop":true}
+{"service":"my-service","stop":true}
 ```
 
-Use `stop:false` to remove that rule. `instance` uses the instance UID as selector;
-`all` uses an empty selector. Matching rules combine with OR: clearing a global
+Use `stop:false` to remove that rule. Use `{"instance":"<UID>","stop":true}` for one instance and
+`{"all":true,"stop":true}` for all instances. Matching rules combine with OR: clearing a global
 rule does not clear a service or instance stop. Instances and ACK state remain
 available through `/api/n9e-plus/opamp/instances`.
 
-The server supplies the same `elastic` JSON namespace and five controls:
+The server supplies the `otel` JSON namespace and five controls:
 
 ```json
 {"deactivate_all_instrumentations":"true","send_traces":"false","send_metrics":"false","send_logs":"false","opamp_polling_interval":"5s"}
@@ -81,8 +81,10 @@ ReportFullState and default-off operation. Native Linux x86_64 is used for Oracl
 Java 6u45; this HTTP matrix does not establish Java 6 HTTPS interoperability or
 exercise the deployed management authentication middleware.
 
-The server baseline is main `5022f6c22e2f30b77c51ce9c76770127e7290de4`.
-Handler/store match release-27 `c7f7a4f04d0357ca14726e9b93eae8b6fad3b5c8`.
+The paired server baseline is `b078fdd6801dd2b6e7c04736e78aed855be3b8e4` (the `otel` protocol-key change).
+Fetch that commit into the local n9e-plus repository before running. The earlier
+`elastic` baseline was main `5022f6c22e2f30b77c51ce9c76770127e7290de4`, identical
+to release-27 `c7f7a4f04d0357ca14726e9b93eae8b6fad3b5c8` for handler/store.
 The earlier official EDOT 1.13.0 comparison used its own connection property;
 the current harness launches this agent with `otel.javaagent.opamp.endpoint`.
 `ConfigCompatibilityTest` and `ProtocolCompatibilityTest` separately verify
@@ -119,3 +121,14 @@ Elastic-prefixed endpoint, headers and TLS settings are ignored. The resulting
 candidate SHA-256 is
 `0ac845a2f1883363f0ffffa31cd6812ea4938ee4eb75686fd379dd0988cf4eba`.
 The 861-class JDK 6 link check and packaged configuration namespace/CRC checks passed.
+
+After changing the wire key to `otel`, both sides passed the full matrix again on
+Java 6u45, 8, 11, 17 and 21 with server commit
+`b078fdd6801dd2b6e7c04736e78aed855be3b8e4` and Agent SHA-256
+`959b5dca8dad09636ca803c3fde9a01d7ead0dce8c70d22ca2cc99f068f313dd`.
+The server's `go test -race ./plus/opamp` and `TestJavaAgentInterop` also passed
+using a temporary modfile for its existing local nightingale dependency.
+The complete management-router package test was blocked before execution by
+missing datasource helpers in that local dependency; no dependency or unrelated
+source files were changed to work around it. These results cover the actual
+committed HTTP handler/store, not a deployed service or Java 6 HTTPS.

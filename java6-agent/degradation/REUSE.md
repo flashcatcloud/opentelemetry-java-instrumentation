@@ -6,7 +6,8 @@
   <https://github.com/elastic/elastic-otel-java/tree/v1.13.0/custom/src/main/java/co/elastic/otel/dynamicconfig>.
 - Its declared OpAMP dependency, OpenTelemetry Java Contrib **v1.59.0**:
   <https://github.com/open-telemetry/opentelemetry-java-contrib/tree/v1.59.0/opamp-client>.
-- n9e-plus main `5022f6c22e2f30b77c51ce9c76770127e7290de4`, with handler/store
+- Paired n9e-plus `otel` protocol change: `b078fdd6801dd2b6e7c04736e78aed855be3b8e4`.
+- Original n9e-plus main `5022f6c22e2f30b77c51ce9c76770127e7290de4`, with handler/store
   identical to release-27 `c7f7a4f04d0357ca14726e9b93eae8b6fad3b5c8`.
 - Final decisions from “查找 Java Agent 热关闭插桩支持”: no probe token, existing
   administrator authentication only on management routes, instance/service/all
@@ -23,7 +24,7 @@ This is source reuse with the adaptations below, not an unchanged EDOT binary.
 | EDOT `CentralConfig` connection helpers | `EdotSettings` | Rename connection keys to `otel.javaagent.opamp.*`; preserve suffix/service/environment behavior |
 | EDOT `CentralConfig.Configs` and `ConfigOption` behavior | `DegradationConfig` | Five n9e-plus controls only; existing Gson parser replaces Java 8 DSL-JSON; omitted keys reset defaults, unknown keys ignored, invalid string booleans retain old values |
 | EDOT `Blockable*Exporter` | Same classes | Package rename; per-exporter instances instead of one global last-exporter singleton; forward current SDK memory mode and close |
-| EDOT `OpampManager` wiring and callbacks | `OpampConnection` | Current protobuf API, existing SDK controller, bounded JSON body; unchanged remote namespace and APPLIED/FAILED hash behavior |
+| EDOT `OpampManager` wiring and callbacks | `OpampConnection` | Current protobuf API, existing SDK controller, bounded JSON body; rename remote namespace to `otel`; retain APPLIED/FAILED hash behavior |
 | EDOT `OpampTlsConfigurer` | Same class | Java 6 file reads and existing Commons Codec Base64; preserve TLS/CA/client-key configuration behavior |
 | Upstream `OpampClient`, builder, state, recipes and appenders | `opampclient/` | Package isolation and Wire-to-protobuf APIs, explicit omission of null optional messages |
 | Upstream HTTP request service, sender, retry delays and Retry-After parser | `opampclient/` | Existing backported OkHttp runtime, Java 6 APIs, lifecycle/error-boundary corrections described below |
@@ -44,7 +45,7 @@ only used at build time. The protocol state machine is reused, not reimplemented
 | Service | `otel.service.name`, then resource `service.name`, then default | Copied helper |
 | Environment | `deployment.environment.name`, then `deployment.environment` | Copied helper; neither is required |
 | Poll interval | Starts at 30s, n9e sends 5s | Same |
-| Remote config | `elastic` JSON map, string boolean controls | Same; JSON booleans also accepted |
+| Remote config | `elastic` JSON map, string boolean controls | `otel` JSON map; JSON booleans also accepted |
 | Defaults | Missing keys return to defaults; unknown keys ignored | Same for the five controls in scope |
 | Invalid boolean string | Log and preserve that property's previous value | Same |
 | ACK | Applied hash only on APPLIED; FAILED does not claim an applied hash | Same |
@@ -57,8 +58,9 @@ only used at build time. The protocol state machine is reused, not reimplemented
 | Management auth | Existing `X-User-Token`/`X-User-Name`/`X-Cluster` | Server unchanged; never copied into probe settings |
 
 Other EDOT features (sampling-rate control, inferred spans, selective
-instrumentation, log-level changes, profiling) are outside this module. No new
-server API, table, token or policy model is introduced.
+instrumentation, log-level changes, profiling) are outside this module. The paired n9e-plus change emits only `otel` and includes the key in its config hash;
+old `elastic` ACKs cannot suppress the new configuration. No new server API, table,
+token or policy model is introduced.
 
 ## Deliberate compatibility and robustness differences
 

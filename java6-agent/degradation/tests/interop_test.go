@@ -123,7 +123,7 @@ func runPackagedAgent(t *testing.T, controlled bool) {
 			// Upstream OpAMP compresses unchanged ACKs; bypassing persistence here would
 			// incorrectly leave an old APPLIED status in the database forever.
 			Handler{db}.ServeHTTP(httptest.NewRecorder(), r)
-			response := &pb.ServerToAgent{InstanceUid: request.InstanceUid, Capabilities: 3, RemoteConfig: &pb.AgentRemoteConfig{ConfigHash: badHash[:], Config: &pb.AgentConfigMap{ConfigMap: map[string]*pb.AgentConfigObject{"elastic": {Body: []byte("{"), ContentType: "application/json"}}}}}
+			response := &pb.ServerToAgent{InstanceUid: request.InstanceUid, Capabilities: 3, RemoteConfig: &pb.AgentRemoteConfig{ConfigHash: badHash[:], Config: &pb.AgentConfigMap{ConfigMap: map[string]*pb.AgentConfigObject{"otel": {Body: []byte("{"), ContentType: "application/json"}}}}}
 			body, err := proto.Marshal(response)
 			if err != nil {
 				t.Error(err)

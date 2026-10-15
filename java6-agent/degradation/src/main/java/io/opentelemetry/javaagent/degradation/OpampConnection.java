@@ -106,7 +106,7 @@ final class OpampConnection implements Closeable {
     public void onMessage(OpampClient client, MessageData message) {
       AgentRemoteConfig remote = message.getRemoteConfig();
       if (remote == null) return;
-      AgentConfigObject file = remote.getConfig().getConfigMapMap().get("elastic");
+      AgentConfigObject file = remote.getConfig().getConfigMapMap().get("otel");
       if (file == null) return; // EDOT ignores configurations outside its namespace.
       RemoteConfigStatus.Builder ack = RemoteConfigStatus.newBuilder();
       try {
