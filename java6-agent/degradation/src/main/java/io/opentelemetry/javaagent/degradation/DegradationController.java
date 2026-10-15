@@ -35,7 +35,7 @@ final class DegradationController {
               : original);
       stopped = config.stopped;
     }
-    state.config = config;
+    state.publish(config);
   }
 
   // The SDK exposes a setter but no getter. Read once, before any remote changes, so resume

@@ -1,0 +1,196 @@
+{
+  "opamp": {
+    "repository": "https://github.com/open-telemetry/opentelemetry-java-contrib",
+    "revision": "ea31a2d440091cbd4e3684ad961764ad18629125",
+    "version": "v1.59.0",
+    "files": [
+      {
+        "source": "io/opentelemetry/opamp/client/OpampClientBuilder.java",
+        "sha256": "400287d2127b5ea06d07849de28a8027b43596440e2d987d0c534c7c5f1eeafc"
+      },
+      {
+        "source": "io/opentelemetry/opamp/client/OpampClient.java",
+        "sha256": "eb670f403a416cafe281fd7eac64e3c9bb792669f9af81d27af7680d0e69faf6"
+      },
+      {
+        "source": "io/opentelemetry/opamp/client/internal/impl/OpampClientState.java",
+        "sha256": "07837595f6272f43f586b1dbc72048df5f04d356a69c33f561f6baf16e2eef36"
+      },
+      {
+        "source": "io/opentelemetry/opamp/client/internal/impl/OpampClientImpl.java",
+        "sha256": "ed39439fcd7771222ea150cbdbf62c25925ffa7dcee749070698a3d7ec27bff3"
+      },
+      {
+        "source": "io/opentelemetry/opamp/client/internal/tools/SystemTime.java",
+        "sha256": "f54248ed9b61255b93af17363b58a41b9e16e5fec3183f83d4ca4c4f3c70999e"
+      },
+      {
+        "source": "io/opentelemetry/opamp/client/internal/response/Response.java",
+        "sha256": "26750ea5f6f9088960cfbec386300d2fc734c93726d919c89a40684452e1fed3"
+      },
+      {
+        "source": "io/opentelemetry/opamp/client/internal/response/OpampServerResponseException.java",
+        "sha256": "fa331d4673d15c4c0ecd993ddae78716ee1d33a7f032c97f9ce6398626e03652"
+      },
+      {
+        "source": "io/opentelemetry/opamp/client/internal/response/MessageData.java",
+        "sha256": "fcf330a22d2620b304d9632334d8e45135d8a24da98b6864749d4d8bc7ade3f1"
+      },
+      {
+        "source": "io/opentelemetry/opamp/client/internal/state/ObservableState.java",
+        "sha256": "f4fba58dc9d45f93aa71b6aef8290a874d4903156e6ca3016d8a5ef467175e3f"
+      },
+      {
+        "source": "io/opentelemetry/opamp/client/internal/state/InMemoryState.java",
+        "sha256": "75c1f43329865d6a5664b2117759a520bc543903d5a308189ba50956a446a0b4"
+      },
+      {
+        "source": "io/opentelemetry/opamp/client/internal/state/State.java",
+        "sha256": "b0cc56f226491c425e2070f443b6ac05bfd96710dff2b5c069d9579da6da8acd"
+      },
+      {
+        "source": "io/opentelemetry/opamp/client/internal/request/Field.java",
+        "sha256": "ab735599c33c3550fb7cab2c66f5e2977093db911dab5c406ee49e317f45abcf"
+      },
+      {
+        "source": "io/opentelemetry/opamp/client/internal/request/Request.java",
+        "sha256": "7c996b9111bd1418b9b2e0e274f65452edfc813bde484fc6149ff4f90e98c411"
+      },
+      {
+        "source": "io/opentelemetry/opamp/client/internal/impl/recipe/AgentToServerAppenders.java",
+        "sha256": "0a74f5fccc851a752ef780cb812e6430102c7f63efeaec3f96eb529d77650f53"
+      },
+      {
+        "source": "io/opentelemetry/opamp/client/internal/impl/recipe/RequestRecipe.java",
+        "sha256": "9d5e50095e00c9bc7e8240a34daa6d7c2f345bfa690e7c1b2962547f1bca37cf"
+      },
+      {
+        "source": "io/opentelemetry/opamp/client/internal/impl/recipe/RecipeManager.java",
+        "sha256": "3b2d1843dddf3cde51af7efbdadc2c050a8f61c613b6227c9203cbfe65c41a39"
+      },
+      {
+        "source": "io/opentelemetry/opamp/client/internal/impl/recipe/appenders/InstanceUidAppender.java",
+        "sha256": "914ba95107cacd952fb6e967175a59a01106a001d562b12e62d3677fd43515a9"
+      },
+      {
+        "source": "io/opentelemetry/opamp/client/internal/impl/recipe/appenders/HealthAppender.java",
+        "sha256": "fc773e91d782dbd7e05b35814add1cd4b82c536ddad6edff5721256a77c0b1ea"
+      },
+      {
+        "source": "io/opentelemetry/opamp/client/internal/impl/recipe/appenders/CapabilitiesAppender.java",
+        "sha256": "26c6f73bc972540eee19397384669b6de7dc3fde05cf32ba18d46d929d7e554c"
+      },
+      {
+        "source": "io/opentelemetry/opamp/client/internal/impl/recipe/appenders/AgentDisconnectAppender.java",
+        "sha256": "76c03f28b6c69f06249b0dd6005625e0f98c57a946138c678cf684106ef5c2ef"
+      },
+      {
+        "source": "io/opentelemetry/opamp/client/internal/impl/recipe/appenders/CustomCapabilitiesAppender.java",
+        "sha256": "1d2fe4107c6e3e17f82162c4cf823dca3bb26700c8d9d07b1656e54fdc8e3aeb"
+      },
+      {
+        "source": "io/opentelemetry/opamp/client/internal/impl/recipe/appenders/RemoteConfigStatusAppender.java",
+        "sha256": "ea2672d5415dfd93e06e57ff2ff578efd1c6b6a671c31852ed73ed42fe2f5ff1"
+      },
+      {
+        "source": "io/opentelemetry/opamp/client/internal/impl/recipe/appenders/AgentDescriptionAppender.java",
+        "sha256": "38977e5734bd9271aad909d253f596b51888c704ce3fcabe4ba8907a3b244175"
+      },
+      {
+        "source": "io/opentelemetry/opamp/client/internal/impl/recipe/appenders/AgentToServerAppender.java",
+        "sha256": "9d8ee5c9304593697d59855acc250c58845f2ec5d8e00589dd2829b1cb5c2d1c"
+      },
+      {
+        "source": "io/opentelemetry/opamp/client/internal/impl/recipe/appenders/FlagsAppender.java",
+        "sha256": "a48064e7729e799f4d8efa658ada7800df7b7c0a786751a63681538faa21d3f2"
+      },
+      {
+        "source": "io/opentelemetry/opamp/client/internal/impl/recipe/appenders/EffectiveConfigAppender.java",
+        "sha256": "d8292d90f7acd71c540a5053d14d436294ddd2230adf20c7887fee5b6f423566"
+      },
+      {
+        "source": "io/opentelemetry/opamp/client/internal/impl/recipe/appenders/SequenceNumberAppender.java",
+        "sha256": "380a6e07b25dc237e9bb6f07fda8dfbc9321d651977cd55e45a16f54c1dd4e7f"
+      },
+      {
+        "source": "io/opentelemetry/opamp/client/internal/connectivity/http/HttpSender.java",
+        "sha256": "c4595530010918a165cc93531f26db259f59346a0f2579b353766e881009a270"
+      },
+      {
+        "source": "io/opentelemetry/opamp/client/internal/connectivity/http/RetryAfterParser.java",
+        "sha256": "86313cf73d60709aa46cda6fb8b792ce7cd2604dd03ae094c6262d6daeec8fa6"
+      },
+      {
+        "source": "io/opentelemetry/opamp/client/internal/connectivity/http/HttpErrorException.java",
+        "sha256": "3d9a6899b62c390f9de95f916129ecb8c5f22a64e5ad412c77b25f7eabab4369"
+      },
+      {
+        "source": "io/opentelemetry/opamp/client/internal/request/service/DaemonThreadFactory.java",
+        "sha256": "9a884295d337fb2a0d78905e930a72797da619082e851442b0bf3002485813cc"
+      },
+      {
+        "source": "io/opentelemetry/opamp/client/internal/request/service/HttpRequestService.java",
+        "sha256": "25498ed72a439099edc50115035afe82caa2fc46f21f07711c54f9e0f3029306"
+      },
+      {
+        "source": "io/opentelemetry/opamp/client/internal/request/delay/ExponentialBackoffPeriodicDelay.java",
+        "sha256": "6b7a5c3a112b890322dba29b4d78ff39f9b0c3ecaf1d40452f3005ec46d7e9b1"
+      },
+      {
+        "source": "io/opentelemetry/opamp/client/internal/request/delay/RetryPeriodicDelay.java",
+        "sha256": "7aeea5d0b63ce2d438d5457484c323edc451ffc190163fd8f1dc7805bfc013a6"
+      },
+      {
+        "source": "io/opentelemetry/opamp/client/internal/request/delay/PeriodicDelay.java",
+        "sha256": "624d9c5ff0dd56e40acb84a04a23cb78730ccae76d77ae5513cf300e12d53f03"
+      },
+      {
+        "source": "io/opentelemetry/opamp/client/internal/request/delay/FixedPeriodicDelay.java",
+        "sha256": "3598f0647a8c26f6e55f39dabb324120bcd61e5549dc8ee18a52a39deb07e493"
+      },
+      {
+        "source": "io/opentelemetry/opamp/client/internal/request/delay/AcceptsDelaySuggestion.java",
+        "sha256": "a6545f02da8c077ab30ef39fe2cf96f61fd27281757d8dc897d9010132832a02"
+      },
+      {
+        "source": "io/opentelemetry/opamp/client/request/service/RequestService.java",
+        "sha256": "bdfbac0f60e5e0a1a2062ffb4e1dd6e19cf421d012fa91df17e2f4f61592850b"
+      },
+      {
+        "source": "io/opentelemetry/opamp/client/internal/connectivity/http/OkHttpSender.java",
+        "sha256": "8e98b01e0f8e702be21a57509db665ef5aaecad48dfa23bf27b4895b628dd251"
+      }
+    ]
+  },
+  "edot": {
+    "repository": "https://github.com/elastic/elastic-otel-java",
+    "revision": "be989afffc981ab39374d271880494a4f6a3842d",
+    "version": "v1.13.0",
+    "files": [
+      {
+        "source": "custom/src/main/java/co/elastic/otel/dynamicconfig/BlockableSpanExporter.java",
+        "sha256": "fc387bd1951edd777b1dfaa2c6cc1ab1ebe7c622d584566d3785361e76ca2c28"
+      },
+      {
+        "source": "custom/src/main/java/co/elastic/otel/dynamicconfig/BlockableMetricExporter.java",
+        "sha256": "16c81c3707227cc5574da2c63be08aa0e358f16e048732895a6055636684d4fa"
+      },
+      {
+        "source": "custom/src/main/java/co/elastic/otel/dynamicconfig/BlockableLogRecordExporter.java",
+        "sha256": "9c3d87335df6c3c57e1c7eb976a21e9154cbc67b0632206cef1595b0d76d2c65"
+      },
+      {
+        "source": "custom/src/main/java/co/elastic/otel/dynamicconfig/internal/OpampTlsConfigurer.java",
+        "sha256": "dba0488ca624066869bbccacc32f7916fe633a469afbf6346eed662d151e19ac"
+      },
+      {
+        "source": "custom/src/main/java/co/elastic/otel/dynamicconfig/CentralConfig.java",
+        "sha256": "a143473842c358cf929bfc66f30e3638385357d8284c626f2c8aaa8adfdf3662"
+      },
+      {
+        "source": "custom/src/main/java/co/elastic/otel/dynamicconfig/internal/OpampManager.java",
+        "sha256": "9a5d156715ecdf835090ebb3ed7316472abbb63e4503af5e635583572524eb0c"
+      }
+    ]
+  }
+}

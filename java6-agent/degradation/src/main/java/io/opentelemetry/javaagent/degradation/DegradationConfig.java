@@ -1,5 +1,20 @@
-/* Copyright The OpenTelemetry Authors
- * SPDX-License-Identifier: Apache-2.0
+/*
+ * Licensed to Elasticsearch B.V. under one or more contributor
+ * license agreements. See the NOTICE file distributed with
+ * this work for additional information regarding copyright
+ * ownership. Elasticsearch B.V. licenses this file to you under
+ * the Apache License, Version 2.0 (the "License"); you may
+ * not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
  */
 package io.opentelemetry.javaagent.degradation;
 
@@ -13,7 +28,7 @@ import java.util.Map;
 
 final class DegradationConfig {
   static final DegradationConfig ENABLED =
-      new DegradationConfig(false, true, true, true, Duration.ofSeconds(5));
+      new DegradationConfig(false, true, true, true, Duration.ofSeconds(30));
   final boolean stopped, sendTraces, sendMetrics, sendLogs;
   final Duration interval;
 
@@ -27,6 +42,10 @@ final class DegradationConfig {
   }
 
   static DegradationConfig parse(byte[] bytes) throws IOException {
+    return parse(bytes, ENABLED);
+  }
+
+  static DegradationConfig parse(byte[] bytes, DegradationConfig previous) throws IOException {
     JsonReader reader = new JsonReader(new StringReader(new String(bytes, "UTF-8")));
     reader.setLenient(false);
     Map<String, String> values = new HashMap<>();
@@ -39,7 +58,10 @@ final class DegradationConfig {
             && !key.equals("send_traces")
             && !key.equals("send_metrics")
             && !key.equals("send_logs")
-            && !key.equals("opamp_polling_interval")) throw new IOException("Unknown field");
+            && !key.equals("opamp_polling_interval")) {
+          reader.skipValue();
+          continue;
+        }
         JsonToken token = reader.peek();
         if (token == JsonToken.STRING) values.put(key, reader.nextString());
         else if (token == JsonToken.BOOLEAN && !key.equals("opamp_polling_interval"))
@@ -53,24 +75,33 @@ final class DegradationConfig {
     }
     Duration interval = ENABLED.interval;
     if (values.containsKey("opamp_polling_interval")) {
-      String value = values.get("opamp_polling_interval");
-      if (!value.matches("[0-9]+s")) throw new IOException("Invalid interval");
-      long seconds = Long.parseLong(value.substring(0, value.length() - 1));
-      if (seconds < 1 || seconds > 3600) throw new IOException("Invalid interval");
-      interval = Duration.ofSeconds(seconds);
+      try {
+        interval = Duration.parse("PT" + values.get("opamp_polling_interval"));
+        // Bound scheduling to avoid zero/negative busy loops and nanosecond overflow.
+        if (interval.isZero() || interval.isNegative()) throw new IllegalArgumentException();
+        interval.toNanos();
+      } catch (RuntimeException invalid) {
+        interval = previous.interval;
+      }
     }
     return new DegradationConfig(
-        bool(values, "deactivate_all_instrumentations"),
-        bool(values, "send_traces"),
-        bool(values, "send_metrics"),
-        bool(values, "send_logs"),
+        bool(values, "deactivate_all_instrumentations", false, previous.stopped),
+        bool(values, "send_traces", true, previous.sendTraces),
+        bool(values, "send_metrics", true, previous.sendMetrics),
+        bool(values, "send_logs", true, previous.sendLogs),
         interval);
   }
 
-  private static boolean bool(Map<String, String> values, String key) throws IOException {
+  // EDOT CentralConfig.Configs restores defaults for omitted keys. ConfigOption.getBoolean
+  // accepts case-insensitive strings; updateOrLog retains a property's old value on errors.
+  private static boolean bool(
+      Map<String, String> values, String key, boolean fallback, boolean previous) {
     String value = values.get(key);
-    if ("true".equals(value)) return true;
-    if ("false".equals(value)) return false;
-    throw new IOException("Missing or invalid boolean");
+    if (value == null) return fallback;
+    if ("true".equalsIgnoreCase(value)) return true;
+    if ("false".equalsIgnoreCase(value)) return false;
+    java.util.logging.Logger.getLogger(DegradationConfig.class.getName())
+        .warning("Invalid remote boolean: " + key);
+    return previous;
   }
 }

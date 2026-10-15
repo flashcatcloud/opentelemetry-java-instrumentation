@@ -71,7 +71,11 @@ transport_input=b/'grpc-transport-input';transport_private=b/'grpc-transport-pri
 for directory in (transport_input,transport_private):
     if directory.exists():shutil.rmtree(directory)
 shutil.copytree(source/'io/opentelemetry/exporter',transport_input/'io/opentelemetry/exporter')
-# Relocate HTTP dependencies only alongside exporter code, never application matchers.
+# The HTTP-only OpAMP port uses the same private OkHttp runtime as SDK exporters.
+# Relocate its references too, without touching any application instrumentation matchers.
+shutil.copytree(source/'io/opentelemetry/javaagent/degradation',
+                transport_input/'io/opentelemetry/javaagent/degradation')
+# Relocate HTTP dependencies only alongside exporter/control code, never application matchers.
 for dependency in sorted((b/'http-dependencies-java6').rglob('*')):
     if not dependency.is_file():continue
     name=dependency.relative_to(b/'http-dependencies-java6')

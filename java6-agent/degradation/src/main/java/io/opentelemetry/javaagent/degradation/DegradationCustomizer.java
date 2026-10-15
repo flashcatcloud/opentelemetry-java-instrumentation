@@ -22,16 +22,14 @@ public final class DegradationCustomizer implements AutoConfigurationCustomizerP
   @Override
   public void customize(AutoConfigurationCustomizer customizer) {
     customizer.addSpanExporterCustomizer(
-        (exporter, config) -> enabled(config) ? new GatedSpanExporter(exporter, STATE) : exporter);
+        (exporter, config) -> enabled(config) ? STATE.wrap(exporter) : exporter);
     customizer.addMetricExporterCustomizer(
-        (exporter, config) ->
-            enabled(config) ? new GatedMetricExporter(exporter, STATE) : exporter);
+        (exporter, config) -> enabled(config) ? STATE.wrap(exporter) : exporter);
     customizer.addLogRecordExporterCustomizer(
-        (exporter, config) ->
-            enabled(config) ? new GatedLogRecordExporter(exporter, STATE) : exporter);
+        (exporter, config) -> enabled(config) ? STATE.wrap(exporter) : exporter);
   }
 
   static boolean enabled(ConfigProperties config) {
-    return !config.getString("otel.javaagent.opamp.endpoint", "").trim().isEmpty();
+    return EdotSettings.getEndpoint(config) != null;
   }
 }

@@ -41,4 +41,4 @@ require (
     gorm.io/gorm v1.25.12
 )
 """)
-    subprocess.run(["go", "test", "-mod=mod", "-race", "-v", "-count=1", "-timeout=180s", "."], cwd=work, check=True)
+    subprocess.run(["go", "test", "-mod=mod", "-race", "-v", "-count=1", "-timeout=300s", "."], cwd=work, check=True)

@@ -1,41 +1,111 @@
-/* Copyright The OpenTelemetry Authors
+/*
+ * Copyright The OpenTelemetry Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 package io.opentelemetry.javaagent.degradation;
 
-/** Exercises the strict JSON parser independently of server-generated configurations. */
+import io.opentelemetry.sdk.autoconfigure.spi.internal.DefaultConfigProperties;
+import java.util.HashMap;
+import java.util.Map;
+
+/** EDOT CentralConfig connection/configuration contract regression, including Java 6 adapters. */
 public final class ConfigCompatibilityTest {
+  private static void check(boolean condition, String message) {
+    if (!condition) throw new AssertionError(message);
+  }
+
+  private static DegradationConfig parse(String value, DegradationConfig previous)
+      throws Exception {
+    return DegradationConfig.parse(value.getBytes("UTF-8"), previous);
+  }
+
   public static void main(String[] args) throws Exception {
-    String body =
-        "\"deactivate_all_instrumentations\":true,\"send_traces\":\"false\","
-            + "\"send_metrics\":false,\"send_logs\":false";
-    DegradationConfig config = DegradationConfig.parse(("{" + body + "}").getBytes("UTF-8"));
-    if (!config.stopped || config.sendTraces || config.sendMetrics || config.sendLogs) {
-      throw new AssertionError("Boolean parsing");
-    }
-    String[] invalid = {
-      "{}",
-      "{" + body + ",\"send_logs\":false}",
-      "{" + body + ",\"unknown\":true}",
-      "{" + body + "} {}",
-      "{" + body + ",\"opamp_polling_interval\":\"0s\"}",
-      "{" + body + ",\"opamp_polling_interval\":\"3601s\"}",
-      "{" + body + ",\"opamp_polling_interval\":5}",
-      "{" + body.replace("true", "null") + "}",
-      "{" + body.replace("true", "\"TRUE\"") + "}"
-    };
-    for (String value : invalid) {
+    Map<String, String> settings = new HashMap<String, String>();
+    check(
+        EdotSettings.getEndpoint(DefaultConfigProperties.createFromMap(settings)) == null,
+        "default off");
+    settings.put("elastic.otel.opamp.endpoint", "http://localhost:19000/prefix");
+    settings.put("otel.javaagent.opamp.endpoint", "http://wrong:123");
+    check(
+        "http://localhost:19000/prefix/v1/opamp"
+            .equals(EdotSettings.getEndpoint(DefaultConfigProperties.createFromMap(settings))),
+        "EDOT endpoint precedence and prefix");
+    settings.put("elastic.otel.opamp.endpoint", "http://localhost:19000/v1/opamp");
+    check(
+        "http://localhost:19000/v1/opamp"
+            .equals(EdotSettings.getEndpoint(DefaultConfigProperties.createFromMap(settings))),
+        "suffix not duplicated");
+    settings.put(
+        "otel.resource.attributes", "deployment.environment=legacy,service.name=from-resource");
+    check(
+        "legacy"
+            .equals(
+                EdotSettings.getServiceEnvironment(
+                    DefaultConfigProperties.createFromMap(settings))),
+        "legacy environment");
+    check(
+        "from-resource"
+            .equals(EdotSettings.getServiceName(DefaultConfigProperties.createFromMap(settings))),
+        "resource service");
+    settings.put("otel.service.name", "from-property");
+    check(
+        "from-property"
+            .equals(EdotSettings.getServiceName(DefaultConfigProperties.createFromMap(settings))),
+        "service precedence");
+    settings.put(
+        "otel.resource.attributes",
+        "deployment.environment=legacy,deployment.environment.name=modern");
+    check(
+        "modern"
+            .equals(
+                EdotSettings.getServiceEnvironment(
+                    DefaultConfigProperties.createFromMap(settings))),
+        "modern environment precedence");
+    settings.remove("elastic.otel.opamp.endpoint");
+    check(
+        "http://wrong:123/v1/opamp"
+            .equals(EdotSettings.getEndpoint(DefaultConfigProperties.createFromMap(settings))),
+        "neutral alias");
+
+    DegradationConfig stopped =
+        parse(
+            "{\"deactivate_all_instrumentations\":\"TRUE\",\"send_traces\":\"false\",\"send_metrics\":false,\"send_logs\":false,\"opamp_polling_interval\":\"5s\"}",
+            DegradationConfig.ENABLED);
+    check(
+        stopped.stopped && !stopped.sendTraces && !stopped.sendMetrics && !stopped.sendLogs,
+        "stop config");
+    DegradationConfig reset = parse("{}", stopped);
+    check(
+        !reset.stopped
+            && reset.sendTraces
+            && reset.sendMetrics
+            && reset.sendLogs
+            && reset.interval.getSeconds() == 30,
+        "omitted keys restore EDOT defaults");
+    DegradationConfig partial =
+        parse("{\"send_traces\":\"garbage\",\"unknown\":{\"future\":true}}", stopped);
+    check(
+        !partial.sendTraces && partial.sendMetrics && !partial.stopped,
+        "invalid value retained; unknown ignored; omitted reset");
+    check(
+        parse("{\"opamp_polling_interval\":\"1m\"}", stopped).interval.getSeconds() == 60,
+        "EDOT duration units");
+    check(
+        parse("{\"opamp_polling_interval\":\"0s\"}", stopped).interval.getSeconds() == 5,
+        "avoid zero-delay busy loop");
+    for (String invalid : new String[] {"{", "{\"send_logs\":false,\"send_logs\":true}", "{} {}"}) {
       boolean rejected = false;
       try {
-        DegradationConfig.parse(value.getBytes("UTF-8"));
+        parse(invalid, stopped);
       } catch (java.io.IOException expected) {
         rejected = true;
       } catch (RuntimeException expected) {
         rejected = true;
       }
-      if (!rejected) throw new AssertionError("Accepted: " + value);
+      check(rejected, "invalid JSON rejected");
     }
     System.out.println(
-        "PASS: strict configuration parser (valid + " + invalid.length + " invalid cases)");
+        "PASS: EDOT endpoint/service/environment, aliases, config defaults,"
+            + " partial/reset/invalid/unknown configuration");
   }
 }

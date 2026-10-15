@@ -1,0 +1,30 @@
+/*
+ * Copyright The OpenTelemetry Authors
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+package io.opentelemetry.javaagent.degradation.opampclient.internal.connectivity.http;
+
+import java.io.Closeable;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+
+public interface HttpSender {
+
+  Response send(BodyWriter writer, int contentLength) throws IOException;
+
+  interface BodyWriter {
+    void writeTo(OutputStream outputStream) throws IOException;
+  }
+
+  interface Response extends Closeable {
+    int statusCode();
+
+    String statusMessage();
+
+    InputStream bodyInputStream() throws IOException;
+
+    String getHeader(String name);
+  }
+}

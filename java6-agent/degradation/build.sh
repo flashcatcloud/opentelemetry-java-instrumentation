@@ -7,7 +7,7 @@ build/degradation-deps/protoc-3.3.0-linux-x86_64.exe -I degradation/proto --java
 find build/degradation-src -name '*.java' > build/degradation-sources.txt
 classpath="build/tooling-combined:build/http-dependencies-java6:build/bootstrap:build/degradation-deps/protobuf-java-3.3.0.jar"
 for jarfile in /sdk/java6-compat/build/deps/build/*.jar build/official-deps/*.jar build/grpc-export-deps/*.jar build/component-deps/*.jar; do classpath="$classpath:$jarfile"; done
-javac -J-XX:TieredStopAtLevel=1 -source 8 -target 8 -proc:none -cp "$classpath" -d build/degradation-classes @build/degradation-sources.txt
+javac -J-XX:TieredStopAtLevel=1 -source 8 -target 8 -cp "$classpath" -processorpath /sdk/java6-compat/build/deps/build/auto-value-1.11.1.jar -d build/degradation-classes @build/degradation-sources.txt
 # Analyze SDK interfaces with their callers so static/default interface calls use
 # exactly the same companion classes as the existing Java 6 SDK transformation.
 mkdir -p build/degradation-combined

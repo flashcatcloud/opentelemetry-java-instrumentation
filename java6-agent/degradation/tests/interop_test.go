@@ -49,6 +49,8 @@ func runPackagedAgent(t *testing.T, controlled bool) {
 	var work, traces, metrics, logs, polls, recording, disabled atomic.Int64
 	var dropAck, offline, invalid atomic.Bool
 	var dropped, unavailable, rejected atomic.Int64
+	var throttle, requestFull, serverUnavailable atomic.Bool
+	var throttledAt, retriedAt, fullReports, protocolRetries atomic.Int64
 	var dropHash, lastAck atomic.Value
 	dropHash.Store("")
 	lastAck.Store("")
@@ -68,10 +70,38 @@ func runPackagedAgent(t *testing.T, controlled bool) {
 			w.WriteHeader(400)
 			return
 		}
+		if at := throttledAt.Load(); at > 0 && retriedAt.Load() == 0 {
+			retriedAt.Store(time.Now().UnixNano())
+		}
+		if throttle.CompareAndSwap(true, false) {
+			throttledAt.Store(time.Now().UnixNano())
+			w.Header().Set("Retry-After", "1")
+			w.WriteHeader(429)
+			return
+		}
+		if requestFull.CompareAndSwap(true, false) {
+			Handler{db}.ServeHTTP(httptest.NewRecorder(), r)
+			body, _ := proto.Marshal(&pb.ServerToAgent{InstanceUid: request.InstanceUid, Flags: uint64(pb.ServerToAgentFlags_ServerToAgentFlags_ReportFullState)})
+			w.Header().Set("Content-Type", "application/x-protobuf")
+			w.Write(body)
+			return
+		}
+		if retriedAt.Load() > 0 && request.AgentDescription != nil {
+			fullReports.Add(1)
+		}
+		if serverUnavailable.CompareAndSwap(true, false) {
+			protocolRetries.Add(1)
+			body, _ := proto.Marshal(&pb.ServerToAgent{InstanceUid: request.InstanceUid,
+				ErrorResponse: &pb.ServerErrorResponse{Type: pb.ServerErrorResponseType_ServerErrorResponseType_Unavailable,
+					Details: &pb.ServerErrorResponse_RetryInfo{RetryInfo: &pb.RetryInfo{RetryAfterNanoseconds: uint64(time.Second)}}}})
+			w.Header().Set("Content-Type", "application/x-protobuf")
+			w.Write(body)
+			return
+		}
 		ack := request.GetRemoteConfigStatus()
 		if ack != nil {
 			lastAck.Store(hex.EncodeToString(ack.LastRemoteConfigHash))
-			if bytes.Equal(ack.LastRemoteConfigHash, badHash[:]) && ack.Status == pb.RemoteConfigStatuses_RemoteConfigStatuses_FAILED {
+			if len(ack.LastRemoteConfigHash) == 0 && ack.Status == pb.RemoteConfigStatuses_RemoteConfigStatuses_FAILED {
 				rejected.Add(1)
 			}
 			if hex.EncodeToString(ack.LastRemoteConfigHash) == dropHash.Load().(string) && dropAck.CompareAndSwap(true, false) {
@@ -89,7 +119,11 @@ func runPackagedAgent(t *testing.T, controlled bool) {
 			return
 		}
 		if invalid.Load() {
-			response := &pb.ServerToAgent{InstanceUid: request.InstanceUid, Capabilities: 3, RemoteConfig: &pb.AgentRemoteConfig{ConfigHash: badHash[:], Config: &pb.AgentConfigMap{ConfigMap: map[string]*pb.AgentConfigObject{"elastic": {Body: []byte("{}"), ContentType: "application/json"}}}}}
+			// Preserve the real server's ACK persistence while replacing only its response.
+			// Upstream OpAMP compresses unchanged ACKs; bypassing persistence here would
+			// incorrectly leave an old APPLIED status in the database forever.
+			Handler{db}.ServeHTTP(httptest.NewRecorder(), r)
+			response := &pb.ServerToAgent{InstanceUid: request.InstanceUid, Capabilities: 3, RemoteConfig: &pb.AgentRemoteConfig{ConfigHash: badHash[:], Config: &pb.AgentConfigMap{ConfigMap: map[string]*pb.AgentConfigObject{"elastic": {Body: []byte("{"), ContentType: "application/json"}}}}}
 			body, err := proto.Marshal(response)
 			if err != nil {
 				t.Error(err)
@@ -122,11 +156,11 @@ func runPackagedAgent(t *testing.T, controlled bool) {
 	}
 	server := httptest.NewServer(mux)
 	defer server.Close()
-	ctx, cancel := context.WithTimeout(context.Background(), 150*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 240*time.Second)
 	defer cancel()
 	cmd := exec.CommandContext(ctx, os.Getenv("INTEROP_JAVA"), "-Xverify:all", "-javaagent:"+os.Getenv("INTEROP_AGENT"),
-		"-Dotel.javaagent.opamp.endpoint="+server.URL,
-		"-Dotel.service.name=interop", "-Dotel.resource.attributes=deployment.environment.name=prod",
+		"-Delastic.otel.opamp.endpoint="+server.URL,
+		"-Dotel.service.name=interop", "-Dotel.resource.attributes=deployment.environment=prod",
 		"-Dotel.exporter.otlp.endpoint="+server.URL, "-Dotel.exporter.otlp.protocol=http/protobuf",
 		"-Dotel.metrics.exporter=otlp", "-Dotel.logs.exporter=otlp", "-Dotel.traces.exporter=otlp",
 		"-Dotel.bsp.schedule.delay=200", "-Dotel.blrp.schedule.delay=200", "-Dotel.metric.export.interval=200",
@@ -134,7 +168,7 @@ func runPackagedAgent(t *testing.T, controlled bool) {
 	if !controlled {
 		var args []string
 		for _, arg := range cmd.Args {
-			if !strings.HasPrefix(arg, "-Dotel.javaagent.opamp.") {
+			if !strings.HasPrefix(arg, "-Delastic.otel.opamp.") && !strings.HasPrefix(arg, "-Dotel.javaagent.opamp.") {
 				args = append(args, arg)
 			}
 		}
@@ -184,14 +218,28 @@ func runPackagedAgent(t *testing.T, controlled bool) {
 		return count == 1
 	}
 	wait("initial ACK and all signals", func() bool { return applied() && traces.Load() > 0 && metrics.Load() > 0 && logs.Load() > 0 })
-	for cycle := 0; cycle < 2; cycle++ {
+	var instance Instance
+	if err := db.First(&instance).Error; err != nil {
+		t.Fatal(err)
+	}
+	if instance.Environment != "prod" {
+		t.Fatalf("legacy environment not reported: %q", instance.Environment)
+	}
+	for cycle, scope := range []string{"service", "instance", "all"} {
+		selector := "interop"
+		if scope == "instance" {
+			selector = instance.UID
+		}
+		if scope == "all" {
+			selector = ""
+		}
 		paused = true
 		if cycle == 0 {
 			_, hash := Config(true)
 			dropHash.Store(hex.EncodeToString(hash))
 			dropAck.Store(true)
 		}
-		err = SetControl(db, "service", "interop", paused, "test")
+		err = SetControl(db, scope, selector, paused, "test")
 		if err != nil {
 			t.Fatal(err)
 		}
@@ -226,8 +274,30 @@ func runPackagedAgent(t *testing.T, controlled bool) {
 			_, hash := Config(paused)
 			wait("valid ACK restored after invalid config", func() bool { return lastAck.Load().(string) == hex.EncodeToString(hash) })
 		}
+		if cycle == 0 {
+			// Resuming all must not clear the service or instance stop rules.
+			for _, control := range []struct {
+				scope, selector string
+				stop            bool
+			}{
+				{"instance", instance.UID, true}, {"all", "", true}, {"all", "", false}, {"service", "interop", false},
+			} {
+				if err := SetControl(db, control.scope, control.selector, control.stop, "test"); err != nil {
+					t.Fatal(err)
+				}
+			}
+			beforePolls := polls.Load()
+			wait("poll after overlapping rule removal", func() bool { return polls.Load() > beforePolls })
+			time.Sleep(time.Second)
+			if recording.Load() != beforeRecording || traces.Load() != before[0] || metrics.Load() != before[1] || logs.Load() != before[2] {
+				t.Fatal("global/service resume incorrectly cleared instance stop")
+			}
+			if err := SetControl(db, "instance", instance.UID, false, "test"); err != nil {
+				t.Fatal(err)
+			}
+		}
 		paused = false
-		err = SetControl(db, "service", "interop", paused, "test")
+		err = SetControl(db, scope, selector, paused, "test")
 		if err != nil {
 			t.Fatal(err)
 		}
@@ -235,10 +305,22 @@ func runPackagedAgent(t *testing.T, controlled bool) {
 			return recording.Load() > beforeRecording && applied() && traces.Load() > before[0] && metrics.Load() > before[1] && logs.Load() > before[2]
 		})
 	}
+	throttle.Store(true)
+	wait("HTTP 429 Retry-After", func() bool { return retriedAt.Load() > 0 })
+	gap := time.Duration(retriedAt.Load() - throttledAt.Load())
+	if gap < 900*time.Millisecond || gap > 10*time.Second {
+		t.Fatalf("Retry-After not honored: %s", gap)
+	}
+	requestFull.Store(true)
+	wait("ReportFullState", func() bool { return fullReports.Load() > 0 })
+	serverUnavailable.Store(true)
+	wait("protocol Unavailable", func() bool { return protocolRetries.Load() > 0 })
+	beforePolls := polls.Load()
+	wait("protocol retry recovers", func() bool { return polls.Load() > beforePolls })
 	var instances int64
 	db.Model(&Instance{}).Count(&instances)
 	if instances != 1 {
 		t.Fatalf("expected one instance, got %d", instances)
 	}
-	t.Logf("PASS: two stop/resume cycles, dropped ACK retry, HTTP outage, invalid config retained; JVM pid=%d; business=%d; trace/metric/log exports=%d/%d/%d; config ACK applied", cmd.Process.Pid, work.Load(), traces.Load(), metrics.Load(), logs.Load())
+	t.Logf("PASS: service/instance/all stop-resume, overlapping rule inheritance, full state, HTTP 429 and protocol retry, dropped ACK retry, HTTP outage, invalid config retained; JVM pid=%d; business=%d; trace/metric/log exports=%d/%d/%d; config ACK applied", cmd.Process.Pid, work.Load(), traces.Load(), metrics.Load(), logs.Load())
 }

@@ -6,15 +6,11 @@
 package io.opentelemetry.javaagent.degradation;
 
 import com.google.auto.service.AutoService;
-import io.opentelemetry.api.common.AttributeKey;
 import io.opentelemetry.javaagent.extension.AgentListener;
 import io.opentelemetry.sdk.autoconfigure.AutoConfiguredOpenTelemetrySdk;
-import io.opentelemetry.sdk.autoconfigure.SdkAutoconfigureAccess;
 import io.opentelemetry.sdk.autoconfigure.internal.AutoConfigureUtil;
 import io.opentelemetry.sdk.autoconfigure.spi.ConfigProperties;
-import io.opentelemetry.sdk.resources.Resource;
 import java.io.IOException;
-import java.net.URI;
 import java.util.logging.Logger;
 
 @AutoService(AgentListener.class)
@@ -33,11 +29,9 @@ public final class DegradationAgentListener implements AgentListener {
       return;
     }
     try {
-      String endpoint = endpoint(config.getString("otel.javaagent.opamp.endpoint", ""));
-      Resource resource = SdkAutoconfigureAccess.getResource(autoConfiguredSdk);
-      String service = resource.getAttribute(AttributeKey.stringKey("service.name"));
-      String environment =
-          resource.getAttribute(AttributeKey.stringKey("deployment.environment.name"));
+      String endpoint = EdotSettings.getEndpoint(config);
+      String service = EdotSettings.getServiceName(config);
+      String environment = EdotSettings.getServiceEnvironment(config);
       DegradationController controller =
           new DegradationController(
               DegradationCustomizer.STATE,
@@ -45,7 +39,8 @@ public final class DegradationAgentListener implements AgentListener {
       OpampConnection connection =
           new OpampConnection(
               endpoint,
-              config.getMap("otel.javaagent.opamp.headers"),
+              EdotSettings.headers(config),
+              config,
               service == null ? "unknown_service:java" : service,
               environment == null ? "" : environment,
               controller,
@@ -70,22 +65,5 @@ public final class DegradationAgentListener implements AgentListener {
     } catch (IOException | RuntimeException e) {
       logger.warning("OpAMP runtime degradation could not start");
     }
-  }
-
-  static String endpoint(String value) {
-    URI uri = URI.create(value.trim());
-    if (!("http".equals(uri.getScheme()) || "https".equals(uri.getScheme()))
-        || uri.getHost() == null
-        || uri.getUserInfo() != null
-        || uri.getFragment() != null
-        || uri.getQuery() != null) {
-      throw new IllegalArgumentException(
-          "Expected HTTP(S) OpAMP endpoint without credentials or query");
-    }
-    String path = uri.getPath();
-    if (path == null || path.isEmpty() || path.equals("/")) {
-      return uri.resolve("/v1/opamp").toString();
-    }
-    return uri.toString();
   }
 }

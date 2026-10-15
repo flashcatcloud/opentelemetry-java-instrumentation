@@ -1,248 +1,162 @@
-/* Copyright The OpenTelemetry Authors
- * SPDX-License-Identifier: Apache-2.0
+/*
+ * Licensed to Elasticsearch B.V. under one or more contributor
+ * license agreements. See the NOTICE file distributed with
+ * this work for additional information regarding copyright
+ * ownership. Elasticsearch B.V. licenses this file to you under
+ * the Apache License, Version 2.0 (the "License"); you may
+ * not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
  */
 package io.opentelemetry.javaagent.degradation;
 
-import com.google.protobuf.ByteString;
-import io.opentelemetry.exporter.sender.okhttp.internal.OkHttpHttpSenderProvider;
-import io.opentelemetry.sdk.common.export.*;
+import io.opentelemetry.javaagent.degradation.opampclient.OpampClient;
+import io.opentelemetry.javaagent.degradation.opampclient.OpampClientBuilder;
+import io.opentelemetry.javaagent.degradation.opampclient.internal.connectivity.http.OkHttpSender;
+import io.opentelemetry.javaagent.degradation.opampclient.internal.request.delay.PeriodicDelay;
+import io.opentelemetry.javaagent.degradation.opampclient.internal.request.delay.RetryPeriodicDelay;
+import io.opentelemetry.javaagent.degradation.opampclient.internal.request.service.HttpRequestService;
+import io.opentelemetry.javaagent.degradation.opampclient.internal.response.MessageData;
+import io.opentelemetry.sdk.autoconfigure.spi.ConfigProperties;
 import java.io.Closeable;
 import java.io.IOException;
-import java.io.OutputStream;
-import java.net.URI;
-import java.nio.ByteBuffer;
 import java.time.Duration;
-import java.util.*;
-import java.util.concurrent.*;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
-import java.util.function.Supplier;
 import java.util.logging.Logger;
-import javax.net.ssl.SSLContext;
-import javax.net.ssl.X509TrustManager;
-import opamp.proto.v1.Anyvalue.*;
-import opamp.proto.v1.Opamp.*;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import opamp.proto.v1.Opamp.AgentConfigObject;
+import opamp.proto.v1.Opamp.AgentRemoteConfig;
+import opamp.proto.v1.Opamp.RemoteConfigStatus;
+import opamp.proto.v1.Opamp.RemoteConfigStatuses;
+import opamp.proto.v1.Opamp.ServerErrorResponse;
 
-/** HTTP/protobuf remote-config subset of OpAMP, using the existing Java 6 SDK transport. */
+/** Java 6 port of EDOT OpampManager using its upstream OpAMP client state machine. */
 final class OpampConnection implements Closeable {
-  private static final Logger logger = Logger.getLogger(OpampConnection.class.getName());
-  private final HttpSender sender;
-  private final Thread worker;
-  private final DegradationController controller;
-  private final DegradationState state;
-  private final ByteString uid;
-  private final AgentDescription description;
-  private volatile boolean closed;
-  // Only the worker owns protocol state. Retain and send the ACK on every request, including
-  // retries.
-  private RemoteConfigStatus ack;
-  private long sequence;
+  private final OpampClient client;
+  private final OkHttpSender sender;
 
   OpampConnection(
       String endpoint,
       Map<String, String> headers,
+      ConfigProperties settings,
       String service,
       String environment,
       DegradationController controller,
       DegradationState state) {
-    this.controller = controller;
-    this.state = state;
-    UUID id = UUID.randomUUID();
-    uid =
-        ByteString.copyFrom(
-            ByteBuffer.allocate(16)
-                .putLong(id.getMostSignificantBits())
-                .putLong(id.getLeastSignificantBits())
-                .array());
-    description =
-        AgentDescription.newBuilder()
-            .addIdentifyingAttributes(attribute("service.name", service))
-            .addIdentifyingAttributes(attribute("deployment.environment.name", environment))
-            .build();
-    sender = new OkHttpHttpSenderProvider().createSender(new SenderConfig(endpoint, headers));
-    worker = new Thread(this::run, "otel-opamp-java6");
-    worker.setDaemon(true);
-    try {
-      worker.start();
-    } catch (RuntimeException e) {
-      sender.shutdown();
-      throw e;
-    }
-  }
-
-  private static KeyValue attribute(String key, String value) {
-    return KeyValue.newBuilder()
-        .setKey(key)
-        .setValue(AnyValue.newBuilder().setStringValue(value))
-        .build();
-  }
-
-  private void run() {
-    boolean failed = false;
-    while (!closed) {
-      long delay = state.config.interval.toMillis();
-      try {
-        AgentToServer.Builder request =
-            AgentToServer.newBuilder()
-                .setInstanceUid(uid)
-                .setSequenceNum(sequence++)
-                .setCapabilities(0x1003)
-                .setAgentDescription(description);
-        if (ack != null) request.setRemoteConfigStatus(ack);
-        ServerToAgent response = exchange(request.build().toByteArray());
-        if (!response.getInstanceUid().equals(uid))
-          throw new IOException("Unexpected instance identity");
-        if (response.hasErrorResponse()) throw new IOException("Server rejected request");
-        if (failed) logger.info("OpAMP connection restored");
-        failed = false;
-        if (response.hasRemoteConfig()) {
-          AgentRemoteConfig remote = response.getRemoteConfig();
-          // Resends of an already applied/rejected hash are idempotent. ACK remains queued.
-          if (ack == null || !ack.getLastRemoteConfigHash().equals(remote.getConfigHash())) {
-            RemoteConfigStatus.Builder status =
-                RemoteConfigStatus.newBuilder().setLastRemoteConfigHash(remote.getConfigHash());
-            try {
-              if (remote.getConfigHash().isEmpty() || remote.getConfigHash().size() > 32)
-                throw new IOException("Invalid hash");
-              AgentConfigObject file = remote.getConfig().getConfigMapMap().get("elastic");
-              if (file == null
-                  || !file.getContentType().equals("application/json")
-                  || file.getBody().size() > 65536) throw new IOException("Invalid config");
-              controller.apply(DegradationConfig.parse(file.getBody().toByteArray()));
-              status.setStatus(RemoteConfigStatuses.RemoteConfigStatuses_APPLIED);
-            } catch (IOException | RuntimeException e) {
-              status
-                  .setStatus(RemoteConfigStatuses.RemoteConfigStatuses_FAILED)
-                  .setErrorMessage("Invalid or unsupported degradation configuration");
-              logger.warning("OpAMP degradation configuration rejected; previous state retained");
-            }
-            ack = status.build();
-            delay = 0; // Immediately report the new configuration status.
-          }
-        }
-      } catch (InterruptedException e) {
-        Thread.currentThread().interrupt();
-        break;
-      } catch (IOException | RuntimeException e) {
-        if (!failed && !closed)
-          logger.warning("OpAMP connection unavailable; retaining last configuration");
-        failed = true;
-        delay = 5000;
-      }
-      try {
-        if (!closed && delay > 0) Thread.sleep(delay);
-      } catch (InterruptedException e) {
-        Thread.currentThread().interrupt();
-        break;
-      }
-    }
-  }
-
-  private ServerToAgent exchange(byte[] bytes) throws IOException, InterruptedException {
-    CountDownLatch done = new CountDownLatch(1);
-    AtomicReference<HttpResponse> response = new AtomicReference<>();
-    AtomicReference<Throwable> failure = new AtomicReference<>();
-    sender.send(
-        new MessageWriter() {
-          public void writeMessage(OutputStream out) throws IOException {
-            out.write(bytes);
-          }
-
-          public int getContentLength() {
-            return bytes.length;
-          }
-        },
-        value -> {
-          response.set(value);
-          done.countDown();
-        },
-        error -> {
-          failure.set(error);
-          done.countDown();
-        });
-    if (!done.await(15, TimeUnit.SECONDS)) {
-      // Do not accumulate requests if a transport violates its 10-second deadline.
-      closed = true;
-      sender.shutdown();
-      throw new IOException("Transport deadline exceeded");
-    }
-    HttpResponse value = response.get();
-    if (failure.get() != null || value == null || value.getStatusCode() != 200)
-      throw new IOException("OpAMP request failed");
-    return ServerToAgent.parseFrom(value.getResponseBody());
+    MutablePeriodicDelay delay = new MutablePeriodicDelay(Duration.ofSeconds(30));
+    OkHttpClient.Builder http = new OkHttpClient.Builder();
+    OpampTlsConfigurer.configure(
+        http,
+        endpoint,
+        EdotSettings.setting(settings, "certificate"),
+        EdotSettings.setting(settings, "client.key"),
+        EdotSettings.setting(settings, "client.certificate"));
+    http.interceptors()
+        .add(
+            chain -> {
+              Request.Builder request = chain.request().newBuilder();
+              for (Map.Entry<String, String> entry : headers.entrySet())
+                request.addHeader(entry.getKey(), entry.getValue());
+              return chain.proceed(request.build());
+            });
+    sender = OkHttpSender.create(endpoint, http.build());
+    OpampClientBuilder builder =
+        OpampClient.builder().enableRemoteConfig().putIdentifyingAttribute("service.name", service);
+    if (environment != null)
+      builder.putIdentifyingAttribute("deployment.environment.name", environment);
+    builder.setRequestService(
+        HttpRequestService.create(
+            sender, delay, RetryPeriodicDelay.create(Duration.ofSeconds(30))));
+    client = builder.build(new Callbacks(controller, state, delay));
   }
 
   @Override
   public void close() throws IOException {
-    closed = true;
-    worker.interrupt();
-    sender.shutdown().join(5, TimeUnit.SECONDS);
     try {
-      worker.join(5000);
-    } catch (InterruptedException e) {
-      Thread.currentThread().interrupt();
+      client.close();
+    } finally {
+      sender.close();
     }
   }
 
-  private static final class SenderConfig implements HttpSenderConfig {
-    private final URI endpoint;
-    private final Map<String, List<String>> headers = new HashMap<>();
+  private static final class Callbacks implements OpampClient.Callbacks {
+    private final Logger logger = Logger.getLogger(Callbacks.class.getName());
+    private final DegradationController controller;
+    private final DegradationState state;
+    private final MutablePeriodicDelay pollingDelay;
+    private boolean failed;
 
-    SenderConfig(String endpoint, Map<String, String> headers) {
-      this.endpoint = URI.create(endpoint);
-      for (Map.Entry<String, String> entry : headers.entrySet())
-        this.headers.put(entry.getKey(), Collections.singletonList(entry.getValue()));
+    Callbacks(
+        DegradationController controller, DegradationState state, MutablePeriodicDelay delay) {
+      this.controller = controller;
+      this.state = state;
+      this.pollingDelay = delay;
     }
 
-    public URI getEndpoint() {
-      return endpoint;
+    public void onMessage(OpampClient client, MessageData message) {
+      AgentRemoteConfig remote = message.getRemoteConfig();
+      if (remote == null) return;
+      AgentConfigObject file = remote.getConfig().getConfigMapMap().get("elastic");
+      if (file == null) return; // EDOT ignores configurations outside its namespace.
+      RemoteConfigStatus.Builder ack = RemoteConfigStatus.newBuilder();
+      try {
+        if (file.getBody().isEmpty() || file.getBody().size() > 65536)
+          throw new IOException("Invalid configuration size");
+        // EDOT accepts the JSON body independently of content_type metadata.
+        DegradationConfig next =
+            DegradationConfig.parse(file.getBody().toByteArray(), state.config);
+        controller.apply(next);
+        pollingDelay.setDelay(next.interval);
+        ack.setStatus(RemoteConfigStatuses.RemoteConfigStatuses_APPLIED)
+            .setLastRemoteConfigHash(remote.getConfigHash());
+      } catch (IOException | RuntimeException invalid) {
+        // Like EDOT, FAILED carries no applied hash. Never acknowledge an unapplied config.
+        ack.setStatus(RemoteConfigStatuses.RemoteConfigStatuses_FAILED);
+        logger.warning("OpAMP configuration rejected; previous configuration retained");
+      }
+      client.setRemoteConfigStatus(ack.build());
     }
 
-    public String getContentType() {
-      return "application/x-protobuf";
+    public void onConnect(OpampClient client) {
+      if (failed) logger.info("OpAMP connection restored");
+      failed = false;
     }
 
-    public Compressor getCompressor() {
-      return null;
+    public void onConnectFailed(OpampClient client, Throwable error) {
+      if (!failed) logger.warning("OpAMP connection unavailable; previous configuration retained");
+      failed = true;
     }
 
-    public Duration getTimeout() {
-      return Duration.ofSeconds(10);
+    public void onErrorResponse(OpampClient client, ServerErrorResponse error) {
+      logger.warning("OpAMP server rejected request; previous configuration retained");
+    }
+  }
+
+  private static final class MutablePeriodicDelay implements PeriodicDelay {
+    private final AtomicReference<Duration> duration = new AtomicReference<>();
+
+    MutablePeriodicDelay(Duration initial) {
+      duration.set(initial);
     }
 
-    public Duration getConnectTimeout() {
-      return Duration.ofSeconds(10);
+    public Duration getNextDelay() {
+      return duration.get();
     }
 
-    public Supplier<Map<String, List<String>>> getHeadersSupplier() {
-      return () -> headers;
-    }
+    public void reset() {}
 
-    public ProxyOptions getProxyOptions() {
-      return null;
-    }
-
-    public RetryPolicy getRetryPolicy() {
-      return null;
-    }
-
-    public SSLContext getSslContext() {
-      return null;
-    }
-
-    public X509TrustManager getTrustManager() {
-      return null;
-    }
-
-    public ExecutorService getExecutorService() {
-      return null;
-    }
-
-    public long getMaxResponseBodySize() {
-      return 131072;
-    }
-
-    public List<String> getEnabledProtocols() {
-      return null;
+    void setDelay(Duration value) {
+      duration.set(value);
     }
   }
 }
