@@ -49,4 +49,6 @@ docker run --rm -v "$root:/repo" -v "$sdk:/sdk" -w /repo/java6-agent eclipse-tem
   io.opentelemetry.javaagent.instrumentation.grpc.v1_6.GrpcInstrumentationModule \
   io.opentelemetry.javaagent.instrumentation.elasticsearch.rest.v7_0.ElasticsearchRest7InstrumentationModule
 docker run --rm --platform linux/amd64 -v "$root:/repo" -w /repo eclipse-temurin:8-jdk@sha256:3a280002b0d1212a62e9f5095c10b07ef3b62c1b13916fe093438e7e9af44b8b sh java6-agent/build-grpc-transport.sh
+python3 java6-agent/degradation/prepare.py
+docker run --rm --platform linux/amd64 -v "$root:/repo" -v "$sdk:/sdk" -w /repo eclipse-temurin:8-jdk@sha256:3a280002b0d1212a62e9f5095c10b07ef3b62c1b13916fe093438e7e9af44b8b sh java6-agent/degradation/build.sh
 python3 java6-agent/package-official.py --sdk "$sdk"

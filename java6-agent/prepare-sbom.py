@@ -14,6 +14,7 @@ inventory = {}
 for manifest, directory in [
     (root / 'official-deps.json', root / 'build/official-deps'),
     (root / 'base-deps.json', root / 'build/deps'),
+    (root / 'degradation/deps.json', root / 'build/degradation-deps'),
     (root / 'runtime-deps.json', root / 'build/runtime-deps'),
     (root / 'grpc-export-deps.json', root / 'build/grpc-export-deps'),
     (root / 'component-deps.json', root / 'build/component-deps'),
@@ -25,6 +26,7 @@ for entry in json.loads((root / 'http-compat/sources.json').read_text()):
     if 'url' in entry:
         inventory[entry['file']] = (entry, root / 'build/http-source-deps' / entry['file'])
 selected = {
+    'protobuf-java-3.3.0.jar': 'BSD-3-Clause',
     'okhttp-3.12.13-sources.jar': 'Apache-2.0',
     'okio-1.17.2-sources.jar': 'Apache-2.0',
     'byte-buddy-dep-1.18.14.jar': 'Apache-2.0',

@@ -1,0 +1,12 @@
+[
+  {
+    "file": "protobuf-java-3.3.0.jar",
+    "url": "https://repo.maven.apache.org/maven2/com/google/protobuf/protobuf-java/3.3.0/protobuf-java-3.3.0.jar",
+    "sha256": "f3411ade77523d5f0d013d4f25c36879e66f0c5e1e4310f7096d54d0d2553554"
+  },
+  {
+    "file": "protoc-3.3.0-linux-x86_64.exe",
+    "url": "https://repo.maven.apache.org/maven2/com/google/protobuf/protoc/3.3.0/protoc-3.3.0-linux-x86_64.exe",
+    "sha256": "bff0c488202b144a30800dbb61a043cf36858cc6ed6215fd200874f3370a425e"
+  }
+]

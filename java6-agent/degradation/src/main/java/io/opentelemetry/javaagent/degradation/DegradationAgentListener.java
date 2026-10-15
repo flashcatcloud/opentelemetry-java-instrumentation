@@ -1,0 +1,91 @@
+/*
+ * Copyright The OpenTelemetry Authors
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+package io.opentelemetry.javaagent.degradation;
+
+import com.google.auto.service.AutoService;
+import io.opentelemetry.api.common.AttributeKey;
+import io.opentelemetry.javaagent.extension.AgentListener;
+import io.opentelemetry.sdk.autoconfigure.AutoConfiguredOpenTelemetrySdk;
+import io.opentelemetry.sdk.autoconfigure.SdkAutoconfigureAccess;
+import io.opentelemetry.sdk.autoconfigure.internal.AutoConfigureUtil;
+import io.opentelemetry.sdk.autoconfigure.spi.ConfigProperties;
+import io.opentelemetry.sdk.resources.Resource;
+import java.io.IOException;
+import java.net.URI;
+import java.util.logging.Logger;
+
+@AutoService(AgentListener.class)
+public final class DegradationAgentListener implements AgentListener {
+  @Override
+  public int order() {
+    return 0;
+  }
+
+  private static final Logger logger = Logger.getLogger(DegradationAgentListener.class.getName());
+
+  @Override
+  public void afterAgent(AutoConfiguredOpenTelemetrySdk autoConfiguredSdk) {
+    ConfigProperties config = AutoConfigureUtil.getConfig(autoConfiguredSdk);
+    if (config == null || !DegradationCustomizer.enabled(config)) {
+      return;
+    }
+    try {
+      String endpoint = endpoint(config.getString("otel.javaagent.opamp.endpoint", ""));
+      Resource resource = SdkAutoconfigureAccess.getResource(autoConfiguredSdk);
+      String service = resource.getAttribute(AttributeKey.stringKey("service.name"));
+      String environment =
+          resource.getAttribute(AttributeKey.stringKey("deployment.environment.name"));
+      DegradationController controller =
+          new DegradationController(
+              DegradationCustomizer.STATE,
+              autoConfiguredSdk.getOpenTelemetrySdk().getSdkTracerProvider());
+      OpampConnection connection =
+          new OpampConnection(
+              endpoint,
+              config.getMap("otel.javaagent.opamp.headers"),
+              service == null ? "unknown_service:java" : service,
+              environment == null ? "" : environment,
+              controller,
+              DegradationCustomizer.STATE);
+      Thread hook =
+          new Thread(
+              () -> {
+                try {
+                  connection.close();
+                } catch (IOException e) {
+                  logger.warning("Could not close OpAMP client");
+                }
+              },
+              "otel-opamp-shutdown");
+      try {
+        Runtime.getRuntime().addShutdownHook(hook);
+      } catch (IllegalStateException | SecurityException e) {
+        connection.close();
+        throw e;
+      }
+      logger.info("OpAMP runtime degradation enabled");
+    } catch (IOException | RuntimeException e) {
+      logger.warning("OpAMP runtime degradation could not start");
+    }
+  }
+
+  static String endpoint(String value) {
+    URI uri = URI.create(value.trim());
+    if (!("http".equals(uri.getScheme()) || "https".equals(uri.getScheme()))
+        || uri.getHost() == null
+        || uri.getUserInfo() != null
+        || uri.getFragment() != null
+        || uri.getQuery() != null) {
+      throw new IllegalArgumentException(
+          "Expected HTTP(S) OpAMP endpoint without credentials or query");
+    }
+    String path = uri.getPath();
+    if (path == null || path.isEmpty() || path.equals("/")) {
+      return uri.resolve("/v1/opamp").toString();
+    }
+    return uri.toString();
+  }
+}

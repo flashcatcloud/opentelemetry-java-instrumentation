@@ -55,6 +55,11 @@ for entry in json.loads((root / 'http-compat/sources.json').read_text()):
     (out / target).write_text(header)
     manifest.append(dict(file=target, sha256=hashlib.sha256(header.encode()).hexdigest(),
                          archive=source.name, archive_sha256=entry['sha256'], entry=name))
+source=root/'degradation/protobuf-LICENSE'
+expected=json.loads((root/'degradation/schema.json').read_text())['protobuf_license_sha256']
+assert hashlib.sha256(source.read_bytes()).hexdigest()==expected
+shutil.copyfile(source,out/'protobuf-3.3.0-LICENSE')
+manifest.append(dict(file='protobuf-3.3.0-LICENSE',sha256=expected,source='https://github.com/protocolbuffers/protobuf/blob/v3.3.0/LICENSE'))
 (out / 'sources.json').write_text(json.dumps(manifest, indent=2, sort_keys=True) + '\n')
 (out / 'README.txt').write_text('''Third-party license materials for the Java 6 compatibility candidate.
 

@@ -1,0 +1,9 @@
+{
+  "repository": "https://github.com/open-telemetry/opamp-spec",
+  "revision": "61372c6916c4be08eb0409f7e1001e25cedb891f",
+  "sha256": {
+    "opamp/v1/anyvalue.proto": "f0326211aed50272a221e75ada27f31db55266ea65dcd7b7b3d8a0a58934e128",
+    "opamp/v1/opamp.proto": "66141d11fa5e00f832abca24c3f59fe8ae2a536027ac6e78370ac33689aa41d1"
+  },
+  "protobuf_license_sha256": "af67c58de2e18677a0b8cb5fffbe2232aabb8eb2930e8cd684769cef3d74a262"
+}
