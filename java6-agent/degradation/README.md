@@ -9,10 +9,15 @@ Enable with JVM properties (without an endpoint, no OpAMP worker is started):
 
 ```properties
 otel.javaagent.opamp.endpoint=http://n9e.example:17000/v1/opamp
-otel.javaagent.opamp.headers=Authorization=Bearer <target-token>
 otel.service.name=my-service
 otel.resource.attributes=deployment.environment.name=prod
 ```
+
+The existing n9e-plus probe endpoint `/v1/opamp` does not require a token.
+Do not add an Authorization header for this integration. Management endpoints
+continue to use n9e-plus administrator authentication; that credential is not
+an agent setting. The optional headers property is only needed for deployments
+that explicitly add their own HTTP authentication.
 
 The `elastic` remote configuration is compatible with the existing n9e-plus
 `plus/opamp` handler and store:
@@ -69,7 +74,8 @@ INTEROP_CLASSPATH=/path/to/test-classes \
 python3 java6-agent/degradation/tests/run.py /path/to/n9e-plus
 ```
 
-The runner copies the unmodified n9e-plus handler/store into an isolated Go test
+The runner extracts the unmodified n9e-plus handler/store from a pinned Git commit
+(`--n9e-ref` overrides it), ignoring all uncommitted files, into an isolated Go test
 module and runs `go test -mod=mod -race -v -count=1 -timeout=180s .` against a
 real agent JVM with `-Xverify:all`. No shared n9e instance is modified.
 It verifies two stop/resume cycles in one process, applied configuration hashes,
@@ -79,38 +85,32 @@ one instance identity, and default-off operation. A native Linux x86_64 host is
 required for Oracle Java 6u45; an SSH launcher can reverse-forward the isolated
 local test server and substitute the remote agent/class paths.
 
-## Verified candidate — 2026-10-15
+## Verification baseline
 
-`java6-agent/build/degradation-candidate.jar`, SHA-256:
+The earlier token-based test used stale uncommitted n9e-plus code and is not
+valid evidence for compatibility with the deployed API. The corrected harness
+uses committed `opamp_rule` / `opamp_instance` and `SetControl`, and asserts that
+the probe sends no Authorization header. The agent runtime sources are unchanged.
+
+Corrected validation on 2026-10-15 passed on Oracle 6u45 (native Linux x86_64),
+Zulu 8u504, Zulu 11.0.32.1, Temurin 17.0.20.1 and Homebrew 21.0.3 (macOS ARM64).
+Every runtime passed both tests, including two stop/resume cycles, retry/fault
+cases, all three exports and cached/new tracer recording, with no probe token.
+The runner executed `go test -mod=mod -race -v -count=1 -timeout=180s .`.
+
+The committed server baseline is n9e-plus main
+`5022f6c22e2f30b77c51ce9c76770127e7290de4`; handler/store are identical in
+release-27 `c7f7a4f04d0357ca14726e9b93eae8b6fad3b5c8`.
+Their SHA-256 hashes are respectively
+`6022295a28850447526857ed6cdf79c678ef9e601163dc9a3912b3ad307f4ad2` and
+`3afe24cfd37eccb30e339ed5dddbea86bfab4aabe84dccb7bb790d7c2e8135a2`.
+Fetch the pinned commit into the local n9e-plus repository before running if it
+is not already available. Uncommitted server files are never used.
+
+All five runs used candidate SHA-256
 `3569766f9d3e2c0f0e3483243d5a18b711e85fa6a98da6c024f0a0037c0401fa`.
-This candidate was tested in the existing compatibility worktree before extracting
-the PR. The unrelated middleware edits in that worktree are excluded from this PR;
-the runtime module sources are unchanged. A full clean build of the isolated PR
-was not repeated. The same candidate bytes passed both interoperability tests on
-every runtime below:
-
-| Runtime | Host | Stop/resume + fault recovery | Default off | Evidence |
-| --- | --- | --- | --- | --- |
-| Oracle 6u45 (1.6.0_45-b06) | Native Linux x86_64 | PASS | PASS | `build/degradation-evidence/java6.log` (local) |
-| Zulu 8u504 | macOS ARM64 | PASS | PASS | `build/degradation-evidence/java8.log` (local) |
-| Zulu 11.0.32.1 | macOS ARM64 | PASS | PASS | `build/degradation-evidence/java11.log` (local) |
-| Temurin 17.0.20.1 | macOS ARM64 | PASS | PASS | `build/degradation-evidence/java17.log` (local) |
-| Homebrew 21.0.3 | macOS ARM64 | PASS | PASS | `build/degradation-evidence/java21.log` (local) |
-
-Each run used the command above (`INTEROP_JAVA` selects the runtime); the runner
-executes `go test -mod=mod -race -v -count=1 -timeout=180s .`. Java 6 used the
-recorded SSH launcher in `build/degradation-evidence/java6-remote.py` and a real
-Oracle JVM, not a bytecode-version simulation. Test logs contain actual JVM
-versions and JVM PIDs; the Go harness's process PID is the SSH launcher for Java 6.
-
-Additional checks:
-
-- `python3 java6-agent/check_jdk6.py <6u45>/jre/lib/rt.jar java6-agent/build/degradation-java6`: 785 classes, zero missing JDK 6 links.
-- `ConfigCompatibilityTest`: valid mixed string/JSON booleans and nine invalid JSON configurations passed. Compile with `javac -source 6 -target 6 -bootclasspath <6u45>/jre/lib/rt.jar -cp java6-agent/build/degradation-java6 -d java6-agent/build/degradation-unit-classes java6-agent/degradation/tests/ConfigCompatibilityTest.java` after creating the output directory. Run `java -Xverify:all -cp 'java6-agent/build/degradation-unit-classes:java6-agent/build/degradation-java6:java6-agent/build/tooling-java6:java6-agent/build/official-deps/*:<sdk>/java6-compat/build/deps/build/*' io.opentelemetry.javaagent.degradation.ConfigCompatibilityTest` (verified on Java 21; supplying the SDK dependency directory is required).
-- `sh -n java6-agent/degradation/build.sh java6-agent/build-official-candidate.sh`, Python AST parsing of the six changed/new Python files, and `git diff --check`: passed.
-- JAR integrity, duplicate-entry, SPI registration, license, SBOM and source-provenance checks passed. Against the pre-change RC5 JAR, no existing class bytes changed and no entries were removed; only new module/protobuf entries, merged SPI registrations and metadata differ.
-
-This verifies the degradation/OpAMP behavior, not the entire middleware support
-matrix or HTTPS interoperability on Java 6. The integration uses the real local
-n9e-plus handler/store with isolated SQLite and HTTP endpoints, not a deployed
-n9e-plus service. The original `official-loader-candidate.jar` was preserved.
+Local logs are saved as `java6-agent/build/degradation-evidence/merged-java*.log`.
+This candidate was built before PR extraction; its unrelated middleware changes
+are excluded from the PR. A full clean build of the isolated PR was not repeated.
+The tests exercise the actual committed handler/store in an isolated HTTP/SQLite
+server, not a deployed n9e-plus service or Java 6 HTTPS.

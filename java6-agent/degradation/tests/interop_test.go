@@ -40,15 +40,12 @@ func runPackagedAgent(t *testing.T, controlled bool) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	if err := db.AutoMigrate(&Target{}, &Instance{}, &Change{}); err != nil {
+	if err := db.AutoMigrate(&Rule{}, &Instance{}); err != nil {
 		t.Fatal(err)
 	}
 	sql, _ := db.DB()
 	defer sql.Close()
-	target, token, err := Create(db, "interop", "prod", "test")
-	if err != nil {
-		t.Fatal(err)
-	}
+	paused := false
 	var work, traces, metrics, logs, polls, recording, disabled atomic.Int64
 	var dropAck, offline, invalid atomic.Bool
 	var dropped, unavailable, rejected atomic.Int64
@@ -59,6 +56,10 @@ func runPackagedAgent(t *testing.T, controlled bool) {
 	mux := http.NewServeMux()
 	mux.HandleFunc("/v1/opamp", func(w http.ResponseWriter, r *http.Request) {
 		polls.Add(1)
+		if r.Header.Get("Authorization") != "" {
+			t.Error("probe must connect without an Authorization header")
+		}
+
 		body, _ := io.ReadAll(r.Body)
 		r.Body = io.NopCloser(bytes.NewReader(body))
 		var request pb.AgentToServer
@@ -125,7 +126,6 @@ func runPackagedAgent(t *testing.T, controlled bool) {
 	defer cancel()
 	cmd := exec.CommandContext(ctx, os.Getenv("INTEROP_JAVA"), "-Xverify:all", "-javaagent:"+os.Getenv("INTEROP_AGENT"),
 		"-Dotel.javaagent.opamp.endpoint="+server.URL,
-		"-Dotel.javaagent.opamp.headers=Authorization=Bearer "+token,
 		"-Dotel.service.name=interop", "-Dotel.resource.attributes=deployment.environment.name=prod",
 		"-Dotel.exporter.otlp.endpoint="+server.URL, "-Dotel.exporter.otlp.protocol=http/protobuf",
 		"-Dotel.metrics.exporter=otlp", "-Dotel.logs.exporter=otlp", "-Dotel.traces.exporter=otlp",
@@ -178,22 +178,20 @@ func runPackagedAgent(t *testing.T, controlled bool) {
 		return
 	}
 	applied := func() bool {
-		_, hash := Config(*target)
+		_, hash := Config(paused)
 		var count int64
-		db.Model(&Instance{}).Where("target_id = ? AND ack_hash = ? AND ack_status = 1", target.ID, hex.EncodeToString(hash)).Count(&count)
+		db.Model(&Instance{}).Where("service = ? AND ack_hash = ? AND ack_status = 1", "interop", hex.EncodeToString(hash)).Count(&count)
 		return count == 1
 	}
 	wait("initial ACK and all signals", func() bool { return applied() && traces.Load() > 0 && metrics.Load() > 0 && logs.Load() > 0 })
 	for cycle := 0; cycle < 2; cycle++ {
-		paused := true
+		paused = true
 		if cycle == 0 {
-			next := *target
-			next.Paused = true
-			_, hash := Config(next)
+			_, hash := Config(true)
 			dropHash.Store(hex.EncodeToString(hash))
 			dropAck.Store(true)
 		}
-		target, _, err = Mutate(db, target.ID, target.Revision, &paused, false, "test")
+		err = SetControl(db, "service", "interop", paused, "test")
 		if err != nil {
 			t.Fatal(err)
 		}
@@ -225,11 +223,11 @@ func runPackagedAgent(t *testing.T, controlled bool) {
 		}
 		if cycle == 0 {
 			invalid.Store(false)
-			_, hash := Config(*target)
+			_, hash := Config(paused)
 			wait("valid ACK restored after invalid config", func() bool { return lastAck.Load().(string) == hex.EncodeToString(hash) })
 		}
 		paused = false
-		target, _, err = Mutate(db, target.ID, target.Revision, &paused, false, "test")
+		err = SetControl(db, "service", "interop", paused, "test")
 		if err != nil {
 			t.Fatal(err)
 		}
