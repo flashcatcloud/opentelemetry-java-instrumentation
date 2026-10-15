@@ -22,8 +22,9 @@ for module in ['instrumentation/runtime-telemetry/library', 'instrumentation/run
     base=r/module/'src/main/java'
     for source in sorted(base.rglob('*.java')):
         relative=source.relative_to(base)
-        # Reuse upstream host detection and SPI; other resource detectors need separate JVM audits.
-        if module == 'instrumentation/resources/library' and source.name not in ('HostResource.java', 'HostResourceProvider.java'):
+        # Reuse upstream host and JVM runtime detection; other detectors need separate JVM audits.
+        if module == 'instrumentation/resources/library' and source.name not in ('HostResource.java', 'HostResourceProvider.java',
+                'ProcessRuntimeResource.java', 'ProcessRuntimeResourceProvider.java'):
             continue
         # The Agent needs internal instrumentation helpers, not JDBC decorator APIs.
         if module == 'instrumentation/jdbc/library' and (
