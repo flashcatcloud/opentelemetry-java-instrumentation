@@ -5,10 +5,10 @@ and reuses its OpenTelemetry Contrib 1.59.0 OpAMP client state machine. The
 Java 6 source adaptations and upstream file hashes are documented in [REUSE.md](REUSE.md)
 and `upstream.json`. It is packaged into the existing compatibility agent.
 
-Use the existing EDOT connection property; no additional enable flag or probe token:
+Use the agent connection property; no additional enable flag or probe token:
 
 ```properties
-elastic.otel.opamp.endpoint=http://n9e.example:19000
+otel.javaagent.opamp.endpoint=http://n9e.example:19000
 otel.service.name=my-service
 otel.resource.attributes=deployment.environment.name=prod
 ```
@@ -16,8 +16,9 @@ otel.resource.attributes=deployment.environment.name=prod
 The endpoint helper appends `/v1/opamp`. Existing `otel.*` export settings stay
 unchanged. The legacy resource key `deployment.environment` also works. Neither
 an environment nor authentication headers are required. Without an endpoint,
-no OpAMP worker starts. `otel.javaagent.opamp.endpoint` remains an optional fallback
-alias; the original `elastic.otel.opamp.endpoint` takes precedence.
+no OpAMP worker starts. All connection options use `otel.javaagent.opamp.*`;
+Elastic-prefixed properties are not read. The wire configuration namespace stays
+`elastic` because that is the existing n9e-plus protocol contract.
 
 The merged n9e-plus probe route requires no Authorization header. Management
 routes continue using existing administrator headers (`X-User-Token`,
@@ -82,11 +83,12 @@ exercise the deployed management authentication middleware.
 
 The server baseline is main `5022f6c22e2f30b77c51ce9c76770127e7290de4`.
 Handler/store match release-27 `c7f7a4f04d0357ca14726e9b93eae8b6fad3b5c8`.
-The same harness can compare the official EDOT 1.13.0 JAR on Java 21.
+The earlier official EDOT 1.13.0 comparison used its own connection property;
+the current harness launches this agent with `otel.javaagent.opamp.endpoint`.
 `ConfigCompatibilityTest` and `ProtocolCompatibilityTest` separately verify
 configuration precedence/defaults and the backported upstream protocol state machine.
 
-## Verified on 2026-10-15
+## Verification history (2026-10-15)
 
 The complete isolated-PR candidate build passed. Both interoperability tests passed
 on Oracle 6u45 (native Linux x86_64), Zulu 8u504, Zulu 11.0.32.1, Temurin 17.0.20.1
@@ -103,9 +105,17 @@ upstream EDOT-NOTICE, whose original trailing blank line is preserved.
 
 Matrix-tested JAR SHA-256:
 `cc1a8eabdaaef792dc95ff483658005ec497eaf3052851f4eb911de23c195a1f`.
-Final packaged JAR SHA-256:
+Pre-namespace-correction packaged JAR SHA-256:
 `096ee22d639a6433212d606a4f4fb30fd2a5a8cf90750e62ff04d3784e92c0cb`.
 A ZIP-entry comparison verified that only `META-INF/sbom.cdx.json` and
 `META-INF/provenance/inputs.json` changed when completing the source inventory;
 all executable classes and runtime resources are byte-identical. CRC verification
 passed. The candidate contains no unrelated uncommitted middleware changes.
+
+After the configuration namespace correction, the module was rebuilt and the full
+HTTP stop/resume matrix passed again on all five runtimes using only
+`otel.javaagent.opamp.endpoint`. The configuration test also confirms that
+Elastic-prefixed endpoint, headers and TLS settings are ignored. The resulting
+candidate SHA-256 is
+`0ac845a2f1883363f0ffffa31cd6812ea4938ee4eb75686fd379dd0988cf4eba`.
+The 861-class JDK 6 link check and packaged configuration namespace/CRC checks passed.

@@ -24,13 +24,16 @@ public final class ConfigCompatibilityTest {
     check(
         EdotSettings.getEndpoint(DefaultConfigProperties.createFromMap(settings)) == null,
         "default off");
-    settings.put("elastic.otel.opamp.endpoint", "http://localhost:19000/prefix");
-    settings.put("otel.javaagent.opamp.endpoint", "http://wrong:123");
+    settings.put("elastic.otel.opamp.endpoint", "http://ignored:123");
+    check(
+        EdotSettings.getEndpoint(DefaultConfigProperties.createFromMap(settings)) == null,
+        "Elastic property must not enable this agent");
+    settings.put("otel.javaagent.opamp.endpoint", "http://localhost:19000/prefix");
     check(
         "http://localhost:19000/prefix/v1/opamp"
             .equals(EdotSettings.getEndpoint(DefaultConfigProperties.createFromMap(settings))),
-        "EDOT endpoint precedence and prefix");
-    settings.put("elastic.otel.opamp.endpoint", "http://localhost:19000/v1/opamp");
+        "agent endpoint and prefix");
+    settings.put("otel.javaagent.opamp.endpoint", "http://localhost:19000/v1/opamp");
     check(
         "http://localhost:19000/v1/opamp"
             .equals(EdotSettings.getEndpoint(DefaultConfigProperties.createFromMap(settings))),
@@ -61,11 +64,25 @@ public final class ConfigCompatibilityTest {
                 EdotSettings.getServiceEnvironment(
                     DefaultConfigProperties.createFromMap(settings))),
         "modern environment precedence");
-    settings.remove("elastic.otel.opamp.endpoint");
+    settings.remove("otel.javaagent.opamp.endpoint");
     check(
-        "http://wrong:123/v1/opamp"
-            .equals(EdotSettings.getEndpoint(DefaultConfigProperties.createFromMap(settings))),
-        "neutral alias");
+        EdotSettings.getEndpoint(DefaultConfigProperties.createFromMap(settings)) == null,
+        "no fallback to Elastic endpoint");
+    settings.put("elastic.otel.opamp.headers", "Authorization=ignored");
+    check(
+        EdotSettings.headers(DefaultConfigProperties.createFromMap(settings)).isEmpty(),
+        "no Elastic headers fallback");
+    for (String key : new String[] {"certificate", "client.key", "client.certificate"}) {
+      settings.put("elastic.otel.opamp." + key, "ignored");
+      check(
+          EdotSettings.setting(DefaultConfigProperties.createFromMap(settings), key) == null,
+          "no Elastic TLS fallback");
+      settings.put("otel.javaagent.opamp." + key, "configured");
+      check(
+          "configured"
+              .equals(EdotSettings.setting(DefaultConfigProperties.createFromMap(settings), key)),
+          "agent TLS setting");
+    }
 
     DegradationConfig stopped =
         parse(
@@ -105,7 +122,7 @@ public final class ConfigCompatibilityTest {
       check(rejected, "invalid JSON rejected");
     }
     System.out.println(
-        "PASS: EDOT endpoint/service/environment, aliases, config defaults,"
+        "PASS: agent namespace, service/environment, config defaults,"
             + " partial/reset/invalid/unknown configuration");
   }
 }

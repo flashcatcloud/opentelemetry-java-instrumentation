@@ -77,7 +77,7 @@ final class OpampTlsConfigurer {
     }
     if ((clientKeyPath == null) != (clientCertificatePath == null)) {
       throw new IllegalArgumentException(
-          "Both elastic.otel.opamp.client.key and elastic.otel.opamp.client.certificate must be"
+          "Both otel.javaagent.opamp.client.key and otel.javaagent.opamp.client.certificate must be"
               + " set");
     }
     X509TrustManager trustManager =

@@ -20,7 +20,7 @@ This is source reuse with the adaptations below, not an unchanged EDOT binary.
 
 | Source | Port | Changes |
 | --- | --- | --- |
-| EDOT `CentralConfig` connection helpers | `EdotSettings` | Preserve original keys and suffix/service/environment precedence; retain the already introduced neutral key as an optional fallback alias |
+| EDOT `CentralConfig` connection helpers | `EdotSettings` | Rename connection keys to `otel.javaagent.opamp.*`; preserve suffix/service/environment behavior |
 | EDOT `CentralConfig.Configs` and `ConfigOption` behavior | `DegradationConfig` | Five n9e-plus controls only; existing Gson parser replaces Java 8 DSL-JSON; omitted keys reset defaults, unknown keys ignored, invalid string booleans retain old values |
 | EDOT `Blockable*Exporter` | Same classes | Package rename; per-exporter instances instead of one global last-exporter singleton; forward current SDK memory mode and close |
 | EDOT `OpampManager` wiring and callbacks | `OpampConnection` | Current protobuf API, existing SDK controller, bounded JSON body; unchanged remote namespace and APPLIED/FAILED hash behavior |
@@ -38,7 +38,7 @@ only used at build time. The protocol state machine is reused, not reimplemented
 
 | Item | EDOT / existing n9e-plus | This module |
 | --- | --- | --- |
-| Enablement | `elastic.otel.opamp.endpoint`, absent means off | Same; no new required flag/token |
+| Enablement | `elastic.otel.opamp.endpoint`, absent means off | `otel.javaagent.opamp.endpoint`; no additional flag/token |
 | Endpoint path | Append `/v1/opamp`, including URL path prefixes | Copied helper |
 | Headers | Optional EDOT headers; n9e probe requires none | No Authorization sent in integration tests |
 | Service | `otel.service.name`, then resource `service.name`, then default | Copied helper |
@@ -88,7 +88,7 @@ server API, table, token or policy model is introduced.
 ## Verification
 
 `ConfigCompatibilityTest` checks copied endpoint/service/environment semantics,
-legacy keys, aliases, default resets, partial values and parser boundaries.
+legacy environment keys, agent namespace isolation, default resets, partial values and parser boundaries.
 `ProtocolCompatibilityTest` directly drives the backported upstream state machine
 for capabilities, sequence, compression, full-state requests, failed ACK retries,
 identity reassignment, disconnect and retry delays.

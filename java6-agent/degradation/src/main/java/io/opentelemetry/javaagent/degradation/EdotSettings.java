@@ -21,13 +21,12 @@ package io.opentelemetry.javaagent.degradation;
 import io.opentelemetry.sdk.autoconfigure.spi.ConfigProperties;
 import java.util.Map;
 
-/** EDOT CentralConfig connection settings; neutral keys remain optional aliases. */
+/** EDOT CentralConfig helpers adapted to this agent’s configuration namespace. */
 final class EdotSettings {
   // package private for testing
 
   static String getEndpoint(ConfigProperties properties) {
-    String endpoint = properties.getString("elastic.otel.opamp.endpoint");
-    if (endpoint == null) endpoint = properties.getString("otel.javaagent.opamp.endpoint");
+    String endpoint = properties.getString("otel.javaagent.opamp.endpoint");
     if (endpoint == null || endpoint.isEmpty()) {
       return null;
     }
@@ -67,14 +66,10 @@ final class EdotSettings {
   }
 
   static String setting(ConfigProperties config, String suffix) {
-    String value = config.getString("elastic.otel.opamp." + suffix);
-    return value != null ? value : config.getString("otel.javaagent.opamp." + suffix);
+    return config.getString("otel.javaagent.opamp." + suffix);
   }
 
   static Map<String, String> headers(ConfigProperties config) {
-    return config.getMap(
-        config.getString("elastic.otel.opamp.headers") != null
-            ? "elastic.otel.opamp.headers"
-            : "otel.javaagent.opamp.headers");
+    return config.getMap("otel.javaagent.opamp.headers");
   }
 }

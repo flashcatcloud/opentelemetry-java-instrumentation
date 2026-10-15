@@ -159,7 +159,7 @@ func runPackagedAgent(t *testing.T, controlled bool) {
 	ctx, cancel := context.WithTimeout(context.Background(), 240*time.Second)
 	defer cancel()
 	cmd := exec.CommandContext(ctx, os.Getenv("INTEROP_JAVA"), "-Xverify:all", "-javaagent:"+os.Getenv("INTEROP_AGENT"),
-		"-Delastic.otel.opamp.endpoint="+server.URL,
+		"-Dotel.javaagent.opamp.endpoint="+server.URL,
 		"-Dotel.service.name=interop", "-Dotel.resource.attributes=deployment.environment=prod",
 		"-Dotel.exporter.otlp.endpoint="+server.URL, "-Dotel.exporter.otlp.protocol=http/protobuf",
 		"-Dotel.metrics.exporter=otlp", "-Dotel.logs.exporter=otlp", "-Dotel.traces.exporter=otlp",
