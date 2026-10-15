@@ -97,8 +97,9 @@ no startup issue.
 
 The Java configuration and protocol tests passed. Running
 `python3 java6-agent/check_jdk6.py /path/to/jdk6/jre/lib/rt.jar java6-agent/build/degradation-java6`
-checked 861 classes with zero missing JDK 6 links. `git diff --check`, Java format,
-Python compilation and shell syntax checks also passed.
+checked 861 classes with zero missing JDK 6 links. Java format, Python compilation
+and shell syntax checks passed. `git diff --check` passes excluding the verbatim
+upstream EDOT-NOTICE, whose original trailing blank line is preserved.
 
 Matrix-tested JAR SHA-256:
 `cc1a8eabdaaef792dc95ff483658005ec497eaf3052851f4eb911de23c195a1f`.
