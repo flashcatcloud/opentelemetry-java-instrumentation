@@ -14,6 +14,7 @@ inventory = {}
 for manifest, directory in [
     (root / 'official-deps.json', root / 'build/official-deps'),
     (root / 'base-deps.json', root / 'build/deps'),
+    (root / 'degradation/deps.json', root / 'build/degradation-deps'),
     (root / 'runtime-deps.json', root / 'build/runtime-deps'),
     (root / 'grpc-export-deps.json', root / 'build/grpc-export-deps'),
     (root / 'component-deps.json', root / 'build/component-deps'),
@@ -25,6 +26,7 @@ for entry in json.loads((root / 'http-compat/sources.json').read_text()):
     if 'url' in entry:
         inventory[entry['file']] = (entry, root / 'build/http-source-deps' / entry['file'])
 selected = {
+    'protobuf-java-3.3.0.jar': 'BSD-3-Clause',
     'okhttp-3.12.13-sources.jar': 'Apache-2.0',
     'okio-1.17.2-sources.jar': 'Apache-2.0',
     'byte-buddy-dep-1.18.14.jar': 'Apache-2.0',
@@ -60,6 +62,8 @@ for filename, license_expression in sorted(selected.items()):
 for name, version, url in [
     ('opentelemetry-java-instrumentation', '2.32.0', 'https://github.com/open-telemetry/opentelemetry-java-instrumentation/tree/v2.32.0'),
     ('opentelemetry-java', '1.66.0', 'https://github.com/open-telemetry/opentelemetry-java/tree/v1.66.0'),
+    ('elastic-otel-java-dynamicconfig', '1.13.0', 'https://github.com/elastic/elastic-otel-java/tree/be989afffc981ab39374d271880494a4f6a3842d/custom/src/main/java/co/elastic/otel/dynamicconfig'),
+    ('opentelemetry-opamp-client', '1.59.0-alpha', 'https://github.com/open-telemetry/opentelemetry-java-contrib/tree/ea31a2d440091cbd4e3684ad961764ad18629125/opamp-client'),
 ]:
     components.append(dict(type='library', **{'bom-ref': name}, name=name, version=version,
                            licenses=[dict(license=dict(id='Apache-2.0'))],

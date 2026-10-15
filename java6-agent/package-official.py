@@ -2,12 +2,28 @@
 """Stage and package the official loader candidate; not a release artifact."""
 from pathlib import Path
 import argparse, shutil, zipfile, subprocess, hashlib, sys, json
-p=argparse.ArgumentParser();p.add_argument('--sdk',type=Path,required=True);a=p.parse_args()
+p=argparse.ArgumentParser();p.add_argument('--sdk',type=Path,required=True);p.add_argument('--output',type=Path);a=p.parse_args()
 r=Path(__file__).resolve().parents[1];b=r/'java6-agent/build'
 source=b/'official-package-input';relocated=b/'official-package-relocated'
 for directory in (source,relocated):
     if directory.exists():shutil.rmtree(directory)
 shutil.copytree(b/'tooling-java6',source)
+# Independent Java 6 degradation module; merge provider registrations without replacing tooling.
+for item in sorted((b/'degradation-java6').rglob('*')):
+    if not item.is_file(): continue
+    name=item.relative_to(b/'degradation-java6');target=source/name
+    if str(name).startswith('META-INF/services/'):
+        lines=set(target.read_text().splitlines()) if target.exists() else set()
+        lines.update(item.read_text().splitlines());target.parent.mkdir(parents=True,exist_ok=True)
+        target.write_text('\n'.join(sorted(lines))+'\n')
+    else:
+        if target.exists(): raise RuntimeError('Duplicate degradation class: '+str(name))
+        data=item.read_bytes()
+        if item.suffix=='.class' and int.from_bytes(data[6:8],'big')>50:
+            raise RuntimeError('Non-Java6 degradation class: '+str(name))
+        target.parent.mkdir(parents=True,exist_ok=True);target.write_bytes(data)
+assert (source/'io/opentelemetry/javaagent/degradation/OpampConnection.class').exists(), 'Build degradation module first'
+
 # Fail on stale prototype classes instead of silently shipping two implementations.
 for prefix in ['io/opentelemetry/javaagent/tooling/Java6HttpSenderProvider',
                'io/opentelemetry/javaagent/tooling/ProtocolInstrumentation',
@@ -55,7 +71,11 @@ transport_input=b/'grpc-transport-input';transport_private=b/'grpc-transport-pri
 for directory in (transport_input,transport_private):
     if directory.exists():shutil.rmtree(directory)
 shutil.copytree(source/'io/opentelemetry/exporter',transport_input/'io/opentelemetry/exporter')
-# Relocate HTTP dependencies only alongside exporter code, never application matchers.
+# The HTTP-only OpAMP port uses the same private OkHttp runtime as SDK exporters.
+# Relocate its references too, without touching any application instrumentation matchers.
+shutil.copytree(source/'io/opentelemetry/javaagent/degradation',
+                transport_input/'io/opentelemetry/javaagent/degradation')
+# Relocate HTTP dependencies only alongside exporter/control code, never application matchers.
 for dependency in sorted((b/'http-dependencies-java6').rglob('*')):
     if not dependency.is_file():continue
     name=dependency.relative_to(b/'http-dependencies-java6')
@@ -96,7 +116,7 @@ bootstrap=('io/opentelemetry/javaagent/bootstrap/','io/opentelemetry/javaagent/s
 subprocess.run([sys.executable, str(r/'java6-agent/prepare-licenses.py'), '--sdk', str(a.sdk)], check=True)
 subprocess.run([sys.executable, str(r/'java6-agent/prepare-sbom.py'), '--sdk', str(a.sdk)], check=True)
 subprocess.run([sys.executable, str(r/'java6-agent/prepare-provenance.py'), '--sdk', str(a.sdk)], check=True)
-artifact=b/'official-loader-candidate.jar'
+artifact=a.output or b/'official-loader-candidate.jar'
 temporary=artifact.with_suffix('.jar.tmp')
 with zipfile.ZipFile(temporary,'w',zipfile.ZIP_DEFLATED) as archive:
     def put(name,data):

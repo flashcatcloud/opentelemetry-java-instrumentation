@@ -19,13 +19,13 @@ def record(path, name):
 def tree(directory, prefix):
     assert directory.is_dir(), directory
     for file in sorted(directory.rglob('*')):
-        if file.is_file() and file.suffix in ('.java', '.py', '.sh', '.json', '.patch') and '__pycache__' not in file.parts:
+        if file.is_file() and file.suffix in ('.java', '.py', '.sh', '.json', '.patch', '.proto') and '__pycache__' not in file.parts:
             record(file, prefix + '/' + file.relative_to(directory).as_posix())
 for file in sorted(root.iterdir()):
     if file.is_file() and file.suffix in ('.py', '.sh', '.json'): record(file, 'agent/' + file.name)
-for directory in ('src', 'build-tools', 'legacy-dubbo', 'http-compat'):
+for directory in ('src', 'build-tools', 'legacy-dubbo', 'http-compat', 'degradation'):
     tree(root / directory, 'agent/' + directory)
-for directory in ('src', 'exporter-src', 'framework-src', 'grpc-overlay-src', 'http-transport-src', 'dependency-src', 'instrumentation-src', 'tooling-src', 'modules-src'):
+for directory in ('src', 'exporter-src', 'framework-src', 'grpc-overlay-src', 'http-transport-src', 'dependency-src', 'instrumentation-src', 'tooling-src', 'modules-src', 'degradation-src'):
     tree(root / 'build' / directory, 'agent/prepared/' + directory)
 sdk = args.sdk / 'java6-compat'
 for file in sorted(sdk.iterdir()):

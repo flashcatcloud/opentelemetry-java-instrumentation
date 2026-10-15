@@ -1,0 +1,132 @@
+/*
+ * Copyright The OpenTelemetry Authors
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+package io.opentelemetry.javaagent.degradation.opampclient.internal.state;
+
+import io.opentelemetry.javaagent.degradation.opampclient.internal.request.Field;
+import java.util.Objects;
+import java.util.function.Supplier;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import opamp.proto.v1.Opamp.ComponentHealth;
+
+/**
+ * This class is internal and is hence not for public use. Its APIs are unstable and can change at
+ * any time.
+ *
+ * <p>Abstraction for a client request field that carries data. Each implementation can only be
+ * linked to one type of client request field, which is provided in its {@link #getFieldType()}
+ * method.
+ */
+public interface State<T> extends Supplier<T> {
+
+  Field getFieldType();
+
+  @Nonnull
+  default T mustGet() {
+    return Objects.requireNonNull(get());
+  }
+
+  final class InstanceUid extends InMemoryState<byte[]> {
+    public InstanceUid(byte[] initialValue) {
+      super(initialValue);
+    }
+
+    @Override
+    public Field getFieldType() {
+      return Field.INSTANCE_UID;
+    }
+  }
+
+  final class SequenceNum extends InMemoryState<Long> {
+    public SequenceNum(Long initialValue) {
+      super(initialValue);
+    }
+
+    public void increment() {
+      set(mustGet() + 1);
+    }
+
+    @Override
+    public Field getFieldType() {
+      return Field.SEQUENCE_NUM;
+    }
+  }
+
+  final class AgentDescription extends InMemoryState<opamp.proto.v1.Opamp.AgentDescription> {
+    public AgentDescription(opamp.proto.v1.Opamp.AgentDescription initialValue) {
+      super(initialValue);
+    }
+
+    @Override
+    public Field getFieldType() {
+      return Field.AGENT_DESCRIPTION;
+    }
+  }
+
+  final class Capabilities extends InMemoryState<Long> {
+    public Capabilities(Long initialValue) {
+      super(initialValue);
+    }
+
+    @Override
+    public Field getFieldType() {
+      return Field.CAPABILITIES;
+    }
+  }
+
+  final class CustomCapabilities extends InMemoryState<opamp.proto.v1.Opamp.CustomCapabilities> {
+    public CustomCapabilities(@Nullable opamp.proto.v1.Opamp.CustomCapabilities initialValue) {
+      super(initialValue);
+    }
+
+    @Override
+    public Field getFieldType() {
+      return Field.CUSTOM_CAPABILITIES;
+    }
+  }
+
+  final class Health extends InMemoryState<ComponentHealth> {
+    public Health(@Nullable ComponentHealth initialValue) {
+      super(initialValue);
+    }
+
+    @Override
+    public Field getFieldType() {
+      return Field.HEALTH;
+    }
+  }
+
+  final class RemoteConfigStatus extends InMemoryState<opamp.proto.v1.Opamp.RemoteConfigStatus> {
+
+    public RemoteConfigStatus(opamp.proto.v1.Opamp.RemoteConfigStatus initialValue) {
+      super(initialValue);
+    }
+
+    @Override
+    public Field getFieldType() {
+      return Field.REMOTE_CONFIG_STATUS;
+    }
+  }
+
+  final class Flags extends InMemoryState<Long> {
+
+    public Flags(Long initialValue) {
+      super(initialValue);
+    }
+
+    @Override
+    public Field getFieldType() {
+      return Field.FLAGS;
+    }
+  }
+
+  abstract class EffectiveConfig extends ObservableState<opamp.proto.v1.Opamp.EffectiveConfig> {
+    @Override
+    public final Field getFieldType() {
+      return Field.EFFECTIVE_CONFIG;
+    }
+  }
+}
