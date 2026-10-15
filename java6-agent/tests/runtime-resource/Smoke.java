@@ -1,0 +1,1 @@
+public class Smoke { public static void main(String[] a) throws Exception { System.out.println("EXPECTED="+System.getProperty("java.runtime.version")); java.net.HttpURLConnection c=(java.net.HttpURLConnection)new java.net.URL(a[0]).openConnection(); if(c.getResponseCode()!=200)throw new AssertionError();c.disconnect();Thread.sleep(1000); } }
